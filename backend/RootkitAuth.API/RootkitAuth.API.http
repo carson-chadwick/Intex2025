@@ -1,0 +1,6 @@
+@RootkitAuth.API_HostAddress = http://localhost:5181
+
+GET {{RootkitAuth.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
