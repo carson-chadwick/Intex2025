@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@thumbmarkjs/thumbmarkjs": "^0.20.0"
+  }
+}

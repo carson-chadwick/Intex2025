@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\RootkitAuth.API",
-    "\\RootkitAuth.API\\Services"
+    "\\Intex2025.API",
+    "\\Intex2025.API\\Controllers"
   ],
-  "SelectedNode": "\\RootkitAuth.API",
+  "SelectedNode": "\\Intex2025.API\\appsettings.json",
   "PreviewInSolutionExplorer": false
 }
