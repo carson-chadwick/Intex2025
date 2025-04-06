@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
-import './HomePage.css'; // If you have custom styling for HomePage
+import './Homepage.css'; // If you have custom styling for HomePage
 
 const HomePage: React.FC = () => {
   return (
