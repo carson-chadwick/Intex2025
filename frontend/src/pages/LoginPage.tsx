@@ -1,21 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './identity.css';
-import '@fortawesome/fontawesome-free/css/all.css';
 
 function LoginPage() {
-  // state variables for email and passwords
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [rememberme, setRememberme] = useState<boolean>(false);
-
-  // state variable for error messages
-  const [error, setError] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberme, setRememberme] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // handle change events for input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, checked, value } = e.target;
+    const { name, type, value, checked } = e.target;
+
     if (type === 'checkbox') {
       setRememberme(checked);
     } else if (name === 'email') {
@@ -29,29 +24,26 @@ function LoginPage() {
     navigate('/register');
   };
 
-  // handle submit event for the form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(''); // Clear any previous errors
+    setError('');
 
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
     }
 
-    const loginUrl = rememberme
-      ? 'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login?useCookies=true'
-      : 'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login?useSessionCookies=true';
+    const loginUrl =
+      'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login';
 
     try {
       const response = await fetch(loginUrl, {
         method: 'POST',
-        credentials: 'include', // ✅ Ensures cookies are sent & received
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, rememberMe: rememberme }),
       });
 
-      // Ensure we only parse JSON if there is content
       let data = null;
       const contentLength = response.headers.get('content-length');
       if (contentLength && parseInt(contentLength, 10) > 0) {
@@ -105,7 +97,6 @@ function LoginPage() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value=""
                   id="rememberme"
                   name="rememberme"
                   checked={rememberme}
