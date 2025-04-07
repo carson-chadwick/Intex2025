@@ -1,26 +1,26 @@
-import { Project } from '../types/Project';
+import { Movie } from '../types/movies';
 
 // Whatever API we are using goes here :)
 
-interface FetchProjectsResponse {
-  projects: Project[];
-  totalNumProjects: number;
+interface FetchMoviesResponse {
+  movies: Movie[];
+  totalNumMovies: number;
 }
 
 const API_URL = '';
 
-export const fetchProjects = async (
+export const fetchMovies = async (
   pageSize: number,
   pageNum: number,
-  selectedCategories: string[]
-): Promise<FetchProjectsResponse> => {
+  // selectedCategories: string[]
+): Promise<FetchMoviesResponse> => {
   try {
-    const categoryParams = selectedCategories
-      .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
-      .join('&');
+    // const categoryParams = selectedCategories
+      // .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
+      // .join('&');
 
     const response = await fetch(
-      `${API_URL}/AllProjects?pageSize=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`
+      `${API_URL}/AllProjects?pageSize=${pageSize}&pageNum=${pageNum}`
     );
 
     if (!response.ok) {
@@ -30,62 +30,6 @@ export const fetchProjects = async (
     return await response.json();
   } catch (error) {
     console.error('Error fetching projects:', error);
-    throw error;
-  }
-};
-
-export const addProject = async (newProject: Project): Promise<Project> => {
-  try {
-    const response = await fetch(`${API_URL}/AddProject`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newProject),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add project');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding project', error);
-    throw error;
-  }
-};
-
-export const updateProject = async (
-  projectId: number,
-  updatedProject: Project
-): Promise<Project> => {
-  try {
-    const response = await fetch(`${API_URL}/UpdateProject/${projectId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedProject),
-    });
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating project:', error);
-    throw error;
-  }
-};
-
-export const deleteProject = async (projectId: number): Promise<void> => {
-  try {
-    const response = await fetch(`${API_URL}/DeleteProject/${projectId}`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete project');
-    }
-  } catch (error) {
-    console.error('Error deleting project:', error);
     throw error;
   }
 };
