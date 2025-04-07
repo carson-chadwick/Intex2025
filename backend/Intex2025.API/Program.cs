@@ -109,7 +109,21 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 }).RequireAuthorization();
 
 app.MapGet("/unauthorized", () => Results.Unauthorized());
-app.MapGet("/test", () => "API is alive1!");
+app.MapGet("/test", () => "API is alive3!");
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+
+    // Seed a test user if none exists
+    if (!db.Users.Any())
+    {
+        var user = new IdentityUser { UserName = "test@test.com", Email = "test@test.com", EmailConfirmed = true };
+        userManager.CreateAsync(user, "Testing1234!").Wait();
+    }
+}
 
 app.Run();
 
