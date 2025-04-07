@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Cors;
 namespace Intex2025.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[auth]")]
 [EnableCors("AllowFrontend")]
 public class LoginController : ControllerBase
 {
@@ -16,7 +16,7 @@ public class LoginController : ControllerBase
         _signInManager = signInManager;
     }
 
-    [HttpPost]
+    [HttpPost("signin")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (!ModelState.IsValid)

@@ -33,8 +33,9 @@ function LoginPage() {
       return;
     }
 
-    const loginUrl =
-      'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login';
+  const loginUrl =
+    'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/auth/signin';
+
 
     try {
       const response = await fetch(loginUrl, {
