@@ -71,12 +71,14 @@ builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<Identi
 
 var app = builder.Build();
 
-// Middleware order matters
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments (including Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Intex2025 API V1");
+    c.RoutePrefix = "swagger"; // This makes it available at /swagger
+});
+
 
 app.UseCors("AllowFrontend"); // ✅ Use named policy explicitly
 app.UseHttpsRedirection();

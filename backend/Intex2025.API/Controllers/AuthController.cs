@@ -14,7 +14,7 @@ public class AuthController : ControllerBase
         _signInManager = signInManager;
     }
 [HttpPost("signin")]
-public async Task<IActionResult> Login([FromBody] LoginRequest request)
+public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
 {
     try
     {
@@ -43,7 +43,7 @@ public async Task<IActionResult> Login([FromBody] LoginRequest request)
 
 }
 
-public class LoginRequest
+public class UserLoginRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }

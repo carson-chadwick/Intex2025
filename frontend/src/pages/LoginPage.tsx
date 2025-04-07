@@ -33,8 +33,8 @@ function LoginPage() {
       return;
     }
 
-  const loginUrl =
-    'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/auth/signin';
+  const loginUrl = `${import.meta.env.VITE_API_URL}/auth/signin`;
+
 
 
     try {
