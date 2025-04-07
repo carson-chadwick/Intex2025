@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Intex2025.API.Data;
 using Intex2025.API.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +42,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-    // Prevent redirects and return proper status codes for APIs
+    // Return 401/403 instead of redirecting
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -56,38 +55,30 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+// ✅ Define and use "AllowFrontend" CORS policy globally
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net")
-                .AllowCredentials()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithExposedHeaders("Content-Security-Policy");
-        });
-});
-
-// ✅ Force default CORS policy to be "AllowFrontend"
-builder.Services.Configure<CorsOptions>(options =>
-{
-    options.DefaultPolicyName = "AllowFrontend";
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net")
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware order matters
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// ✅ CORS must come before authentication
-app.UseCors();
+app.UseCors("AllowFrontend"); // ✅ Use named policy explicitly
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -98,7 +89,6 @@ app.MapIdentityApi<IdentityUser>();
 app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
-
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
     {
         HttpOnly = true,
@@ -111,25 +101,17 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
-    Console.WriteLine($"User authenticated? {user.Identity?.IsAuthenticated}");
-
     if (!user.Identity?.IsAuthenticated ?? false)
-    {
-        Console.WriteLine("Unauthorized request to /pingauth");
         return Results.Unauthorized();
-    }
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    Console.WriteLine($"Authenticated User Email: {email}");
-
     return Results.Json(new { email = email });
 }).RequireAuthorization();
 
-// Optional: Fallback
 app.MapGet("/unauthorized", () => Results.Unauthorized());
-
-app.MapGet("/test", () => "API is alive2!");
+app.MapGet("/test", () => "API is alive1!");
 
 app.Run();
+
 
 

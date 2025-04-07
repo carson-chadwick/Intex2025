@@ -19,11 +19,14 @@ function AuthorizeView(props: { children: React.ReactNode }) {
     async function fetchWithRetry(url: string, options: any) {
       try {
         const response = await fetch(url, options);
-        //console.log('AuthorizeView: Raw Response:', response);
+
+        // ✅ If unauthorized, don't treat it like a crash
+        if (response.status === 401) {
+          setAuthorized(false);
+          return;
+        }
 
         const contentType = response.headers.get('content-type');
-
-        // Ensure response is JSON before parsing
         if (!contentType || !contentType.includes('application/json')) {
           throw new Error('Invalid response format from server');
         }
@@ -37,6 +40,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
           throw new Error('Invalid user session');
         }
       } catch (error) {
+        console.error('Pingauth error:', error);
         setAuthorized(false);
       } finally {
         setLoading(false);
@@ -51,6 +55,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
       }
     );
   }, []);
+
 
   if (loading) {
     return <p>Loading...</p>;

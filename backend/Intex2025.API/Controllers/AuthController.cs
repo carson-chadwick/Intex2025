@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 
 namespace Intex2025.API.Controllers;
 
 [ApiController]
-[Route("auth")]
-//[EnableCors("AllowFrontend")]
+[Route("auth")] // all routes prefixed with /auth
 public class AuthController : ControllerBase
 {
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -15,10 +13,13 @@ public class AuthController : ControllerBase
     {
         _signInManager = signInManager;
     }
-
-    [HttpPost("signin")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+[HttpPost("signin")]
+public async Task<IActionResult> Login([FromBody] LoginRequest request)
+{
+    try
     {
+        Console.WriteLine($"[LOGIN ATTEMPT] {request.Email}, RememberMe: {request.RememberMe}");
+
         if (!ModelState.IsValid)
             return BadRequest("Invalid login request");
 
@@ -33,6 +34,13 @@ public class AuthController : ControllerBase
 
         return Unauthorized(new { message = "Invalid email or password." });
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[LOGIN ERROR] {ex.Message}");
+        return StatusCode(500, "Internal server error during login.");
+    }
+}
+
 }
 
 public class LoginRequest
