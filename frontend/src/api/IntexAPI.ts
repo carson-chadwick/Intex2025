@@ -1,4 +1,4 @@
-import { Movie } from '../types/movies';
+import { Movie } from '../types/Movies';
 
 // Whatever API we are using goes here :)
 
@@ -11,13 +11,13 @@ const API_URL = '';
 
 export const fetchMovies = async (
   pageSize: number,
-  pageNum: number,
+  pageNum: number
   // selectedCategories: string[]
 ): Promise<FetchMoviesResponse> => {
   try {
     // const categoryParams = selectedCategories
-      // .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
-      // .join('&');
+    // .map((cat) => `projectTypes=${encodeURIComponent(cat)}`)
+    // .join('&');
 
     const response = await fetch(
       `${API_URL}/AllProjects?pageSize=${pageSize}&pageNum=${pageNum}`
