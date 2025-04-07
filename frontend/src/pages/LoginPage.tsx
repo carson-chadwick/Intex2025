@@ -40,8 +40,8 @@ function LoginPage() {
     }
 
     const loginUrl = rememberme
-      ? 'https://localhost:5000/login?useCookies=true'
-      : 'https://localhost:5000/login?useSessionCookies=true';
+      ? 'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login?useCookies=true'
+      : 'https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net/login?useSessionCookies=true';
 
     try {
       const response = await fetch(loginUrl, {
