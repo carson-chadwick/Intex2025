@@ -4,7 +4,7 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import logo from '../images/cinenicheicon_720.png';
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn] = useState<boolean>(false);
 
   return (
     <header className="header">
