@@ -121,5 +121,7 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 // ✅ Optional: Keep this if needed for fallback debugging
 app.MapGet("/unauthorized", () => Results.Unauthorized());
 
+app.MapGet("/test", () => "API is alive!");
+
 app.Run();
 
