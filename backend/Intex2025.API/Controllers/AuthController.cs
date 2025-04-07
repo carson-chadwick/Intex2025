@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Cors;
 namespace Intex2025.API.Controllers;
 
 [ApiController]
-[Route("[auth]")]
-[EnableCors("AllowFrontend")]
-public class LoginController : ControllerBase
+[Route("auth")]
+//[EnableCors("AllowFrontend")]
+public class AuthController : ControllerBase
 {
     private readonly SignInManager<IdentityUser> _signInManager;
 
-    public LoginController(SignInManager<IdentityUser> signInManager)
+    public AuthController(SignInManager<IdentityUser> signInManager)
     {
         _signInManager = signInManager;
     }

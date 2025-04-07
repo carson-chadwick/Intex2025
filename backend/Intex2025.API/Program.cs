@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Intex2025.API.Data;
 using Intex2025.API.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-    // ✅ Prevent redirects and return proper status codes for APIs
+    // Prevent redirects and return proper status codes for APIs
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -68,6 +69,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+// ✅ Force default CORS policy to be "AllowFrontend"
+builder.Services.Configure<CorsOptions>(options =>
+{
+    options.DefaultPolicyName = "AllowFrontend";
+});
+
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 var app = builder.Build();
@@ -80,7 +87,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // ✅ CORS must come before authentication
-app.UseCors("AllowFrontend");
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -118,10 +125,11 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
     return Results.Json(new { email = email });
 }).RequireAuthorization();
 
-// ✅ Optional: Keep this if needed for fallback debugging
+// Optional: Fallback
 app.MapGet("/unauthorized", () => Results.Unauthorized());
 
-app.MapGet("/test", () => "API is alive!");
+app.MapGet("/test", () => "API is alive2!");
 
 app.Run();
+
 
