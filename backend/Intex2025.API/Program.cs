@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Intex2025.API.Data;
 using Intex2025.API.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,26 +18,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 builder.Services.AddAuthorization();
-
-
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-////builder.Services.AddIdentityApiEndpoints<IdentityUser>()  
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
@@ -46,10 +38,21 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.Name = ".AspNetCore.Identity.Application";
-    options.LoginPath = "/login";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    // ✅ Prevent redirects and return proper status codes for APIs
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddCors(options =>
@@ -57,8 +60,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net") // Replace with your frontend URL
-                .AllowCredentials() // Required to allow cookies
+            policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net")
+                .AllowCredentials()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .WithExposedHeaders("Content-Security-Policy");
@@ -76,6 +79,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// ✅ CORS must come before authentication
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -87,8 +91,7 @@ app.MapIdentityApi<IdentityUser>();
 app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
-    
-    // Ensure authentication cookie is removed
+
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
     {
         HttpOnly = true,
@@ -102,7 +105,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
     Console.WriteLine($"User authenticated? {user.Identity?.IsAuthenticated}");
-    
+
     if (!user.Identity?.IsAuthenticated ?? false)
     {
         Console.WriteLine("Unauthorized request to /pingauth");
@@ -115,4 +118,8 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
     return Results.Json(new { email = email });
 }).RequireAuthorization();
 
+// ✅ Optional: Keep this if needed for fallback debugging
+app.MapGet("/unauthorized", () => Results.Unauthorized());
+
 app.Run();
+

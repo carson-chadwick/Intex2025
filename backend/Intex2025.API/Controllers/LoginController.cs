@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace Intex2025.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[EnableCors("AllowFrontend")]
 public class LoginController : ControllerBase
 {
     private readonly SignInManager<IdentityUser> _signInManager;
