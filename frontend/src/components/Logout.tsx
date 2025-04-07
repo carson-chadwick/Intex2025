@@ -7,13 +7,16 @@ function Logout(props: { children: React.ReactNode }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:5000/logout', {
-        method: 'POST',
-        credentials: 'include', // Ensure cookies are sent
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+          const response = await fetch(`${apiUrl}/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
 
       if (response.ok) {
         navigate('/login');

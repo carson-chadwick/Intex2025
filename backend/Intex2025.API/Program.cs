@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Intex2025.API.Data;
 using Intex2025.API.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,26 +18,22 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddDbContext<MoviesContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
 
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 builder.Services.AddAuthorization();
-
-
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-////builder.Services.AddIdentityApiEndpoints<IdentityUser>()  
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
@@ -46,37 +41,49 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUser
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.Name = ".AspNetCore.Identity.Application";
-    options.LoginPath = "/login";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    // Return 401/403 instead of redirecting
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
 });
 
+// ✅ Define and use "AllowFrontend" CORS policy globally
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net") // Replace with your frontend URL
-                .AllowCredentials() // Required to allow cookies
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithExposedHeaders("Content-Security-Policy");
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://calm-tree-0ae01fe1e.6.azurestaticapps.net")
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments (including Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Intex2025 API V1");
+    c.RoutePrefix = "swagger"; // This makes it available at /swagger
+});
 
-app.UseCors("AllowFrontend");
+
+app.UseCors("AllowFrontend"); // ✅ Use named policy explicitly
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -87,8 +94,6 @@ app.MapIdentityApi<IdentityUser>();
 app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
-    
-    // Ensure authentication cookie is removed
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
     {
         HttpOnly = true,
@@ -101,18 +106,25 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
-    Console.WriteLine($"User authenticated? {user.Identity?.IsAuthenticated}");
-    
     if (!user.Identity?.IsAuthenticated ?? false)
-    {
-        Console.WriteLine("Unauthorized request to /pingauth");
         return Results.Unauthorized();
-    }
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    Console.WriteLine($"Authenticated User Email: {email}");
-
     return Results.Json(new { email = email });
 }).RequireAuthorization();
 
+app.MapGet("/unauthorized", () => Results.Unauthorized());
+app.MapGet("/test", () => "API is alive3!");
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+
+}
+
 app.Run();
+
+
+
