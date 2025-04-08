@@ -15,7 +15,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-
+        <Route path="/HomePage" element={<HomePage/>} />
+        <Route path="/MyListPage" element={<MyListPage/>} />
+        <Route path="/AdminPage" element={<AdminPage/>} />
         {/* Protected route */}
         <Route
           path="/"
@@ -23,9 +25,6 @@ function App() {
             <AuthorizeView>
               <Header/>
               <HomePage/>
-              {/* <Route path="/HomePage" element={<HomePage/>} />
-              <Route path="/MyListPage" element={<MyListPage/>} />
-              <Route path="/AdminPage" element={<AdminPage/>} /> */}
             </AuthorizeView>
           }
         />
