@@ -3,10 +3,15 @@ import './Header.css';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import logo from '../images/cinenicheicon_720.png';
 import { UserContext } from './AuthorizeView';
-
+// import { useNavigate } from 'react-router-dom';
 const Header: React.FC = () => {
   const user = useContext(UserContext);
   const isLoggedIn = !!user;
+
+  // const navigate = useNavigate();
+  // const handleNavigation = (path: string) => {
+  //   navigate(path);
+  // };
 
   return (
     <>
@@ -20,6 +25,9 @@ const Header: React.FC = () => {
             <button className="btn">Home</button>
             <button className="btn">My List</button>
             <button className="btn">Admin</button>
+            {/* <button className="btn" onClick={() => handleNavigation("./HomePage")}>Home</button>
+            <button className="btn" onClick={() => handleNavigation("./MyListPage")}>My List</button>
+            <button className="btn" onClick={() => handleNavigation("./AdminPage")}>Admin</button> */}
             <FaSearch className="icon" />
             <FaUserCircle className="icon profile-icon" />
           </div>

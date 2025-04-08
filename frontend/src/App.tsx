@@ -5,6 +5,8 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AuthorizeView from './components/AuthorizeView';
 import Header from './components/Header';
+import MyListPage from './pages/MyListPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -20,9 +22,10 @@ function App() {
           element={
             <AuthorizeView>
               <Header/>
-              <Route path="/HomePage" element={<HomePage/>} />
-              <Route path="/MyList" element={<HomePage/>} />
               <HomePage/>
+              {/* <Route path="/HomePage" element={<HomePage/>} />
+              <Route path="/MyListPage" element={<MyListPage/>} />
+              <Route path="/AdminPage" element={<AdminPage/>} /> */}
             </AuthorizeView>
           }
         />
