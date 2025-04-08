@@ -5,7 +5,6 @@ namespace Intex2025.API.Data;
 
 public partial class UserHomeGenreRec
 {
-    [Key]
     public int? UserId { get; set; }
 
     public string? Genre { get; set; }

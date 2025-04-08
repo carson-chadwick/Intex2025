@@ -37,7 +37,6 @@ namespace Intex2025.API.Controllers
         
         
         
-        
         // [HttpGet("HomePageRecommendation/{userId}")]
         // public IActionResult GetRecommendations(int userId)
         // {

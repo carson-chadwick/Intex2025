@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Intex2025.API.Data;
 
 public partial class ContentRec
 {
-    [Key]
     public string? ShowId { get; set; }
 
     public string? RecId { get; set; }

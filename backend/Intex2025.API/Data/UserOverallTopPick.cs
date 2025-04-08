@@ -5,7 +5,6 @@ namespace Intex2025.API.Data;
 
 public partial class UserOverallTopPick
 {
-    [Key]
     public int? UserId { get; set; }
 
     public string? Title { get; set; }
