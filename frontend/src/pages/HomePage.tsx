@@ -1,6 +1,5 @@
 // frontend/src/pages/HomePage.tsx
 import React from 'react';
-import Header from '../components/Header';
 import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import './Homepage.css'; // If you have custom styling for HomePage
