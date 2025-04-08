@@ -23,8 +23,8 @@ function App() {
         <Route path="/MyListPage" element={<AuthorizeView><MyListPage/></AuthorizeView>} />
         <Route path="/AdminPage" element={<AuthorizeView><AdminPage/></AuthorizeView>} />
         <Route path="/" element={<AuthorizeView><HomePage/></AuthorizeView>} />
-        <Route path="/MovieDetailPage" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
-        {/* <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} /> */}
+        {/* <Route path="/MovieDetailPage" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} /> */}
+        <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
       </Routes>
     </Router>
   );

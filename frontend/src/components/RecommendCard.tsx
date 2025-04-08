@@ -95,20 +95,19 @@ export default function TiltedCard({
 
   //routing stuff
     const navigate = useNavigate();
-    // const handleNavigation = (path: string, id: string) => {
-    //   navigate(`${path}/${id}`);
+    const handleNavigation = (path:string, id:string) => {
+      navigate(`${path}/${id}`);
+    }
+    // const handleNavigation = (path: string) => {
+    //   navigate(path);
     // };
-    
-    const handleNavigation = (path: string) => {
-      navigate(path);
-    };
   
 
   return (
     <>
       <figure
-        // onClick={() => handleNavigation('/MovieDetailPage', '12345')} // Replace '12345' with actual ID
-        onClick={() => handleNavigation('/MovieDetailPage')}
+        onClick={() => handleNavigation('/MovieDetailPage', 's461')} //hard coded id:s461
+        // onClick={() => handleNavigation('/MovieDetailPage')}
         ref={ref}
         className="tilted-card-figure"
         style={{
