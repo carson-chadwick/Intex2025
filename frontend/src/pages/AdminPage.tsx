@@ -6,6 +6,9 @@ import EditMovieForm from '../components/EditMovieForm';
 import NewMovieForm from '../components/NewMovieForm';
 import './AdminPage.css';
 import MovieSearchBar from '../components/MovieSearchBar';
+import Header from '../components/Header';
+import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import Logout from '../components/Logout';
 
 
 function AdminPage() {
@@ -56,128 +59,140 @@ useEffect(() => {
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <div className="container mt-5">
-      {!showForm && (
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <button className="btn rounded-0" onClick={() => setShowForm(true)}>
-            Add Movie
-          </button>
-          <div className="w-50">
-            <MovieSearchBar
-              onSearch={(term) => {
-                setSearchTerm(term);
-                setPageNum(1);
-              }}
-            />
+    <>
+      <AuthorizeView>
+        <Header />
+        <span>
+          <Logout>
+            Logout <AuthorizedUser value="email" />
+          </Logout>
+        </span>
+        <div className="container mt-5">
+          {!showForm && (
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <button
+                className="btn rounded-0"
+                onClick={() => setShowForm(true)}
+              >
+                Add Movie
+              </button>
+              <div className="w-50">
+                <MovieSearchBar
+                  onSearch={(term) => {
+                    setSearchTerm(term);
+                    setPageNum(1);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {showForm && (
+            <div className="row mb-4">
+              <div className="col-12 col-md-10 offset-md-1">
+                <NewMovieForm
+                  onSuccess={() => {
+                    setShowForm(false);
+                    fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
+                      setMovies(data.movies)
+                    );
+                  }}
+                  onCancel={() => setShowForm(false)}
+                />
+              </div>
+            </div>
+          )}
+
+          {editingMovie && (
+            <div className="row mb-4">
+              <div className="col-12 col-md-10 offset-md-1">
+                <EditMovieForm
+                  movie={editingMovie}
+                  onSuccess={() => {
+                    setEditingMovie(null);
+                    fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
+                      setMovies(data.movies)
+                    );
+                  }}
+                  onCancel={() => setEditingMovie(null)}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="table-responsive">
+            <table className="table table-striped table-bordered align-middle">
+              <thead className="table-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Director</th>
+                  <th>Cast</th>
+                  <th>Country</th>
+                  <th>Release Year</th>
+                  <th>Rating</th>
+                  <th>Duration</th>
+                  <th>Genre</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {movies.map((movie) => (
+                  <tr key={movie.showId}>
+                    <td>{movie.title}</td>
+                    <td>{movie.type}</td>
+                    <td>{movie.director || 'N/A'}</td>
+                    <td>{movie.cast}</td>
+                    <td>{movie.country}</td>
+                    <td>{movie.releaseYear}</td>
+                    <td>{movie.rating}</td>
+                    <td>{movie.duration}</td>
+                    <td>
+                      {Object.entries(movie)
+                        .filter(
+                          ([_, value]) =>
+                            typeof value === 'number' && value === 1
+                        )
+                        .map(([key]) =>
+                          key
+                            .replace(/([A-Z])/g, ' $1')
+                            .replace(/^./, (str) => str.toUpperCase())
+                        )
+                        .join(', ')}
+                    </td>
+                    <td>
+                      <button
+                        className="btn rounded-0 btn-sm w-100 mb-1"
+                        onClick={() => setEditingMovie(movie)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn rounded-0 btn-sm w-100"
+                        onClick={() => handleDelete(Number(movie.showId))}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+
+          <Pagination
+            currentPage={pageNum}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPageNum}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPageNum(1);
+            }}
+          />
         </div>
-      )}
-
-      {showForm && (
-        <div className="row mb-4">
-          <div className="col-12 col-md-10 offset-md-1">
-            <NewMovieForm
-              onSuccess={() => {
-                setShowForm(false);
-                fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
-                  setMovies(data.movies)
-                );
-              }}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
-        </div>
-      )}
-
-      {editingMovie && (
-        <div className="row mb-4">
-          <div className="col-12 col-md-10 offset-md-1">
-            <EditMovieForm
-              movie={editingMovie}
-              onSuccess={() => {
-                setEditingMovie(null);
-                fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
-                  setMovies(data.movies)
-                );
-              }}
-              onCancel={() => setEditingMovie(null)}
-            />
-          </div>
-        </div>
-      )}
-
-
-
-      <div className="table-responsive">
-        <table className="table table-striped table-bordered align-middle">
-          <thead className="table-light">
-            <tr>
-              <th>Title</th>
-              <th>Type</th>
-              <th>Director</th>
-              <th>Cast</th>
-              <th>Country</th>
-              <th>Release Year</th>
-              <th>Rating</th>
-              <th>Duration</th>
-              <th>Genre</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {movies.map((movie) => (
-              <tr key={movie.showId}>
-                <td>{movie.title}</td>
-                <td>{movie.type}</td>
-                <td>{movie.director || 'N/A'}</td>
-                <td>{movie.cast}</td>
-                <td>{movie.country}</td>
-                <td>{movie.releaseYear}</td>
-                <td>{movie.rating}</td>
-                <td>{movie.duration}</td>
-                <td>
-                  {Object.entries(movie)
-                    .filter(
-                      ([_, value]) => typeof value === 'number' && value === 1
-                    )
-                    .map(([key]) =>
-                      key
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, (str) => str.toUpperCase())
-                    )
-                    .join(', ')}
-                </td>
-                <td>
-                  <button
-                    className="btn rounded-0 btn-sm w-100 mb-1"
-                    onClick={() => setEditingMovie(movie)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn rounded-0 btn-sm w-100"
-                    onClick={() => handleDelete(Number(movie.showId))}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <Pagination
-        currentPage={pageNum}
-        totalPages={totalPages}
-        pageSize={pageSize}
-        onPageChange={setPageNum}
-        onPageSizeChange={(newSize) => {
-          setPageSize(newSize);
-          setPageNum(1);
-        }}
-      />
-    </div>
+      </AuthorizeView>
+    </>
   );
 }
 
