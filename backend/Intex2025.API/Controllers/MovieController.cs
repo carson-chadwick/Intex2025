@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Intex2025.API.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,5 +34,24 @@ namespace Intex2025.API.Controllers
             return Ok(someObject);
         }
         
+        // [HttpGet("HomePageRecommendation/{userId}")]
+        // public IActionResult GetRecommendations(int userId)
+        // {
+        //     var start = new System.Diagnostics.ProcessStartInfo
+        //     {
+        //         FileName = "python3",
+        //         Arguments = $"Recommender_HomePage_Backend.py {userId}",
+        //         RedirectStandardOutput = true,
+        //         UseShellExecute = false,
+        //         CreateNoWindow = true
+        //     };
+        //
+        //     using var process = System.Diagnostics.Process.Start(start);
+        //     using var reader = process.StandardOutput;
+        //     string result = reader.ReadToEnd();
+        //
+        //     var recommendations = JsonSerializer.Deserialize<List<string>>(result); // Or your custom object
+        //     return Ok(recommendations);
+        // }
     }
 }
