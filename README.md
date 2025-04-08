@@ -6,3 +6,7 @@
 
 [Scrum Updates](https://www.figma.com/board/lsN4eMqtu62mFPmUbgGsMG/2025W-INTEX-Figma-04-02?node-id=0-1&t=Ss1mx9dQWxbbqjoM-1)
 
+## Example User
+
+Username: test@test.com
+Password: Testing1234!
