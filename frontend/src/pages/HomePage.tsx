@@ -5,7 +5,7 @@ import './Homepage.css'; // If you have custom styling for HomePage
 import Recommender from '../components/RecommenderComponent';
 import Header from '../components/Header';
 const HomePage: React.FC = () => {
-  const user_id = 5;
+  const user_id = 9;
   return (
     <AuthorizeView>
       <Header />
