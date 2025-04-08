@@ -8,14 +8,12 @@ interface RecommenderProps {
 const Recommender = ({ Id, Name }: RecommenderProps) => {
   return (
     <div className="w-[90%] mx-auto">
-      <h1 className="text-3xl font-semibold text-start">
-        {Name}
-      </h1>
+      <h1 className="text-3xl font-semibold text-start">{Name}</h1>
 
       <div className="row mt-4 g-3 bg-transparent">
         <div className="col-auto">
           <RecommendCard
-            imageSrc="https://mlworkspace6342542406.blob.core.windows.net/inteximages/Zozo.jpg"
+            imageSrc="https://mlworkspace6342542406.blob.core.windows.net/inteximages/Surfs Up.jpg"
             altText="Kendrick Lamar - GNX Album Cover"
             captionText="Movie"
             containerHeight="300px"
@@ -33,7 +31,7 @@ const Recommender = ({ Id, Name }: RecommenderProps) => {
 
         <div className="col-auto">
           <RecommendCard
-            imageSrc="https://mlworkspace6342542406.blob.core.windows.net/inteximages/Zozo.jpg"
+            imageSrc="https://mlworkspace6342542406.blob.core.windows.net/inteximages/SpiderMan 3.jpg"
             altText="Kendrick Lamar - GNX Album Cover"
             captionText="Movie"
             containerHeight="300px"

@@ -20,4 +20,16 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Movies.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="cine_recs.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Identity.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
