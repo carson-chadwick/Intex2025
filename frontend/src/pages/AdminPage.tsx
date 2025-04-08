@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { Movie } from '../types/Movies';;
+import { useEffect, useState } from 'react';
+import { Movie } from '../types/Movies';
 import Pagination from '../components/Pagination';
-import { deleteMovie, fetchMovies } from '../api/IntexAPI';
+import { deleteMovie, fetchGenres, fetchMovies } from '../api/IntexAPI';
 import EditMovieForm from '../components/EditMovieForm';
 import NewMovieForm from '../components/NewMovieForm';
 import './AdminPage.css';
@@ -10,36 +10,49 @@ import Header from '../components/Header';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 
-
 function AdminPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [pageSize, setPageSize] = useState<number>(10); // Number of records per page
-  const [pageNum, setPageNum] = useState<number>(1); // Current page number
-  const [totalPages, setTotalPages] = useState<number>(0); // Total number of pages
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [showForm, setShowForm] = useState(false);
   const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [genres, setGenres] = useState<string[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string>('All');
+  const [sortBy, setSortBy] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+  useEffect(() => {
+    fetchGenres()
+      .then((g) => setGenres(['All', ...g]))
+      .catch((e) => console.error('Genre fetch failed', e));
+  }, []);
 
-useEffect(() => {
-  const loadProjects = async () => {
-    try {
-      const data = await fetchMovies(pageSize, pageNum, searchTerm);
-      setMovies(data.movies);
-      setTotalPages(Math.ceil(data.totalNumMovies / pageSize));
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const data = await fetchMovies(
+          pageSize,
+          pageNum,
+          searchTerm,
+          selectedGenre,
+          sortBy,
+          sortOrder
+        );
+        setMovies(data.movies);
+        setTotalPages(Math.ceil(data.totalNumMovies / pageSize));
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  loadProjects();
-}, [pageSize, pageNum, searchTerm]);
-
-
+    loadProjects();
+  }, [pageSize, pageNum, searchTerm, selectedGenre, sortBy, sortOrder]);
 
   const handleDelete = async (showId: number) => {
     const confirmDelete = window.confirm(
@@ -69,20 +82,64 @@ useEffect(() => {
         </span>
         <div className="container mt-5">
           {!showForm && (
-            <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
               <button
                 className="btn rounded-0"
                 onClick={() => setShowForm(true)}
               >
                 Add Movie
               </button>
-              <div className="w-50">
-                <MovieSearchBar
-                  onSearch={(term) => {
-                    setSearchTerm(term);
+
+              <div className="d-flex gap-3 align-items-center flex-wrap">
+                <div className="w-50">
+                  <MovieSearchBar
+                    onSearch={(term) => {
+                      setSearchTerm(term);
+                      setPageNum(1);
+                    }}
+                  />
+                </div>
+
+                <select
+                  className="form-select w-auto"
+                  value={selectedGenre}
+                  onChange={(e) => {
+                    setSelectedGenre(e.target.value);
                     setPageNum(1);
                   }}
-                />
+                >
+                  {genres.map((genre) => (
+                    <option key={genre} value={genre}>
+                      {genre}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className="form-select w-auto"
+                  value={sortBy}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                    setPageNum(1);
+                  }}
+                >
+                  <option value="">Sort By</option>
+                  <option value="title">Title</option>
+                  <option value="releaseYear">Release Year</option>
+                  <option value="rating">Rating</option>
+                </select>
+
+                <select
+                  className="form-select w-auto"
+                  value={sortOrder}
+                  onChange={(e) => {
+                    setSortOrder(e.target.value as 'asc' | 'desc');
+                    setPageNum(1);
+                  }}
+                >
+                  <option value="asc">Asc</option>
+                  <option value="desc">Desc</option>
+                </select>
               </div>
             </div>
           )}
@@ -93,9 +150,14 @@ useEffect(() => {
                 <NewMovieForm
                   onSuccess={() => {
                     setShowForm(false);
-                    fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
-                      setMovies(data.movies)
-                    );
+                    fetchMovies(
+                      pageSize,
+                      pageNum,
+                      searchTerm,
+                      selectedGenre,
+                      sortBy,
+                      sortOrder
+                    ).then((data) => setMovies(data.movies));
                   }}
                   onCancel={() => setShowForm(false)}
                 />
@@ -110,9 +172,14 @@ useEffect(() => {
                   movie={editingMovie}
                   onSuccess={() => {
                     setEditingMovie(null);
-                    fetchMovies(pageSize, pageNum, searchTerm).then((data) =>
-                      setMovies(data.movies)
-                    );
+                    fetchMovies(
+                      pageSize,
+                      pageNum,
+                      searchTerm,
+                      selectedGenre,
+                      sortBy,
+                      sortOrder
+                    ).then((data) => setMovies(data.movies));
                   }}
                   onCancel={() => setEditingMovie(null)}
                 />
@@ -197,3 +264,4 @@ useEffect(() => {
 }
 
 export default AdminPage;
+
