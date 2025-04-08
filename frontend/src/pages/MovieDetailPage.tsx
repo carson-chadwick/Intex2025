@@ -1,15 +1,34 @@
-function MovieDetailPage() {
+import { useParams } from 'react-router-dom';
+import Recommender from '../components/RecommenderComponent';
 
-    return (
+function MovieDetailPage() {
+  const { showId } = useParams<{ showId: string }>();
+  console.log('✅ showId:', showId); // ← add this line to test in dev tools
+  return (
+    <div className="container mt-5">
+      <h2 className="text-3xl font-bold mb-3">Movie Details</h2>
+      <p>
+        You're viewing the details for movie ID: <strong>{showId}</strong>
+      </p>
+
+      {/* Recommendation Sections */}
+      {showId && (
         <>
-            <p>
-                This is the Movie Details page.
-                What's supposed to happen here is that when a user clicks on a movie, 
-                it will open up a page to see more details about that movie.
-            </p>
+          <Recommender
+            type="collab"
+            showId={showId}
+            Name="Because You Watched This..."
+          />
+
+          <Recommender
+            type="content"
+            showId={showId}
+            Name="You Might Also Like"
+          />
         </>
-    );
+      )}
+    </div>
+  );
 }
 
 export default MovieDetailPage;
-

@@ -5,27 +5,26 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AuthorizeView from './components/AuthorizeView';
 import Header from './components/Header';
+import MovieDetailPage from './pages/MovieDetailPage';
 
 function App() {
   return (
     <Router>
-
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Protected route */}
         <Route
-          path="/"
           element={
             <AuthorizeView>
-              <Header/>
-              {/* <Route path="/HomePage" element={<HomePage/>} />
-              <Route path="/MyList" element={<HomePage/>} /> */}
-              <HomePage/>
+              <Header />
             </AuthorizeView>
           }
-        />
+        >
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies/:showId" element={<MovieDetailPage />} />
+        </Route>
       </Routes>
     </Router>
   );
