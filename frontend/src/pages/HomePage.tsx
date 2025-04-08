@@ -4,11 +4,11 @@ import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import './Homepage.css'; // If you have custom styling for HomePage
 import Recommender from '../components/RecommenderComponent';
-
+import Header from '../components/Header';
 const HomePage: React.FC = () => {
   return (
     <AuthorizeView>
-      {/* <Header/> */}
+      <Header/>
       <div className="home-container">
         <span>
           <Logout>
