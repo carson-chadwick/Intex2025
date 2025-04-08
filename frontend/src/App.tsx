@@ -7,26 +7,23 @@ import AuthorizeView from './components/AuthorizeView';
 import Header from './components/Header';
 import MyListPage from './pages/MyListPage';
 import AdminPage from './pages/AdminPage';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
     <Router>
 
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/HomePage" element={<HomePage/>} />
-        <Route path="/MyListPage" element={<MyListPage/>} />
-        <Route path="/AdminPage" element={<AdminPage/>} />
-        {/* Protected route */}
-        <Route
-          path="/"
-          element={
-            <AuthorizeView>
-              <HomePage/>
-            </AuthorizeView>
-          }
-        />
+        {/* Unprotected routes */}
+        <Route path="/LandingPage" element={<LandingPage/>} />
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/register" element={<RegisterPage/>} />
+        
+        {/* Protected routes */}
+        <Route path="/HomePage" element={<AuthorizeView><HomePage/></AuthorizeView>} />
+        <Route path="/MyListPage" element={<AuthorizeView><MyListPage/></AuthorizeView>} />
+        <Route path="/AdminPage" element={<AuthorizeView><AdminPage/></AuthorizeView>} />
+        <Route path="/" element={<AuthorizeView><HomePage/></AuthorizeView>} />
       </Routes>
     </Router>
   );
