@@ -23,7 +23,6 @@ function App() {
           path="/"
           element={
             <AuthorizeView>
-              <Header/>
               <HomePage/>
             </AuthorizeView>
           }
