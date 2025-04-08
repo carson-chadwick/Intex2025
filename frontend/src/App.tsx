@@ -4,10 +4,10 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AuthorizeView from './components/AuthorizeView';
-import Header from './components/Header';
 import MyListPage from './pages/MyListPage';
 import AdminPage from './pages/AdminPage';
 import LandingPage from './pages/LandingPage';
+import MovieDetailPage from './pages/MovieDetailPage';
 
 function App() {
   return (
@@ -23,6 +23,8 @@ function App() {
         <Route path="/MyListPage" element={<AuthorizeView><MyListPage/></AuthorizeView>} />
         <Route path="/AdminPage" element={<AuthorizeView><AdminPage/></AuthorizeView>} />
         <Route path="/" element={<AuthorizeView><HomePage/></AuthorizeView>} />
+        <Route path="/MovieDetailPage" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
+        {/* <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} /> */}
       </Routes>
     </Router>
   );

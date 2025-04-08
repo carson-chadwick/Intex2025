@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ReactNode } from 'react';
 import './RecommendCard.css'; // or TiltedCard.css
+import { useNavigate } from 'react-router-dom';
 
 // ✅ Define your props type right after the imports
 type TiltedCardProps = {
@@ -91,9 +92,23 @@ export default function TiltedCard({
     rotateFigcaption.set(0);
   }
 
+
+  //routing stuff
+    const navigate = useNavigate();
+    // const handleNavigation = (path: string, id: string) => {
+    //   navigate(`${path}/${id}`);
+    // };
+    
+    const handleNavigation = (path: string) => {
+      navigate(path);
+    };
+  
+
   return (
     <>
       <figure
+        // onClick={() => handleNavigation('/MovieDetailPage', '12345')} // Replace '12345' with actual ID
+        onClick={() => handleNavigation('/MovieDetailPage')}
         ref={ref}
         className="tilted-card-figure"
         style={{
