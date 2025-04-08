@@ -7,20 +7,21 @@ import './Homepage.css'; // If you have custom styling for HomePage
 
 const HomePage: React.FC = () => {
   return (
-    <AuthorizeView>
-      <Header />
-      <div className="home-container">
-        <span>
-          <Logout>
-            Logout <AuthorizedUser value="email" />
-          </Logout>
-        </span>
-        <div className="content">
-          <h1>Welcome to Intex2025</h1>
-          <p>Your personalized homepage</p>
+    <>
+      <AuthorizeView>
+        <div className="home-container">
+          <span>
+            <Logout>
+              Logout <AuthorizedUser value="email" />
+            </Logout>
+          </span>
+          <div className="content">
+            <h1>Welcome to Intex2025</h1>
+            <p>Your personalized homepage</p>
+          </div>
         </div>
-      </div>
-    </AuthorizeView>
+      </AuthorizeView>    
+    </>
   );
 };
 
