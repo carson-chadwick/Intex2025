@@ -1,4 +1,3 @@
-// frontend/src/pages/HomePage.tsx
 import React from 'react';
 import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';

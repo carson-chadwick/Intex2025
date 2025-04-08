@@ -19,7 +19,7 @@ function Logout(props: { children: React.ReactNode }) {
 
 
       if (response.ok) {
-        navigate('/login');
+        navigate('/LandingPage');
       } else {
         console.error('Logout failed:', response.status);
       }
