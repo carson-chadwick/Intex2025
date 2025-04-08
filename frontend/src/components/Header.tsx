@@ -4,7 +4,8 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import logo from '../images/cinenicheicon_720.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
-
+import Logout from '../components/Logout';
+import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 const Header: React.FC = () => {
   //authentication stuff
   const user = useContext(UserContext);
@@ -35,30 +36,19 @@ const Header: React.FC = () => {
             <FaSearch className="icon" />
             {/* Profile Icon and Dropdown */}
 
-          <div className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
-            <FaUserCircle/>
-          </div>
+            <div className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              <FaUserCircle/>
+            </div>
 
-          <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
-            <h4>Profile</h4>
-            <label>
-              Make Phone Number Public
-              <input type="checkbox" />
-            </label>
-            <label>
-              Make Personality Profile Public
-              <input type="checkbox" />
-            </label>
-            <button>Logout</button>
-            {/* <button onClick={handleLogout} className="logout-button">
-              Logout
-            </button> */}
-          </div>
-            {/* Todo: make the FaUserCircle create a dropdown menu with the following items:
-            - Account
-            - Privacy Policy
-            - Logout */}
-            {/* <FaUserCircle className="icon profile-icon" /> */}
+            <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
+              <button>Account</button>
+              <button>Privacy Policy</button>
+              <button>
+                <div className='custom-logout'>
+                  <Logout>Logout <AuthorizedUser value="email" /></Logout>
+                </div>
+              </button>
+            </div>
           </div>
         </header>
       ) : (

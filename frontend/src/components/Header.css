@@ -85,33 +85,38 @@
   cursor: pointer;
 }
 
-.profile-dropdown input[type="checkbox"] {
-  appearance: none;
-  width: 40px;
-  height: 20px;
-  background: #ccc;
-  border-radius: 10px;
-  position: relative;
+.profile-dropdown button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: #1c1c1e;
   cursor: pointer;
-  transition: background 0.3s;
+  border-radius: 5px;
 }
 
-.profile-dropdown input[type="checkbox"]:checked {
-  background: #006184;
+.profile-dropdown button:hover {
+  background-color: #c0c0c0; /* Slight hover effect */
 }
 
-.profile-dropdown input[type="checkbox"]::before {
-  content: "";
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 50%;
-  top: 1px;
-  left: 2px;
-  transition: transform 0.3s;
+.custom-logout,
+.custom-logout * {
+  all: unset;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: #1c1c1e;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.profile-dropdown input[type="checkbox"]:checked::before {
-  transform: translateX(20px);
+.custom-logout:hover {
+  background-color: #c0c0c0; /* Slight hover effect */
 }
+
+/*End Profile dropdown menu*/
