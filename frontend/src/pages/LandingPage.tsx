@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-
+import rick from '../images/rick.png';
 function LandingPage() {
 
     const navigate = useNavigate();
@@ -10,6 +10,8 @@ function LandingPage() {
     return (
         <>  
             <Header/>
+            <h1>You got rick rolled</h1>
+            <img src={rick}/>
             <p>
                 This is the landing page. 
                 This is the first page that logged out users see.
