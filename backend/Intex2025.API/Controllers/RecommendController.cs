@@ -44,8 +44,8 @@ namespace Intex2025.API.Controllers
         public IActionResult GetTopPicks(int userId)
         {
             var picks = _recsContext.UserTopPicks
-                .Where(p => p.User_Id == userId)
-                .OrderBy(p => p.Rank)
+                .Where(p => p.user_id == userId)
+                .OrderBy(p => p.rank)
                 .ToList();
             return Ok(picks);
         }
@@ -54,9 +54,9 @@ namespace Intex2025.API.Controllers
         public IActionResult GetGenrePicks(int userId)
         {
             var picks = _recsContext.UserHomeGenreRecs
-                .Where(p => p.User_Id == userId)
-                .OrderBy(p => p.Genre)
-                .ThenBy(p => p.Rank)
+                .Where(p => p.user_id == userId)
+                .OrderBy(p => p.genre)
+                .ThenBy(p => p.rank)
                 .ToList();
             return Ok(picks);
         }
