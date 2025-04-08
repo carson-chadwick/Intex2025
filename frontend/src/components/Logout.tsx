@@ -19,7 +19,7 @@ function Logout(props: { children: React.ReactNode }) {
 
 
       if (response.ok) {
-        navigate('/login');
+        navigate('/LandingPage');
       } else {
         console.error('Logout failed:', response.status);
       }
@@ -29,7 +29,7 @@ function Logout(props: { children: React.ReactNode }) {
   };
 
   return (
-    <a className="logout" href="#" onClick={handleLogout}>
+    <a className="logout text-dark" href="#" onClick={handleLogout}>
       {props.children}
     </a>
   );

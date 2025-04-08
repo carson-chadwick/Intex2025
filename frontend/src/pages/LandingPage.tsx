@@ -1,36 +1,63 @@
-import React, { useEffect } from 'react';
-// import Logout from '../components/Logout';
-import Slideshow from '../components/Slideshow';
-import Recommender from '../components/RecommenderComponent';
+import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import rick from '../images/rick.png';
+function LandingPage() {
 
-const LandingPage: React.FC = () => {
-  useEffect(() => {
-    if (document.querySelector('script[src="/slideshow.js"]')) return;
-
-    const script = document.createElement('script');
-    script.src = '/slideshow.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.initSlideshow) {
-        window.initSlideshow();
-      }
+    const navigate = useNavigate();
+    const handleNavigation = (path: string) => {
+      navigate(path);
     };
+    return (
+        <>  
+            <Header/>
+            <h1>You got rick rolled</h1>
+            <img src={rick}/>
+            <p>
+                This is the landing page. 
+                This is the first page that logged out users see.
+            </p>
+            <button className="btn" onClick={() => handleNavigation('/login')}>Login</button>
+            <button className="btn" onClick={() => handleNavigation('/register')}>Register</button>
+        </>
+    );
+}
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  return (
-    <>
-      {/* <Slideshow /> */}
-    </>
-  );
-};
 
 export default LandingPage;
+
+// import React, { useEffect } from 'react';
+// // import Logout from '../components/Logout';
+// import Slideshow from '../components/Slideshow';
+// import Recommender from '../components/RecommenderComponent';
+
+// const LandingPage: React.FC = () => {
+//   useEffect(() => {
+//     if (document.querySelector('script[src="/slideshow.js"]')) return;
+
+//     const script = document.createElement('script');
+//     script.src = '/slideshow.js';
+//     script.async = true;
+//     document.body.appendChild(script);
+
+//     script.onload = () => {
+//       if (window.initSlideshow) {
+//         window.initSlideshow();
+//       }
+//     };
+
+//     return () => {
+//       document.body.removeChild(script);
+//     };
+//   }, []);
+
+//   return (
+//     <>
+//       {/* <Slideshow /> */}
+//     </>
+//   );
+// };
+
+// export default LandingPage;
 
 // import React, { useEffect } from 'react';
 // // import Logout from '../components/Logout';
