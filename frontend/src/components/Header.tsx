@@ -1,34 +1,45 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import './Header.css';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import logo from '../images/cinenicheicon_720.png';
+import { UserContext } from './AuthorizeView';
 
 const Header: React.FC = () => {
-  const [isLoggedIn] = useState<boolean>(false);
+  const user = useContext(UserContext);
+  const isLoggedIn = !!user;
 
   return (
-    <header className="header">
-      <div className="logo">
-        <img src={logo} alt="CineNiche Logo" className="logo-img" />
-      </div>
+    <>
+      {isLoggedIn ? (
+        <header className="header">
+          <div className="logo">
+            <img src={logo} alt="CineNiche Logo" className="logo-img" />
+          </div>
 
-      <div className="header-right">
-        {isLoggedIn ? (
-          <>
-            <button className="btn">Products</button>
+          <div className="header-right">
+            <button className="btn">Home</button>
             <button className="btn">My List</button>
+            <button className="btn">Admin</button>
             <FaSearch className="icon" />
             <FaUserCircle className="icon profile-icon" />
-          </>
-        ) : (
-          <>
+          </div>
+        </header>
+      ) : (
+        //Have this header be hidden when logged in
+        <header className="header">
+          <div className="logo">
+            <img src={logo} alt="CineNiche Logo" className="logo-img" />
+          </div>
+
+          <div className="header-right">
             <button className="btn">Sign in</button>
             <button className="btn">Register</button>
-          </>
-        )}
-      </div>
-    </header>
+          </div>
+        </header>
+      )}
+    </>
   );
 };
 
 export default Header;
+
