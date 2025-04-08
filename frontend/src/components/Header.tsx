@@ -32,8 +32,7 @@ const Header: React.FC = () => {
           </div>
 
           <div className="header-right">
-            <button className="btn">Sign in</button>
-            <button className="btn">Register</button>
+            <FaUserCircle className="icon profile-icon" />
           </div>
         </header>
       )}
