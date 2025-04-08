@@ -37,19 +37,16 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
 
   return (
     <div className="w-[90%] mx-auto">
-      <br/>
-      <br/>
-      <br/>
+      <h1 className="text-3xl font-semibold text-start mb-4">{Name}</h1>
 
-      <h1>HJI</h1>
-      {/* <p>{JSON.stringify(recs, null, 2)}</p> */}
-      {/* <h1 className="text-3xl font-semibold text-start mb-4">{Name}</h1> */}
-
-      {/* <div className="row g-3 bg-transparent">
+      <div className="row g-3 bg-transparent">
         {recs.map((rec, idx) => (
+
           <div className="col-auto" key={idx}>
             <RecommendCard
-              imageSrc={`/images/${rec.title}.jpg`} // 🔄 Update to your actual image path logic
+              const sanitizedTitle = rec.title.replace(/[':.]/g, "");
+            
+              imageSrc={`https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`} // 🔄 Update to your actual image path logic
               altText={rec.title}
               captionText={
                 type === 'homeGenre' ? `${rec.genre}: ${rec.title}` : rec.title
@@ -67,7 +64,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
             />
           </div>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };
