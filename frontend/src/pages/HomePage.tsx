@@ -1,14 +1,14 @@
-// frontend/src/pages/HomePage.tsx
 import React from 'react';
 import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import './Homepage.css'; // If you have custom styling for HomePage
 import Recommender from '../components/RecommenderComponent';
-
+import Header from '../components/Header';
 const HomePage: React.FC = () => {
   const user_id = 5;
   return (
     <AuthorizeView>
+      <Header/>
       <div className="home-container">
         <span>
           <Logout>
