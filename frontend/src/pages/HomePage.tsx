@@ -8,6 +8,7 @@ import Recommender from '../components/RecommenderComponent';
 const HomePage: React.FC = () => {
   return (
     <AuthorizeView>
+      {/* <Header/> */}
       <div className="home-container">
         <span>
           <Logout>
