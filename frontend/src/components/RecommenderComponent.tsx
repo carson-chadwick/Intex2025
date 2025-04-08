@@ -5,6 +5,7 @@ interface RecData {
   title: string;
   genre?: string;
   rank: number;
+  user_Id?: number; // optional
 }
 
 interface RecommenderProps {
@@ -36,9 +37,15 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
 
   return (
     <div className="w-[90%] mx-auto">
-      <h1 className="text-3xl font-semibold text-start mb-4">{Name}</h1>
+      <br/>
+      <br/>
+      <br/>
 
-      <div className="row g-3 bg-transparent">
+      <h1>HJI</h1>
+      {/* <p>{JSON.stringify(recs, null, 2)}</p> */}
+      {/* <h1 className="text-3xl font-semibold text-start mb-4">{Name}</h1> */}
+
+      {/* <div className="row g-3 bg-transparent">
         {recs.map((rec, idx) => (
           <div className="col-auto" key={idx}>
             <RecommendCard
@@ -60,7 +67,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
             />
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
