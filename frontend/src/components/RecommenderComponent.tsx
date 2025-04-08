@@ -18,6 +18,11 @@ interface RecommenderProps {
 const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
   const [recs, setRecs] = useState<RecData[]>([]);
 
+  // 🔧 Helper function to sanitize titles
+  const sanitizeTitle = (title: string): string => {
+    return title.replace(/[':.]/g, '');
+  };
+
   useEffect(() => {
     let endpoint = '';
 
@@ -37,34 +42,84 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
 
   return (
     <div className="w-[90%] mx-auto">
-      <h1 className="text-3xl font-semibold text-start mb-4">{Name}</h1>
+      <h1 className="text-3xl font-semibold text-start mb-4">
+        You might also enjoy:
+      </h1>
 
-      <div className="row g-3 bg-transparent">
-        {recs.map((rec, idx) => (
+      {type === 'homeGenre' ? (
+        // Group and display by genre
+        Object.entries(
+          recs.reduce(
+            (acc, rec) => {
+              const genre = rec.genre || 'Other';
+              if (!acc[genre]) acc[genre] = [];
+              acc[genre].push(rec);
+              return acc;
+            },
+            {} as Record<string, RecData[]>
+          )
+        ).map(([genre, genreRecs]) => (
+          <div key={genre} className="mb-8">
+            <h2 className="text-3xl font-semibold text-start mb-4">
+              Top picks in {genre}
+            </h2>
+            <div className="row g-3 bg-transparent">
+              {genreRecs.map((rec, idx) => {
+                const sanitizedTitle = sanitizeTitle(rec.title);
+                const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
 
-          <div className="col-auto" key={idx}>
-            <RecommendCard
-              const sanitizedTitle = rec.title.replace(/[':.]/g, "");
-            
-              imageSrc={`https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`} // 🔄 Update to your actual image path logic
-              altText={rec.title}
-              captionText={
-                type === 'homeGenre' ? `${rec.genre}: ${rec.title}` : rec.title
-              }
-              containerHeight="300px"
-              containerWidth="200px"
-              imageHeight="300px"
-              imageWidth="200px"
-              rotateAmplitude={0}
-              scaleOnHover={1.05}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={false}
-              overlayContent={false}
-            />
+                return (
+                  <div className="col-auto" key={idx}>
+                    <RecommendCard
+                      imageSrc={imageSrc}
+                      altText={rec.title}
+                      captionText={rec.title}
+                      containerHeight="300px"
+                      containerWidth="200px"
+                      imageHeight="300px"
+                      imageWidth="200px"
+                      rotateAmplitude={0}
+                      scaleOnHover={1.05}
+                      showMobileWarning={false}
+                      showTooltip={false}
+                      displayOverlayContent={false}
+                      overlayContent={false}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        ))}
-      </div>
+        ))
+      ) : (
+        // Standard one-row layout for other types
+        <div className="row g-3 bg-transparent">
+          {recs.map((rec, idx) => {
+            const sanitizedTitle = sanitizeTitle(rec.title);
+            const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+
+            return (
+              <div className="col-auto" key={idx}>
+                <RecommendCard
+                  imageSrc={imageSrc}
+                  altText={rec.title}
+                  captionText={rec.title}
+                  containerHeight="300px"
+                  containerWidth="200px"
+                  imageHeight="300px"
+                  imageWidth="200px"
+                  rotateAmplitude={0}
+                  scaleOnHover={1.05}
+                  showMobileWarning={false}
+                  showTooltip={false}
+                  displayOverlayContent={false}
+                  overlayContent={false}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

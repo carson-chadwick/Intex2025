@@ -1,42 +1,43 @@
-/* Make sure html and body take the full height of the screen */
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+html,
+body {
   height: 100%;
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
+  margin: 0;
+  padding: 0;
+  background-color: #1c1c1e;
+  color: #f2ebdb;
+  font-family: 'Inter', sans-serif;
 }
 
-/* General layout for the homepage */
 .home-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #f4f4f4;
-  box-sizing: border-box; /* Ensures padding is included in the height */
+  background-color: #1c1c1e;
+  box-sizing: border-box;
 }
 
-/* Header styling */
 .home-header {
   text-align: center;
   margin-bottom: 30px;
 }
 
 .home-tagline {
-  color: #777;
+  color: #f2ebdb;
   font-size: 18px;
 }
 
-/* Main content styling */
 .home-main {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
-  flex-grow: 1; /* This ensures the main section expands to take available space */
+  flex-grow: 1;
 }
 
-/* Button container and styling */
 .button-container {
   margin-top: 20px;
 }
@@ -44,8 +45,8 @@ html, body {
 .learn-more-btn {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #007BFF;
-  color: #fff;
+  background-color: #007bff;
+  color: #f2ebdb;
   border: none;
   cursor: pointer;
   border-radius: 5px;
@@ -56,10 +57,9 @@ html, body {
   background-color: #0056b3;
 }
 
-/* Footer styling */
 .home-footer {
   text-align: center;
   margin-top: 40px;
   font-size: 14px;
-  color: #777;
+  color: #f2ebdb;
 }
