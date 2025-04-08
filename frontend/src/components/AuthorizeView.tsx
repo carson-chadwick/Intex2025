@@ -1,19 +1,16 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { Navigate } from 'react-router-dom';
 
-const UserContext = createContext<User | null>(null);
-
 interface User {
   email: string;
 }
 
+export const UserContext = createContext<User | null>(null);
+
 function AuthorizeView(props: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true); // add a loading state
-  //const navigate = useNavigate();
-  let emptyuser: User = { email: '' };
-
-  const [user, setUser] = useState(emptyuser);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchWithRetry(url: string, options: any) {
