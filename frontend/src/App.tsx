@@ -20,6 +20,8 @@ function App() {
           element={
             <AuthorizeView>
               <Header/>
+              <Route path="/HomePage" element={<HomePage/>} />
+              <Route path="/MyList" element={<HomePage/>} />
               <HomePage/>
             </AuthorizeView>
           }
