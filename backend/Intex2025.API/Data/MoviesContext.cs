@@ -95,6 +95,7 @@ public partial class MoviesContext : DbContext
             entity.Property(e => e.Zip).HasColumnName("zip");
         });
 
+
         OnModelCreatingPartial(modelBuilder);
     }
 
