@@ -17,8 +17,8 @@ const HomePage: React.FC = () => {
         <div className="content">
           <h1>Welcome to Intex2025</h1>
           <p>Your personalized homepage</p>
-          <Recommender Id={1} Name="Suggested For You" />
-          <Recommender Id={2} Name="Suggested For You 2" />
+          <Recommender user_id={1} show_id=null Name="Suggested For You" />
+          <Recommender user_id={2} show_id=null Name="Suggested For You 2" />
         </div>
       </div>
     </AuthorizeView>
