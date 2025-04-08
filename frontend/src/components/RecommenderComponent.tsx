@@ -35,7 +35,7 @@ const sanitizeTitle = (title: string): string => {
     if (type === 'homeTop') endpoint = `/recommend/home/top/${userId}`;
     if (type === 'homeGenre') endpoint = `/recommend/home/genre/${userId}`;
 
-    const BASE_URL = 'https://localhost:5000'; // or use process.env.REACT_APP_API_URL
+    const BASE_URL = import.meta.env.VITE_API_URL; // or use process.env.REACT_APP_API_URL
     const fullUrl = `${BASE_URL}${endpoint}`;
 
     fetch(fullUrl)
