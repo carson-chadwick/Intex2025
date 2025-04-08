@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Intex2025.API.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Intex2025.API.Controllers
 {
@@ -9,49 +9,86 @@ namespace Intex2025.API.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private MoviesContext _movieContext;
-        
-        public MovieController(MoviesContext temp) => _movieContext = temp;
-        
+        private readonly MoviesContext _movieContext;
+
+        public MovieController(MoviesContext context)
+        {
+            _movieContext = context;
+        }
+
+        // GET: /Movie/AllMovies
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1)
+        public IActionResult GetAllMovies(int pageSize, int pageNum, string? search)
         {
             var query = _movieContext.MoviesTitles.AsQueryable();
 
-            var totalNumProjects = query.Count();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(m => m.Title.Contains(search));
+            }
 
-            var movieReturn = query
-                .Skip((pageNum-1) * pageSize)
+            var totalNumMovies = query.Count();
+
+            var movies = query
+                .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            var someObject = new
+            return Ok(new
             {
-                Movies = movieReturn,
-                TotalNumMovies = totalNumProjects
-            };
-
-            return Ok(someObject);
+                movies,
+                totalNumMovies
+            });
         }
-        
-        // [HttpGet("HomePageRecommendation/{userId}")]
-        // public IActionResult GetRecommendations(int userId)
-        // {
-        //     var start = new System.Diagnostics.ProcessStartInfo
-        //     {
-        //         FileName = "python3",
-        //         Arguments = $"Recommender_HomePage_Backend.py {userId}",
-        //         RedirectStandardOutput = true,
-        //         UseShellExecute = false,
-        //         CreateNoWindow = true
-        //     };
-        //
-        //     using var process = System.Diagnostics.Process.Start(start);
-        //     using var reader = process.StandardOutput;
-        //     string result = reader.ReadToEnd();
-        //
-        //     var recommendations = JsonSerializer.Deserialize<List<string>>(result); // Or your custom object
-        //     return Ok(recommendations);
-        // }
+
+
+        // POST: /Movie/AddMovie
+        [HttpPost("AddMovie")]
+        public IActionResult AddMovie([FromBody] MoviesTitle movie)
+        {
+            if (movie == null)
+            {
+                return BadRequest("Invalid movie object.");
+            }
+
+            _movieContext.MoviesTitles.Add(movie);
+            _movieContext.SaveChanges();
+            return Ok(new { message = "Movie added successfully." });
+        }
+
+        // PUT: /Movie/EditMovie/{showId}
+        [HttpPut("EditMovie/{showId}")]
+        public IActionResult EditMovie(string showId, [FromBody] MoviesTitle updatedMovie)
+        {
+            var existingMovie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
+
+            if (existingMovie == null)
+            {
+                return NotFound("Movie not found.");
+            }
+
+            _movieContext.Entry(existingMovie).CurrentValues.SetValues(updatedMovie);
+            _movieContext.SaveChanges();
+
+            return Ok(new { message = "Movie updated successfully." });
+        }
+
+        // DELETE: /Movie/DeleteMovie/{showId}
+        [HttpDelete("DeleteMovie/{showId}")]
+        public IActionResult DeleteMovie(string showId)
+        {
+            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
+
+            if (movie == null)
+            {
+                return NotFound("Movie not found.");
+            }
+
+            _movieContext.MoviesTitles.Remove(movie);
+            _movieContext.SaveChanges();
+
+            return Ok(new { message = "Movie deleted successfully." });
+        }
     }
 }
+
