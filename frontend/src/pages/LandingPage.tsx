@@ -1,7 +1,6 @@
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 import rick from '../images/rick.png';
-import PrivacyPage from './PrivacyPage';
 import Footer from '../components/Footer';
 import Recommender from '../components/RecommenderComponent';
 function LandingPage() {

@@ -103,3 +103,48 @@ table td {
 .sort-dropdown div:hover {
   background-color: #f5f5f5;
 }
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-modal {
+  background-color: white; /* Clean white bg */
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  animation: popup-fade 0.2s ease-out;
+  border-radius: 0; /* 👈 No rounded corners */
+  border: 1px solid #ddd; /* 👈 Optional subtle border */
+}
+
+@keyframes popup-fade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control {
+  border-radius: 0 !important;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem; /* 👈 This adds spacing between each field */
+}

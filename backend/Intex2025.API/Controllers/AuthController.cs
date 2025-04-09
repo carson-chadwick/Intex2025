@@ -23,8 +23,30 @@ public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         if (!ModelState.IsValid)
             return BadRequest("Invalid login request");
 
+        var user = await _signInManager.UserManager.FindByEmailAsync(request.Email);
+        if (user == null)
+            return Unauthorized(new { message = "Invalid email or password." });
+
+        // ✅ First, check if password is valid
+        var passwordValid = await _signInManager.UserManager.CheckPasswordAsync(user, request.Password);
+        if (!passwordValid)
+            return Unauthorized(new { message = "Invalid email or password." });
+
+        // ✅ Check if the user has MFA enabled
+        var mfaEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(user);
+        if (mfaEnabled)
+        {
+            return Ok(new
+            {
+                requiresMfa = true,
+                email = user.Email
+            });
+        }
+
+
+        // ✅ No MFA — proceed to full sign-in
         var result = await _signInManager.PasswordSignInAsync(
-            request.Email,
+            user,
             request.Password,
             isPersistent: request.RememberMe,
             lockoutOnFailure: false);
@@ -40,6 +62,8 @@ public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         return StatusCode(500, "Internal server error during login.");
     }
 }
+
+
 
 }
 
