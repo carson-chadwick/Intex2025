@@ -63,30 +63,3 @@ body {
   font-size: 14px;
   color: #f2ebdb;
 }
-
-
-/*New stuff*/
-body {
-  margin: 0; /* Remove any default margins */
-  padding: 0;
-  height: 100vh; /* Ensure the body takes up the full viewport height */
-}
-
-#root {
-  height: 100%; /* Let your app's root element use the full height */
-  display: flex;
-  flex-direction: column;
-}
-
-.main-content {
-  flex: 1; /* Pushes the footer to the bottom */
-  display: flex;
-  flex-wrap: wrap; /* Ensures movie elements wrap within the page */
-  justify-content: center; /* Optional: Centers the content */
-}
-
-img {
-  max-width: 100%; /* Prevents images from overflowing horizontally */
-  max-height: calc(100vh - 200px); /* Adjusts max height to avoid overlapping the footer */
-  object-fit: cover; /* Keeps image proportions intact */
-}
