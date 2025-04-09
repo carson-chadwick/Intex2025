@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Movie } from '../types/Movies';
 import Pagination from '../components/Pagination';
-import { deleteMovie, fetchGenres, fetchMovies } from '../api/IntexAPI';
+import { deleteMovie, fetchMovies } from '../api/IntexAPI';
 import EditMovieForm from '../components/EditMovieForm';
 import NewMovieForm from '../components/NewMovieForm';
 import './AdminPage.css';
@@ -20,16 +20,11 @@ function AdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [genres, setGenres] = useState<string[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<string>('All');
   const [sortBy, setSortBy] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
-  useEffect(() => {
-    fetchGenres()
-      .then((g) => setGenres(['All', ...g]))
-      .catch((e) => console.error('Genre fetch failed', e));
-  }, []);
+  const [activeSortDropdown, setActiveSortDropdown] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -38,7 +33,7 @@ function AdminPage() {
           pageSize,
           pageNum,
           searchTerm,
-          selectedGenre,
+          '',
           sortBy,
           sortOrder
         );
@@ -52,7 +47,7 @@ function AdminPage() {
     };
 
     loadProjects();
-  }, [pageSize, pageNum, searchTerm, selectedGenre, sortBy, sortOrder]);
+  }, [pageSize, pageNum, searchTerm, sortBy, sortOrder]);
 
   const handleDelete = async (showId: number) => {
     const confirmDelete = window.confirm(
@@ -90,56 +85,13 @@ function AdminPage() {
                 Add Movie
               </button>
 
-              <div className="d-flex gap-3 align-items-center flex-wrap">
-                <div className="w-50">
-                  <MovieSearchBar
-                    onSearch={(term) => {
-                      setSearchTerm(term);
-                      setPageNum(1);
-                    }}
-                  />
-                </div>
-
-                <select
-                  className="form-select w-auto"
-                  value={selectedGenre}
-                  onChange={(e) => {
-                    setSelectedGenre(e.target.value);
+              <div className="w-50">
+                <MovieSearchBar
+                  onSearch={(term) => {
+                    setSearchTerm(term);
                     setPageNum(1);
                   }}
-                >
-                  {genres.map((genre) => (
-                    <option key={genre} value={genre}>
-                      {genre}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  className="form-select w-auto"
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value);
-                    setPageNum(1);
-                  }}
-                >
-                  <option value="">Sort By</option>
-                  <option value="title">Title</option>
-                  <option value="releaseYear">Release Year</option>
-                  <option value="rating">Rating</option>
-                </select>
-
-                <select
-                  className="form-select w-auto"
-                  value={sortOrder}
-                  onChange={(e) => {
-                    setSortOrder(e.target.value as 'asc' | 'desc');
-                    setPageNum(1);
-                  }}
-                >
-                  <option value="asc">Asc</option>
-                  <option value="desc">Desc</option>
-                </select>
+                />
               </div>
             </div>
           )}
@@ -154,7 +106,7 @@ function AdminPage() {
                       pageSize,
                       pageNum,
                       searchTerm,
-                      selectedGenre,
+                      '',
                       sortBy,
                       sortOrder
                     ).then((data) => setMovies(data.movies));
@@ -176,7 +128,7 @@ function AdminPage() {
                       pageSize,
                       pageNum,
                       searchTerm,
-                      selectedGenre,
+                      '',
                       sortBy,
                       sortOrder
                     ).then((data) => setMovies(data.movies));
@@ -191,12 +143,120 @@ function AdminPage() {
             <table className="table table-striped table-bordered align-middle">
               <thead className="table-light">
                 <tr>
-                  <th>Title</th>
+                  <th className="sortable-header position-relative">
+                    <div
+                      onClick={() =>
+                        setActiveSortDropdown((prev) =>
+                          prev === 'title' ? null : 'title'
+                        )
+                      }
+                    >
+                      Title <span className="sort-arrow">⇅</span>
+                    </div>
+                    {activeSortDropdown === 'title' && (
+                      <div
+                        className="sort-dropdown"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div
+                          onClick={() => {
+                            setSortBy('title');
+                            setSortOrder('asc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Asc
+                        </div>
+                        <div
+                          onClick={() => {
+                            setSortBy('title');
+                            setSortOrder('desc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Desc
+                        </div>
+                      </div>
+                    )}
+                  </th>
+
                   <th>Type</th>
-                  <th>Director</th>
+                  <th className="sortable-header position-relative">
+                    <div
+                      onClick={() =>
+                        setActiveSortDropdown((prev) =>
+                          prev === 'director' ? null : 'director'
+                        )
+                      }
+                    >
+                      Director <span className="sort-arrow">⇅</span>
+                    </div>
+                    {activeSortDropdown === 'director' && (
+                      <div
+                        className="sort-dropdown"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div
+                          onClick={() => {
+                            setSortBy('director');
+                            setSortOrder('asc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Asc
+                        </div>
+                        <div
+                          onClick={() => {
+                            setSortBy('director');
+                            setSortOrder('desc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Desc
+                        </div>
+                      </div>
+                    )}
+                  </th>
+
                   <th>Cast</th>
                   <th>Country</th>
-                  <th>Release Year</th>
+                  <th className="sortable-header position-relative">
+                    <div
+                      onClick={() =>
+                        setActiveSortDropdown((prev) =>
+                          prev === 'releaseYear' ? null : 'releaseYear'
+                        )
+                      }
+                    >
+                      Release Year <span className="sort-arrow">⇅</span>
+                    </div>
+                    {activeSortDropdown === 'releaseYear' && (
+                      <div
+                        className="sort-dropdown"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div
+                          onClick={() => {
+                            setSortBy('releaseYear');
+                            setSortOrder('asc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Asc
+                        </div>
+                        <div
+                          onClick={() => {
+                            setSortBy('releaseYear');
+                            setSortOrder('desc');
+                            setActiveSortDropdown(null);
+                          }}
+                        >
+                          Desc
+                        </div>
+                      </div>
+                    )}
+                  </th>
+
                   <th>Rating</th>
                   <th>Duration</th>
                   <th>Genre</th>
@@ -264,4 +324,3 @@ function AdminPage() {
 }
 
 export default AdminPage;
-
