@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 // ✅ Define your props type right after the imports
 type TiltedCardProps = {
+  showId: string;
   imageSrc?: string;
   altText?: string;
   captionText?: string;
@@ -28,6 +29,7 @@ const springValues = {
 };
 
 export default function TiltedCard({
+  showId = '',
   imageSrc = 'https://via.placeholder.com/300',
   altText = 'Tilted card image',
   captionText = '',
@@ -104,7 +106,7 @@ export default function TiltedCard({
   return (
     <>
       <figure
-        onClick={() => handleNavigation('/MovieDetailPage', 's115')} //hard coded id:s461
+        onClick={() => handleNavigation('/MovieDetailPage', showId)}
         // onClick={() => handleNavigation('/MovieDetailPage')}
         ref={ref}
         className="tilted-card-figure"
