@@ -20,7 +20,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
 
   // 🔧 Helper function to sanitize titles
   const sanitizeTitle = (title: string): string => {
-    return title.replace(/[':.]/g, '');
+    return title.replace(/[':./-]/g, '');
   };
 
   useEffect(() => {
@@ -40,11 +40,13 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
       .catch((err) => console.error('Failed to fetch recommendations:', err));
   }, [type, showId, userId]);
 
+  const isMovieDetailRecommender = type === 'collab' || type === 'content';
+
   return (
-    <div className="w-[90%] mx-auto">
-      <h1 className="text-3xl font-semibold text-start mb-4">
-        You might also enjoy:
-      </h1>
+    <div className="w-[90%] mx-auto mb-5">
+      {isMovieDetailRecommender && (
+        <h2 className="text-2xl font-semibold text-start mb-3">{Name}</h2>
+      )}
 
       {type === 'homeGenre' ? (
         // Group and display by genre
@@ -92,7 +94,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
           </div>
         ))
       ) : (
-        // Standard one-row layout for other types
+        // Standard one-row layout for other types (like collab/content)
         <div className="row g-3 bg-transparent">
           {recs.map((rec, idx) => {
             const sanitizedTitle = sanitizeTitle(rec.title);
