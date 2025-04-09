@@ -84,6 +84,9 @@ namespace Intex2025.API.Controllers
             .Skip((pageNum - 1) * pageSize)
             .Take(pageSize)
             .ToList();
+        
+        HttpContext.Response.Cookies.Append("totalNumMovies", totalNumMovies.ToString(),
+            new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.None, Secure = true, Expires = DateTime.Now.AddMinutes(5) });
 
         return Ok(new
         {
