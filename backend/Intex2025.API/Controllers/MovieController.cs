@@ -114,5 +114,18 @@ namespace Intex2025.API.Controllers
 
             return Ok(new { message = "Movie deleted successfully." });
         }
+
+        [HttpGet("GetMoviesByShowId/{showId}")]
+        public IActionResult GetMoviesByShowId(string showId)
+        {
+            var movie = _movieContext.MoviesTitles.FirstOrDefault(m => m.ShowId == showId);
+
+            if (movie == null)
+            {
+                return NotFound("Movie not found.");
+            }
+
+            return Ok(movie);
+        }
     }
 }

@@ -17,25 +17,56 @@ namespace Intex2025.API.Controllers
         }
 
         // --- Show Details Page ---
-
         [HttpGet("collab/{showId}")]
         public IActionResult GetCollab(string showId)
         {
             var recs = _recsContext.CollabRecs
-                .Where(r => r.Show_Id == showId)
+                .Where(r => r.Show_Id.ToLower() == showId.ToLower())
                 .OrderBy(r => r.Rank)
                 .ToList();
-            return Ok(recs);
+
+            Console.WriteLine($"✅ Found {recs.Count} recommendations for showId: {showId}");
+            foreach (var r in recs)
+            {
+                Console.WriteLine($" → Rec_Id: {r.Rec_Id}");
+            }
+
+            var fullRecs = recs
+                .Join(_moviesContext.MoviesTitles,
+                    c => c.Rec_Id,
+                    m => m.ShowId,
+                    (c, m) => new
+                    {
+                        Title = m.Title,
+                        Rank = c.Rank
+                    })
+                .OrderBy(r => r.Rank)
+                .ToList();
+
+            return Ok(fullRecs);
         }
 
         [HttpGet("content/{showId}")]
         public IActionResult GetContent(string showId)
         {
             var recs = _recsContext.ContentRecs
-                .Where(r => r.Show_Id == showId)
+                .Where(r => r.Show_Id.Trim().ToLower() == showId.Trim().ToLower())
                 .OrderBy(r => r.Rank)
                 .ToList();
-            return Ok(recs);
+
+            var fullRecs = recs
+                .Join(_moviesContext.MoviesTitles,
+                    c => c.Rec_Id,
+                    m => m.ShowId,
+                    (c, m) => new
+                    {
+                        Title = m.Title,
+                        Rank = c.Rank
+                    })
+                .OrderBy(r => r.Rank)
+                .ToList();
+
+            return Ok(fullRecs);
         }
 
         // --- User Home Page ---
