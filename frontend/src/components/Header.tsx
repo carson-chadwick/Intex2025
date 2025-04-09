@@ -1,18 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import './Header.css';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import logo from '../images/cinenicheicon_720.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
-
+import Logout from '../components/Logout';
 const Header: React.FC = () => {
+  //authentication stuff
   const user = useContext(UserContext);
   const isLoggedIn = !!user;
 
+  //navigation stuff
   const navigate = useNavigate();
   const handleNavigation = (path: string) => {
     navigate(path);
   };
+
+  //profile dropdown stuff
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
 
   return (
     <>
@@ -27,7 +33,16 @@ const Header: React.FC = () => {
             <button className="btn" onClick={() => handleNavigation('/MyListPage')}>My List</button>
             <button className="btn" onClick={() => handleNavigation('/AdminPage')}>Admin</button>
             <FaSearch className="icon" />
-            <FaUserCircle className="icon profile-icon" />
+            {/* Profile Icon and Dropdown */}
+
+            <div className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              <FaUserCircle/>
+            </div>
+
+            <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
+              <button onClick={() => handleNavigation('/AccountPage')}>Account</button>
+              <Logout>Logout </Logout>
+            </div>
           </div>
         </header>
       ) : (
@@ -37,7 +52,15 @@ const Header: React.FC = () => {
           </div>
 
           <div className="header-right">
-            <FaUserCircle className="icon profile-icon" />
+            <div className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              <FaUserCircle/>
+            </div>
+
+            <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
+              <button onClick={() => handleNavigation('/login')}>Login</button>
+              <button onClick={() => handleNavigation('/register')}>Get Started</button>
+            </div>
+            {/* <FaUserCircle className="icon profile-icon" /> */}
           </div>
         </header>
       )}

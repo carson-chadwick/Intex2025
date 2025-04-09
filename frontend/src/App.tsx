@@ -8,6 +8,8 @@ import MyListPage from './pages/MyListPage';
 import AdminPage from './pages/AdminPage';
 import LandingPage from './pages/LandingPage';
 import MovieDetailPage from './pages/MovieDetailPage';
+import PrivacyPage from './pages/PrivacyPage';
+import AccountPage from './pages/AccountPage';
 
 function App() {
   return (
@@ -17,14 +19,16 @@ function App() {
         <Route path="/LandingPage" element={<LandingPage/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/register" element={<RegisterPage/>} />
+        <Route path="/PrivacyPage" element={<PrivacyPage/>} />
         
         {/* Protected routes */}
         <Route path="/HomePage" element={<AuthorizeView><HomePage/></AuthorizeView>} />
         <Route path="/MyListPage" element={<AuthorizeView><MyListPage/></AuthorizeView>} />
         <Route path="/AdminPage" element={<AuthorizeView><AdminPage/></AuthorizeView>} />
         <Route path="/" element={<AuthorizeView><HomePage/></AuthorizeView>} />
-        {/* <Route path="/MovieDetailPage" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} /> */}
         <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
+        {/* Todo: Eventually pass in the userId to the account page */}
+        <Route path="/AccountPage" element={<AuthorizeView><AccountPage/></AuthorizeView>} />
       </Routes>
     </Router>
   );

@@ -5,9 +5,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
+  margin-bottom: 10px; /* Want a little space between the body and the header */
   height: 64px;
   min-height: 64px;
-  /* position: fixed; */
+  position: relative;
+  width: 100%;
+  z-index: 100; /* make sure it is the front most element*/
 }
 
 .logo-img {
@@ -50,3 +53,55 @@
   font-size: 28px;
   margin-left: 5px;
 }
+
+
+/* Profile Dropdown Menu */
+.profile-dropdown {
+  position: fixed;
+  top: 50px; /* Adjust based on navbar height */
+  right: 12px;
+  background: #dcdcdc; /* Medium grey background */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  border-radius: 10px;
+  width: 250px; /* Adjust width as needed */
+  display: none; /* Initially hidden */
+  z-index: 1000;
+  padding: 10px;
+}
+
+.profile-dropdown.active {
+  display: block; /* Show when active */
+}
+
+.profile-dropdown h4 {
+  margin: 0;
+  padding: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-dropdown label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-dropdown button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: #1c1c1e;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.profile-dropdown button:hover {
+  background-color: #c0c0c0; /* Slight hover effect */
+}
+/*End Profile dropdown menu*/

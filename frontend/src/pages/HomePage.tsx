@@ -4,6 +4,7 @@ import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import './Homepage.css';
 import Recommender from '../components/RecommenderComponent';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -44,11 +45,11 @@ const HomePage: React.FC = () => {
     <AuthorizeView>
       <Header />
       <div className="home-container">
-        <span>
+        {/* <span>
           <Logout>
             Logout <AuthorizedUser value="email" />
           </Logout>
-        </span>
+        </span> */}
         <div className="content">
           <h1>Welcome to Intex2025</h1>
           <p>Your personalized homepage</p>
@@ -64,6 +65,7 @@ const HomePage: React.FC = () => {
           />
         </div>
       </div>
+      <Footer/>
     </AuthorizeView>
   );
 };
