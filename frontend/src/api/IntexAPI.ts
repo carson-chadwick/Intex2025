@@ -114,3 +114,5 @@ export const fetchGenres = async (): Promise<string[]> => {
   if (!response.ok) throw new Error('Failed to fetch genres');
   return response.json();
 };
+
+

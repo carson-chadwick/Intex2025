@@ -94,7 +94,6 @@ namespace Intex2025.API.Controllers
 
 
 
-        // POST: /Movie/AddMovie
         [HttpPost("AddMovie")]
         public IActionResult AddMovie([FromBody] MoviesTitle movie)
         {
@@ -103,10 +102,18 @@ namespace Intex2025.API.Controllers
                 return BadRequest("Invalid movie object.");
             }
 
+            // ✅ Auto-generate ShowId if not provided
+            if (string.IsNullOrWhiteSpace(movie.ShowId))
+            {
+                movie.ShowId = Guid.NewGuid().ToString(); // or use a more custom ID format if you want
+            }
+
             _movieContext.MoviesTitles.Add(movie);
             _movieContext.SaveChanges();
+
             return Ok(new { message = "Movie added successfully." });
         }
+
 
         // PUT: /Movie/EditMovie/{showId}
         [HttpPut("EditMovie/{showId}")]
@@ -262,5 +269,6 @@ namespace Intex2025.API.Controllers
 
             return Ok(new { message = "Rating saved successfully." });
         }
+
     }
 }
