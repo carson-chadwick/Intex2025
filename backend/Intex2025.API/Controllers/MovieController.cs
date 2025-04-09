@@ -16,56 +16,82 @@ namespace Intex2025.API.Controllers
             _movieContext = context;
         }
 
-        // GET: /Movie/AllMovies
-        [HttpGet("AllMovies")]
-        public IActionResult GetAllMovies(
-            int pageSize,
-            int pageNum,
-            string? search,
-            string? director,
-            string? sortBy,
-            string? order
-        )
+    [HttpGet("AllMovies")]
+    public IActionResult GetAllMovies(
+        int pageSize,
+        int pageNum,
+        string? search,
+        string? director,
+        string? sortBy,
+        string? order,
+        string? genre // ✅ New filter param
+    )
+    {
+        var query = _movieContext.MoviesTitles.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
         {
-            var query = _movieContext.MoviesTitles.AsQueryable();
+            query = query.Where(m => m.Title != null && m.Title.ToLower().Contains(search.ToLower()));
+        }
 
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(m => m.Title != null && m.Title.ToLower().Contains(search.ToLower()));
-            }
+        if (!string.IsNullOrWhiteSpace(director))
+        {
+            query = query.Where(m => m.Director != null && m.Director.ToLower().Contains(director.ToLower()));
+        }
 
-            if (!string.IsNullOrWhiteSpace(director))
+        // ✅ Genre filter (for int-based flags like 0/1)
+        if (!string.IsNullOrWhiteSpace(genre))
+        {
+            Console.WriteLine($"🔍 Incoming genre filter: {genre}");
+
+            // Convert first character to uppercase (camelCase → PascalCase)
+            var genrePascal = char.ToUpper(genre[0]) + genre.Substring(1);
+
+            var property = typeof(MoviesTitle).GetProperties()
+                .FirstOrDefault(p => string.Equals(p.Name, genrePascal, StringComparison.Ordinal));
+
+            if (property != null && (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?)))
             {
-                query = query.Where(m => m.Director != null && m.Director.ToLower().Contains(director.ToLower()));
+                Console.WriteLine($"✅ Filtering by property: {property.Name}");
+                query = query.Where(m => EF.Property<int?>(m, property.Name) == 1);
             }
+            else
+            {
+                Console.WriteLine($"❌ Property not found or not numeric: {genre}");
+            }
+        }
+
+
 
             // Apply sorting
             if (!string.IsNullOrWhiteSpace(sortBy))
+        {
+            bool ascending = order?.ToLower() != "desc";
+
+            query = sortBy.ToLower() switch
             {
-                bool ascending = order?.ToLower() != "desc";
-
-                query = sortBy.ToLower() switch
-                {
-                    "title" => ascending ? query.OrderBy(m => m.Title) : query.OrderByDescending(m => m.Title),
-                    "releaseyear" => ascending ? query.OrderBy(m => m.ReleaseYear) : query.OrderByDescending(m => m.ReleaseYear),
-                    "rating" => ascending ? query.OrderBy(m => m.Rating) : query.OrderByDescending(m => m.Rating),
-                    _ => query
-                };
-            }
-
-            var totalNumMovies = query.Count();
-
-            var movies = query
-                .Skip((pageNum - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            return Ok(new
-            {
-                movies,
-                totalNumMovies
-            });
+                "title" => ascending ? query.OrderBy(m => m.Title) : query.OrderByDescending(m => m.Title),
+                "releaseyear" => ascending ? query.OrderBy(m => m.ReleaseYear) : query.OrderByDescending(m => m.ReleaseYear),
+                "rating" => ascending ? query.OrderBy(m => m.Rating) : query.OrderByDescending(m => m.Rating),
+                _ => query
+            };
         }
+
+        var totalNumMovies = query.Count();
+
+        var movies = query
+            .Skip((pageNum - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        return Ok(new
+        {
+            movies,
+            totalNumMovies
+        });
+    }
+
+
 
         // POST: /Movie/AddMovie
         [HttpPost("AddMovie")]
