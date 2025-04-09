@@ -30,7 +30,7 @@ const Header: React.FC = () => {
 
           <div className="header-right">
             <button className="btn" onClick={() => handleNavigation('/HomePage')}>Home</button>
-            <button className="btn" onClick={() => handleNavigation('/MyListPage')}>My List</button>
+            <button className="btn" onClick={() => handleNavigation('/AllMoviesPage')}>All Movies</button>
             <button className="btn" onClick={() => handleNavigation('/AdminPage')}>Admin</button>
             <FaSearch className="icon" />
             {/* Profile Icon and Dropdown */}
