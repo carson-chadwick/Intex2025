@@ -8,7 +8,6 @@ import MyListPage from './pages/MyListPage';
 import AdminPage from './pages/AdminPage';
 import LandingPage from './pages/LandingPage';
 import MovieDetailPage from './pages/MovieDetailPage';
-import PrivacyPage from './pages/PrivacyPageLoggedIn';
 import AccountPage from './pages/AccountPage';
 import PrivacyPageLoggedOut from './pages/PrivacyPageLoggedOut';
 import PrivacyPageLoggedIn from './pages/PrivacyPageLoggedIn';
