@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Intex2025.API.Controllers
 {
-    [Route("[controller]")]
+    [Route("Movie")]
     [ApiController]
     public class MovieController : ControllerBase
     {
@@ -18,13 +18,39 @@ namespace Intex2025.API.Controllers
 
         // GET: /Movie/AllMovies
         [HttpGet("AllMovies")]
-        public IActionResult GetAllMovies(int pageSize, int pageNum, string? search)
+        public IActionResult GetAllMovies(
+            int pageSize,
+            int pageNum,
+            string? search,
+            string? director,
+            string? sortBy,
+            string? order
+        )
         {
             var query = _movieContext.MoviesTitles.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(m => m.Title.Contains(search));
+                query = query.Where(m => m.Title != null && m.Title.ToLower().Contains(search.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(director))
+            {
+                query = query.Where(m => m.Director != null && m.Director.ToLower().Contains(director.ToLower()));
+            }
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                bool ascending = order?.ToLower() != "desc";
+
+                query = sortBy.ToLower() switch
+                {
+                    "title" => ascending ? query.OrderBy(m => m.Title) : query.OrderByDescending(m => m.Title),
+                    "releaseyear" => ascending ? query.OrderBy(m => m.ReleaseYear) : query.OrderByDescending(m => m.ReleaseYear),
+                    "rating" => ascending ? query.OrderBy(m => m.Rating) : query.OrderByDescending(m => m.Rating),
+                    _ => query
+                };
             }
 
             var totalNumMovies = query.Count();
@@ -40,7 +66,6 @@ namespace Intex2025.API.Controllers
                 totalNumMovies
             });
         }
-
 
         // POST: /Movie/AddMovie
         [HttpPost("AddMovie")]
@@ -104,4 +129,3 @@ namespace Intex2025.API.Controllers
         }
     }
 }
-
