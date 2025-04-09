@@ -1,14 +1,11 @@
-import AuthorizeView from "../components/AuthorizeView";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import PrivacyInfo from "../components/PrivacyInfo";
-function PrivacyPage() {
+function PrivacyPageLoggedOut() {
 
     return (
         <>  
-            <AuthorizeView>
-                <Header/>
-            </AuthorizeView>
+            <Header/>
             <PrivacyInfo/>
             <Footer/>
         </>
@@ -16,4 +13,4 @@ function PrivacyPage() {
 }
 
 
-export default PrivacyPage;
+export default PrivacyPageLoggedOut;

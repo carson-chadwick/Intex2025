@@ -60,7 +60,6 @@ const Header: React.FC = () => {
               <button onClick={() => handleNavigation('/login')}>Login</button>
               <button onClick={() => handleNavigation('/register')}>Get Started</button>
             </div>
-            {/* <FaUserCircle className="icon profile-icon" /> */}
           </div>
         </header>
       )}
