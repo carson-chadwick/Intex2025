@@ -12,7 +12,6 @@ import MovieFormModal from '../components/MovieFormModal';
 import { addMovie, editMovie } from '../api/IntexAPI';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 
-
 function AdminPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +27,7 @@ function AdminPage() {
   const [activeSortDropdown, setActiveSortDropdown] = useState<string | null>(
     null
   );
-  const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null); 
+  const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null);
 
   useEffect(() => {
     const loadProjects = async () => {

@@ -22,7 +22,16 @@ const MovieFormModal = ({ isOpen, onClose, onSubmit, initialData }: Props) => {
   };
 
   const handleSubmit = () => {
-    onSubmit(formData);
+    const cleanedData = {
+      ...formData,
+      releaseYear: formData.releaseYear
+        ? Number(formData.releaseYear)
+        : undefined,
+    };
+
+    console.log('Submitting movie:', cleanedData);
+
+    onSubmit(cleanedData);
     onClose();
   };
 

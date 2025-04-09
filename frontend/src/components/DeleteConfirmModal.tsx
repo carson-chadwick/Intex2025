@@ -1,12 +1,12 @@
 import React from 'react';
 
 interface Props {
-    isOpen: boolean;
-    title: string;
-    onCancel: () => void;
-    onConfirm: () => void;
-  }
-  
+  isOpen: boolean;
+  title: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
 const DeleteConfirmModal = ({ isOpen, title, onCancel, onConfirm }: Props) => {
   // ✅ No useState here unless necessary
   if (!isOpen) return null;
