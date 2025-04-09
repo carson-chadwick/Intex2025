@@ -7,8 +7,7 @@ import NewMovieForm from '../components/NewMovieForm';
 import './AdminPage.css';
 import MovieSearchBar from '../components/MovieSearchBar';
 import Header from '../components/Header';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
-import Logout from '../components/Logout';
+import AuthorizeView from '../components/AuthorizeView';
 import Footer from '../components/Footer';
 
 function AdminPage() {

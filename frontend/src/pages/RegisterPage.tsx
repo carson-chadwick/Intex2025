@@ -4,6 +4,12 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 function Register() {
+  //navigation stuff
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+
   // state variables for email and passwords
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -109,6 +115,24 @@ function Register() {
                   />
                   <label htmlFor="confirmPassword">Confirm Password</label>
                 </div>
+
+                {/* Privacy Policy stuff */}
+                <div className="form-check mb-3">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    //Todo: require user to check this box before registering
+                    // id="rememberme"
+                    // name="rememberme"
+                    // checked={rememberme}
+                    // onChange={handleChange}
+                  />
+                  <label className="form-check-label" style={{ textAlign: 'left', display: 'block' }} htmlFor="rememberme">
+                    I have read and understood the <a style={{ textDecoration: 'underline' }} onClick={() => handleNavigation('/PrivacyPageLoggedOut')}>privacy policy.</a>
+                  </label>
+                </div>
+
+
 
                 <div className="d-grid mb-2">
                   <button

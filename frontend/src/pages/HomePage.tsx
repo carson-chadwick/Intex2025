@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Logout from '../components/Logout';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import AuthorizeView from '../components/AuthorizeView';
 import './Homepage.css';
 import Recommender from '../components/RecommenderComponent';
 import Header from '../components/Header';
@@ -45,11 +44,6 @@ const HomePage: React.FC = () => {
     <AuthorizeView>
       <Header />
       <div className="home-container">
-        {/* <span>
-          <Logout>
-            Logout <AuthorizedUser value="email" />
-          </Logout>
-        </span> */}
         <div className="content">
           <h1>Welcome to Intex2025</h1>
           <p>Your personalized homepage</p>
