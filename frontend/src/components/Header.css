@@ -100,23 +100,4 @@
 .profile-dropdown button:hover {
   background-color: #c0c0c0; /* Slight hover effect */
 }
-
-.custom-logout,
-.custom-logout * {
-  all: unset;
-  width: 100%;
-  padding: 10px;
-  text-align: left;
-  background-color: transparent;
-  border: none;
-  font-size: 14px;
-  color: #1c1c1e;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.custom-logout:hover {
-  background-color: #c0c0c0; /* Slight hover effect */
-}
-
 /*End Profile dropdown menu*/

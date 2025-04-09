@@ -5,7 +5,6 @@ import logo from '../images/cinenicheicon_720.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 const Header: React.FC = () => {
   //authentication stuff
   const user = useContext(UserContext);
@@ -42,12 +41,7 @@ const Header: React.FC = () => {
 
             <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
               <button>Account</button>
-              <button>Privacy Policy</button>
-              <button>
-                <div className='custom-logout'>
-                  <Logout>Logout <AuthorizedUser value="email" /></Logout>
-                </div>
-              </button>
+              <Logout>Logout </Logout>
             </div>
           </div>
         </header>
