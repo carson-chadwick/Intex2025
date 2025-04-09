@@ -33,6 +33,7 @@ function App() {
         <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
         {/* Todo: Eventually pass in the userId to the account page */}
         <Route path="/AccountPage" element={<AuthorizeView><AccountPage/></AuthorizeView>} />
+        <Route path="/PrivacyPageLoggedIn" element={<AuthorizeView><PrivacyPageLoggedIn/></AuthorizeView>} />
       </Routes>
     </Router>
   );
