@@ -39,6 +39,16 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
+
+    // ✅ Custom password settings
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 12;
+    options.Password.RequireNonAlphanumeric = false; // no @!# required
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+
+    // ✅ Allow any email-like string
+    options.User.RequireUniqueEmail = true;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
