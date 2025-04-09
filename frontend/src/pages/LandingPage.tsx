@@ -20,7 +20,6 @@ function LandingPage() {
             </p>
             <button className="btn" onClick={() => handleNavigation('/login')}>Login</button>
             <button className="btn" onClick={() => handleNavigation('/register')}>Register</button>
-            <button className="btn" onClick={() => handleNavigation('/PrivacyPage')}>PrivacyPage</button>
             <Footer/>
         </>
     );

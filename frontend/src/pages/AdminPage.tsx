@@ -71,11 +71,11 @@ function AdminPage() {
     <>
       <AuthorizeView>
         <Header />
-        <span>
+        {/* <span>
           <Logout>
             Logout <AuthorizedUser value="email" />
           </Logout>
-        </span>
+        </span> */}
         <div className="container mt-5">
           {!showForm && (
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">

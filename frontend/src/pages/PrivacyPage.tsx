@@ -6,7 +6,9 @@ function PrivacyPage() {
 
     return (
         <>  
-            <Header/>
+            <AuthorizeView>
+                <Header/>
+            </AuthorizeView>
             <PrivacyInfo/>
             <Footer/>
         </>
