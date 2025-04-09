@@ -3,9 +3,10 @@ import RecommendCard from './RecommendCard';
 
 interface RecData {
   title: string;
+  showId: string; // ✅ ADD THIS LINE
   genre?: string;
   rank: number;
-  user_Id?: number; // optional
+  user_Id?: number;
 }
 
 interface RecommenderProps {
@@ -74,6 +75,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
                 return (
                   <div className="col-auto" key={idx}>
                     <RecommendCard
+                      showId={rec.showId}
                       imageSrc={imageSrc}
                       altText={rec.title}
                       captionText={rec.title}
@@ -104,6 +106,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
             return (
               <div className="col-auto" key={idx}>
                 <RecommendCard
+                  showId={rec.showId}
                   imageSrc={imageSrc}
                   altText={rec.title}
                   captionText={rec.title}

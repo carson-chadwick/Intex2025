@@ -16,7 +16,6 @@ namespace Intex2025.API.Controllers
             _recsContext = recsContext;
         }
 
-        // --- Show Details Page ---
         [HttpGet("collab/{showId}")]
         public IActionResult GetCollab(string showId)
         {
@@ -25,12 +24,6 @@ namespace Intex2025.API.Controllers
                 .OrderBy(r => r.Rank)
                 .ToList();
 
-            Console.WriteLine($"✅ Found {recs.Count} recommendations for showId: {showId}");
-            foreach (var r in recs)
-            {
-                Console.WriteLine($" → Rec_Id: {r.Rec_Id}");
-            }
-
             var fullRecs = recs
                 .Join(_moviesContext.MoviesTitles,
                     c => c.Rec_Id,
@@ -38,7 +31,8 @@ namespace Intex2025.API.Controllers
                     (c, m) => new
                     {
                         Title = m.Title,
-                        Rank = c.Rank
+                        Rank = c.Rank,
+                        ShowId = m.ShowId  // 👈 add this
                     })
                 .OrderBy(r => r.Rank)
                 .ToList();
@@ -61,7 +55,8 @@ namespace Intex2025.API.Controllers
                     (c, m) => new
                     {
                         Title = m.Title,
-                        Rank = c.Rank
+                        Rank = c.Rank,
+                        ShowId = m.ShowId  // 👈 add this
                     })
                 .OrderBy(r => r.Rank)
                 .ToList();
@@ -77,18 +72,33 @@ namespace Intex2025.API.Controllers
             var picks = _recsContext.UserTopPicks
                 .Where(p => p.user_id == userId)
                 .OrderBy(p => p.rank)
+                .Select(p => new {
+                    title = p.title,
+                    rank = p.rank,
+                    userId = p.user_id,
+                    showId = p.show_id // ✅ matches frontend key
+                })
                 .ToList();
+
             return Ok(picks);
         }
 
         [HttpGet("home/genre/{userId}")]
         public IActionResult GetGenrePicks(int userId)
         {
-            var picks = _recsContext.UserHomeGenreRecs
-                .Where(p => p.user_id == userId)
-                .OrderBy(p => p.genre)
-                .ThenBy(p => p.rank)
-                .ToList();
+        var picks = _recsContext.UserHomeGenreRecs
+            .Where(p => p.user_id == userId)
+            .OrderBy(p => p.genre)
+            .ThenBy(p => p.rank)
+            .Select(p => new {
+                title = p.title,
+                genre = p.genre,
+                rank = p.rank,
+                userId = p.user_id,
+                showId = p.show_id
+            })
+            .ToList();
+
             return Ok(picks);
         }
     }
