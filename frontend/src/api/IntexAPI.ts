@@ -7,11 +7,14 @@ interface FetchMoviesResponse {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// ✅ Fetch movies
+// ✅ Fetch movies (with optional genre & sorting)
 export const fetchMovies = async (
   pageSize: number,
   pageNum: number,
-  searchTerm: string = ''
+  searchTerm: string = '',
+  genre: string = 'All',
+  sortBy: string = '',
+  order: 'asc' | 'desc' = 'asc'
 ): Promise<FetchMoviesResponse> => {
   try {
     const query = new URLSearchParams({
@@ -21,6 +24,18 @@ export const fetchMovies = async (
 
     if (searchTerm.trim()) {
       query.append('search', searchTerm.trim());
+    }
+
+    if (genre && genre !== 'All') {
+      query.append('genre', genre);
+    }
+
+    if (sortBy) {
+      query.append('sortBy', sortBy);
+    }
+
+    if (order) {
+      query.append('order', order);
     }
 
     const response = await fetch(
@@ -92,4 +107,10 @@ export const editMovie = async (
     console.error('Error editing movie:', error);
     throw error;
   }
+};
+
+export const fetchGenres = async (): Promise<string[]> => {
+  const response = await fetch(`${API_URL}/Movie/Genres`);
+  if (!response.ok) throw new Error('Failed to fetch genres');
+  return response.json();
 };
