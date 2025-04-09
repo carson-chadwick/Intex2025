@@ -222,8 +222,7 @@ function AllMoviesPage() {
                   showMobileWarning={false}
                   showTooltip={false}
                   displayOverlayContent={false}
-                  overlayContent={false}
-                />
+                  overlayContent={false} showId={''}                />
               </div>
             );
           })}
