@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { Movie } from '../types/Movies';
 import Pagination from '../components/Pagination';
 import { deleteMovie, fetchMovies } from '../api/IntexAPI';
-import EditMovieForm from '../components/EditMovieForm';
-import NewMovieForm from '../components/NewMovieForm';
 import './AdminPage.css';
 import MovieSearchBar from '../components/MovieSearchBar';
 import Header from '../components/Header';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import Footer from '../components/Footer';
+import MovieFormModal from '../components/MovieFormModal';
+import { addMovie, editMovie } from '../api/IntexAPI';
+import DeleteConfirmModal from '../components/DeleteConfirmModal';
+
 
 function AdminPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -26,6 +28,7 @@ function AdminPage() {
   const [activeSortDropdown, setActiveSortDropdown] = useState<string | null>(
     null
   );
+  const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null); 
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -71,13 +74,9 @@ function AdminPage() {
     <>
       <AuthorizeView>
         <Header />
-        {/* <span>
-          <Logout>
-            Logout <AuthorizedUser value="email" />
-          </Logout>
-        </span> */}
-        <div className="container mt-5">
-          {!showForm && (
+
+        <div className="mt-5">
+          <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
               <button
                 className="btn rounded-0"
@@ -95,52 +94,65 @@ function AdminPage() {
                 />
               </div>
             </div>
-          )}
+          </div>
 
-          {showForm && (
-            <div className="row mb-4">
-              <div className="col-12 col-md-10 offset-md-1">
-                <NewMovieForm
-                  onSuccess={() => {
-                    setShowForm(false);
-                    fetchMovies(
-                      pageSize,
-                      pageNum,
-                      searchTerm,
-                      '',
-                      sortBy,
-                      sortOrder
-                    ).then((data) => setMovies(data.movies));
-                  }}
-                  onCancel={() => setShowForm(false)}
-                />
-              </div>
-            </div>
-          )}
+          <MovieFormModal
+            isOpen={showForm || !!editingMovie}
+            onClose={() => {
+              setShowForm(false);
+              setEditingMovie(null);
+            }}
+            initialData={editingMovie}
+            onSubmit={async (movieData) => {
+              try {
+                if (editingMovie) {
+                  await editMovie(
+                    editingMovie.showId.toString(),
+                    movieData as Movie
+                  );
+                } else {
+                  await addMovie(movieData as Movie);
+                }
 
-          {editingMovie && (
-            <div className="row mb-4">
-              <div className="col-12 col-md-10 offset-md-1">
-                <EditMovieForm
-                  movie={editingMovie}
-                  onSuccess={() => {
-                    setEditingMovie(null);
-                    fetchMovies(
-                      pageSize,
-                      pageNum,
-                      searchTerm,
-                      '',
-                      sortBy,
-                      sortOrder
-                    ).then((data) => setMovies(data.movies));
-                  }}
-                  onCancel={() => setEditingMovie(null)}
-                />
-              </div>
-            </div>
-          )}
+                const data = await fetchMovies(
+                  pageSize,
+                  pageNum,
+                  searchTerm,
+                  '',
+                  sortBy,
+                  sortOrder
+                );
+                setMovies(data.movies);
+              } catch (error) {
+                alert('Something went wrong. Please try again.');
+              } finally {
+                setShowForm(false);
+                setEditingMovie(null);
+              }
+            }}
+          />
 
-          <div className="table-responsive">
+          <DeleteConfirmModal
+            isOpen={!!movieToDelete}
+            title={movieToDelete?.title || ''}
+            onCancel={() => setMovieToDelete(null)}
+            onConfirm={async () => {
+              if (!movieToDelete) return;
+
+              try {
+                await deleteMovie(movieToDelete.showId.toString());
+                setMovies(
+                  movies.filter((m) => m.showId !== movieToDelete.showId)
+                );
+              } catch {
+                alert('Failed to delete movie.');
+              } finally {
+                setMovieToDelete(null);
+              }
+            }}
+          />
+
+          <div className="container table-responsive">
             <table className="table table-striped table-bordered align-middle">
               <thead className="table-light">
                 <tr>
@@ -297,7 +309,7 @@ function AdminPage() {
                       </button>
                       <button
                         className="btn rounded-0 btn-sm w-100"
-                        onClick={() => handleDelete(Number(movie.showId))}
+                        onClick={() => setMovieToDelete(movie)}
                       >
                         Delete
                       </button>
@@ -306,20 +318,21 @@ function AdminPage() {
                 ))}
               </tbody>
             </table>
-          </div>
 
-          <Pagination
-            currentPage={pageNum}
-            totalPages={totalPages}
-            pageSize={pageSize}
-            onPageChange={setPageNum}
-            onPageSizeChange={(newSize) => {
-              setPageSize(newSize);
-              setPageNum(1);
-            }}
-          />
+            <Pagination
+              currentPage={pageNum}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              onPageChange={setPageNum}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPageNum(1);
+              }}
+            />
+          </div>
         </div>
-        <Footer/>
+
+        <Footer />
       </AuthorizeView>
     </>
   );
