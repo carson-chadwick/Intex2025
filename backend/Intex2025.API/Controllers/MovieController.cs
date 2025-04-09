@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using Intex2025.API.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -151,37 +152,21 @@ namespace Intex2025.API.Controllers
                 return NotFound("Movie not found.");
             }
 
-            // ✅ Step 1: Define the mapping from property name to display name
-            var genreMap = new Dictionary<string, string>
-            {
-                { "RealityTv", "Reality TV" },
-                { "TvAction", "TV Action" },
-                { "TvComedies", "TV Comedies" },
-                { "TvDramas", "TV Dramas" },
-                { "TalkShowsTvComedies", "Talk Shows TV Comedies" },
-                { "KidsTv", "Kids' TV" },
-                { "BritishTvShowsDocuseriesInternational", "British TV Shows Docuseries International" },
-                {"LanguageTvShows", "Language TV Shows"},
-                {"FamilyMovies", "Family Movies"},
-                {"AnimeSeriesInternationalTvShows", "Anime Series International TV Shows"},
-                // 🔧 Add more edge cases as needed, or fallback logic will be used
-            };
-
-            // ✅ Step 2: Dynamically collect genres
+            // ✅ Use the [Column] name instead of property name
             var genreList = movie.GetType()
                 .GetProperties()
                 .Where(p =>
                     (p.PropertyType == typeof(int) || p.PropertyType == typeof(int?)) &&
-                    p.GetValue(movie) != null &&
-                    (int)p.GetValue(movie)! == 1
+                    p.GetValue(movie) is int value && value == 1
                 )
-                .Select(p => genreMap.ContainsKey(p.Name)
-                        ? genreMap[p.Name]
-                        : p.Name.Replace('_', ' ') // fallback: replace underscores with spaces
-                )
+                .Select(p =>
+                {
+                    var columnAttr = p.GetCustomAttributes(typeof(ColumnAttribute), false)
+                        .FirstOrDefault() as ColumnAttribute;
+                    return columnAttr?.Name ?? p.Name;
+                })
                 .ToList();
 
-            // ✅ Step 3: Return movie data + genres
             return Ok(new
             {
                 movie.ShowId,
