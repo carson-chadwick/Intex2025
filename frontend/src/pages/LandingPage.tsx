@@ -1,6 +1,8 @@
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 import rick from '../images/rick.png';
+import PrivacyPage from './PrivacyPage';
+import Footer from '../components/Footer';
 function LandingPage() {
 
     const navigate = useNavigate();
@@ -18,6 +20,7 @@ function LandingPage() {
             </p>
             <button className="btn" onClick={() => handleNavigation('/login')}>Login</button>
             <button className="btn" onClick={() => handleNavigation('/register')}>Register</button>
+            <Footer/>
         </>
     );
 }
