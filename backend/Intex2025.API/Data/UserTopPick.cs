@@ -2,8 +2,9 @@ namespace Intex2025.API.Data
 {
     public class UserTopPick
     {
-        public int User_Id { get; set; }
-        public string Title { get; set; } = null!;
-        public int Rank { get; set; }
+        public int user_id { get; set; }
+        public string title { get; set; } = null!;
+        public int rank { get; set; }
+        public string show_id { get; set;}
     }
 }
