@@ -9,6 +9,7 @@ import MovieSearchBar from '../components/MovieSearchBar';
 import Header from '../components/Header';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
+import Footer from '../components/Footer';
 
 function AdminPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -318,6 +319,7 @@ function AdminPage() {
             }}
           />
         </div>
+        <Footer/>
       </AuthorizeView>
     </>
   );

@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import Logout from '../components/Logout';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import Footer from '../components/Footer';
 function MyListPage() {
 
 
@@ -17,6 +18,7 @@ function MyListPage() {
                         Logout <AuthorizedUser value="email" />
                     </Logout>
                 </span>
+                <Footer/>
             </AuthorizeView>
         </>
     );

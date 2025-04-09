@@ -4,6 +4,7 @@ import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import './Homepage.css';
 import Recommender from '../components/RecommenderComponent';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -64,6 +65,7 @@ const HomePage: React.FC = () => {
           />
         </div>
       </div>
+      <Footer/>
     </AuthorizeView>
   );
 };

@@ -40,7 +40,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
-              <button>Account</button>
+              <button onClick={() => handleNavigation('/AccountPage')}>Account</button>
               <Logout>Logout </Logout>
             </div>
           </div>
@@ -52,7 +52,15 @@ const Header: React.FC = () => {
           </div>
 
           <div className="header-right">
-            <FaUserCircle className="icon profile-icon" />
+            <div className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              <FaUserCircle/>
+            </div>
+
+            <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
+              <button onClick={() => handleNavigation('/login')}>Login</button>
+              <button onClick={() => handleNavigation('/register')}>Get Started</button>
+            </div>
+            {/* <FaUserCircle className="icon profile-icon" /> */}
           </div>
         </header>
       )}

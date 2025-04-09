@@ -5,8 +5,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
+  margin-bottom: 10px; /* Want a little space between the body and the header */
   height: 64px;
   min-height: 64px;
+  position: relative;
+  width: 100%;
+  z-index: 100; /* make sure it is the front most element*/
 }
 
 .logo-img {

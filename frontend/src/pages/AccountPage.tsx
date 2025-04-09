@@ -1,10 +1,18 @@
+import AuthorizeView from "../components/AuthorizeView";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+
 function AccountPage() {
 
     return(
         <>
-            <h1>Congrats, you made it to the account page.</h1>
-            <h2>Change your password here. </h2>
-            <h2>Update your profile here.</h2>
+            <AuthorizeView>
+                <Header/>
+                <h1>Congrats, you made it to the account page.</h1>
+                <h2>Change your password here. </h2>
+                <h2>Update your profile Pic here.</h2>
+                <Footer/>
+            </AuthorizeView>
         </>
     );
 }
