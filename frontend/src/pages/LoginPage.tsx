@@ -107,10 +107,12 @@ function LoginPage() {
                     checked={rememberme}
                     onChange={handleChange}
                   />
-                  <label className="form-check-label" htmlFor="rememberme">
+                  <label className="form-check-label" style={{ textAlign: 'left', display: 'block' }} htmlFor="rememberme">
                     Remember password
                   </label>
                 </div>
+
+
                 <div className="d-grid mb-2">
                   <button
                     className="btn btn-primary btn-login text-uppercase fw-bold"

@@ -135,13 +135,18 @@ export default function TiltedCard({
               scale,
             }}
           >
-            <motion.img
+            <img
               src={imageSrc}
               alt={altText}
-              className="tilted-card-img"
-              style={{
-                width: imageWidth,
-                height: imageHeight,
+              loading="lazy"
+              className="tilted-card-img fade-in"
+              style={{ width: imageWidth, height: imageHeight }}
+              onError={(e) => {
+                const placeholder =
+                  'https://mlworkspace6342542406.blob.core.windows.net/inteximages/NoImage.png';
+                if (e.currentTarget.src !== placeholder) {
+                  e.currentTarget.src = placeholder;
+                }
               }}
             />
 

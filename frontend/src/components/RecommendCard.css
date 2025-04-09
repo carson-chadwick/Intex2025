@@ -69,3 +69,13 @@
   text-align: center;
   color: #2d2d2d;
 }
+
+/* Fade-in effect for lazy-loaded images */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in[src] {
+  opacity: 1;
+}
