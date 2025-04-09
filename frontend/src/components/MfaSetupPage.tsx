@@ -4,7 +4,7 @@ import QRCode from 'react-qr-code';
 function MfaSetup() {
   const [email, setEmail] = useState('');
   const [qrCodeUri, setQrCodeUri] = useState('');
-  const [sharedKey, setSharedKey] = useState('');
+  const [_sharedKey, setSharedKey] = useState('');
   const [code, setCode] = useState('');
   const [status, setStatus] = useState('');
 
