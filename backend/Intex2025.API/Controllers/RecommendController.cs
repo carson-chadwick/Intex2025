@@ -56,7 +56,7 @@ namespace Intex2025.API.Controllers
                     {
                         Title = m.Title,
                         Rank = c.Rank,
-                        ShowId = m.ShowId  // 👈 add this
+                        ShowId = m.ShowId 
                     })
                 .OrderBy(r => r.Rank)
                 .ToList();
@@ -76,7 +76,7 @@ namespace Intex2025.API.Controllers
                     title = p.title,
                     rank = p.rank,
                     userId = p.user_id,
-                    showId = p.show_id // ✅ matches frontend key
+                    showId = p.show_id
                 })
                 .ToList();
 
