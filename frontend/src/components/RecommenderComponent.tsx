@@ -15,17 +15,14 @@ interface RecommenderProps {
   type: 'collab' | 'content' | 'homeTop' | 'homeGenre';
 }
 
-const Recommender = ({ userId, showId, type }: RecommenderProps) => {
+const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
   const [recs, setRecs] = useState<RecData[]>([]);
 
   // 🔧 Helper function to sanitize titles
-const sanitizeTitle = (title: string): string => {
-  // Remove special characters but keep letters, digits, spaces, and preserve multiple spaces as is.
-  return title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
-};
-
-
-
+  const sanitizeTitle = (title: string): string => {
+    // Remove special characters but keep letters, digits, spaces, and preserve multiple spaces as is.
+    return title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+  };
 
   useEffect(() => {
     let endpoint = '';
