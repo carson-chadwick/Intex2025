@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './Header.css';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
-import logo from '../images/cinenicheicon_720.png';
+import logo from '../images/NewCineNicheLogo.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
