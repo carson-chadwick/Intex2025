@@ -3,9 +3,10 @@ import RecommendCard from './RecommendCard';
 
 interface RecData {
   title: string;
+  showId: string; // ✅ ADD THIS LINE
   genre?: string;
   rank: number;
-  user_Id?: number; // optional
+  user_Id?: number;
 }
 
 interface RecommenderProps {
@@ -32,7 +33,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
     if (type === 'homeTop') endpoint = `/recommend/home/top/${userId}`;
     if (type === 'homeGenre') endpoint = `/recommend/home/genre/${userId}`;
 
-    const BASE_URL = 'https://localhost:5000'; // or use process.env.REACT_APP_API_URL
+    const BASE_URL = import.meta.env.VITE_API_URL; // or use process.env.REACT_APP_API_URL
     const fullUrl = `${BASE_URL}${endpoint}`;
 
     fetch(fullUrl)
@@ -74,6 +75,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
                 return (
                   <div className="col-auto" key={idx}>
                     <RecommendCard
+                      showId={rec.showId}
                       imageSrc={imageSrc}
                       altText={rec.title}
                       captionText={rec.title}
@@ -104,6 +106,7 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
             return (
               <div className="col-auto" key={idx}>
                 <RecommendCard
+                  showId={rec.showId}
                   imageSrc={imageSrc}
                   altText={rec.title}
                   captionText={rec.title}
