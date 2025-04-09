@@ -11,6 +11,7 @@ import MovieDetailPage from './pages/MovieDetailPage';
 import PrivacyPage from './pages/PrivacyPage';
 import AccountPage from './pages/AccountPage';
 import AllMoviesPage from './pages/AllMoviesPage';
+import MfaSetupPage from './components/MfaSetupPage';
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
             </AuthorizeView>
           }
         />
+        <Route path="/MfaSetupPage" element={<MfaSetupPage />} />
       </Routes>
     </Router>
   );

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Recommender from '../components/RecommenderComponent';
+import Rating from '../components/Rating';
+import AverageRating from '../components/AverageRating';
 
 function MovieDetailPage() {
   const { showId } = useParams<{ showId: string }>();
+  const [userId, setUserId] = useState<number | null>(null);
+  console.log('Current showId from URL:', showId);
   const [movie, setMovie] = useState<any>(null); // use a better type if you have one
   const [loading, setLoading] = useState(true);
   const url = import.meta.env.VITE_API_URL;
@@ -26,6 +30,28 @@ function MovieDetailPage() {
           setLoading(false);
         });
     }
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/user/current-user`,
+          {
+            method: 'GET',
+            credentials: 'include', // required to send cookies/session
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch current user');
+        }
+
+        const data = await response.json();
+        setUserId(data.user_id);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    fetchCurrentUser();
   }, [showId]);
 
   // 🔧 Helper function to sanitize titles
@@ -52,6 +78,7 @@ function MovieDetailPage() {
                 className="img-fluid rounded mb-3"
                 style={{ maxWidth: '300px', width: '100%' }} // 👈 scales with container
               />
+              {userId !== null && <Rating showId={showId!} userId={userId} />}
             </div>
 
             <div className="col-md-6 text-start">
@@ -71,11 +98,21 @@ function MovieDetailPage() {
                 <strong>Country:</strong> {movie.country}
               </p>
 
+              <AverageRating showId={showId!} />
+              <br />
+
               <h4 className="text-lg font-semibold mb-2">Description:</h4>
               <p className="mb-4">{movie.description}</p>
 
               <h4 className="text-lg font-semibold mb-2">Cast:</h4>
               <p className="mb-0">{movie.cast}</p>
+
+              {movie.genres && movie.genres.length > 0 && (
+                <>
+                  <h4 className="text-lg font-semibold mb-2 mt-3">Genres:</h4>
+                  <p className="mb-0">{movie.genres.join(', ')}</p>
+                </>
+              )}
             </div>
           </div>
           <p>
