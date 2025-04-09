@@ -1,0 +1,16 @@
+.footer {
+    background-color: #D4AF37; /* Muted gold color. For bronze, try #CD7F32. */
+    color: white; /* Makes text readable against muted gold/bronze. */
+    text-align: center;
+    padding: 1rem;
+    margin-top: 10px; /* Want a little space between the body and the footer */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2); /* Adds some depth. */
+}
+
+.footer-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+}

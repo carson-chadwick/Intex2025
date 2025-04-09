@@ -9,6 +9,7 @@ import MovieSearchBar from '../components/MovieSearchBar';
 import Header from '../components/Header';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
+import Footer from '../components/Footer';
 
 function AdminPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -70,11 +71,11 @@ function AdminPage() {
     <>
       <AuthorizeView>
         <Header />
-        <span>
+        {/* <span>
           <Logout>
             Logout <AuthorizedUser value="email" />
           </Logout>
-        </span>
+        </span> */}
         <div className="container mt-5">
           {!showForm && (
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
@@ -318,6 +319,7 @@ function AdminPage() {
             }}
           />
         </div>
+        <Footer/>
       </AuthorizeView>
     </>
   );

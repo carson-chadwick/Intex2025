@@ -1,0 +1,53 @@
+.privacy-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .privacy-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #2c3e50;
+  }
+  
+  .effective-date {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  section {
+    margin-bottom: 25px;
+  }
+  
+  section h3 {
+    font-size: 1.3rem;
+    color: #34495e;
+    margin-bottom: 10px;
+  }
+  
+  section ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  section ul li {
+    margin-bottom: 8px;
+  }
+  
+  .disclaimer {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #ffe6e6;
+    border-left: 5px solid #ff4d4d;
+    color: #900;
+    font-weight: bold;
+  }
+  
