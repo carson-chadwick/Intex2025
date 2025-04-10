@@ -1,5 +1,5 @@
 .footer {
-    background-color: #D4AF37; /* Muted gold color. For bronze, try #CD7F32. */
+    background-color: #1c1c1c; /* Muted gold color. For bronze, try #CD7F32. */
     color: white; /* Makes text readable against muted gold/bronze. */
     text-align: center;
     padding: 1rem;
@@ -13,4 +13,5 @@
 .footer-text {
     font-family: 'Arial', sans-serif;
     font-size: 0.9rem;
+    color: white;
 }
