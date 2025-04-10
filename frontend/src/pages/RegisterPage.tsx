@@ -14,6 +14,7 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
   const navigate = useNavigate();
 
   // state variable for error messages
@@ -31,6 +32,11 @@ function Register() {
     if (name === 'confirmPassword') setConfirmPassword(value);
   };
 
+  // handle change for the checkbox
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPrivacyChecked(e.target.checked);
+  };
+
   // handle submit event for the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,6 +47,8 @@ function Register() {
       setError('Please enter a valid email address.');
     } else if (password !== confirmPassword) {
       setError('Passwords do not match.');
+    } else if (!isPrivacyChecked) {
+      setError('Must comply with the Privacy Policy.');
     } else {
       // clear error message
       setError('');
@@ -56,7 +64,7 @@ function Register() {
           password: password,
         }),
       })
-        //.then((response) => response.json())
+        .then((response) => response.json())
         .then((data) => {
           // handle success or error from the server
           console.log(data);
@@ -74,6 +82,7 @@ function Register() {
   return (
     <>
       <Header/>
+      <div className='apply-margin'></div>
       <div className="container">
         <div className="row">
           <div className="card border-0 shadow rounded-3 ">
@@ -121,14 +130,13 @@ function Register() {
                   <input
                     className="form-check-input"
                     type="checkbox"
+                    id="privacyPolicy"
+                    checked={isPrivacyChecked}
+                    onChange={handleCheckboxChange}
                     //Todo: require user to check this box before registering
-                    // id="rememberme"
-                    // name="rememberme"
-                    // checked={rememberme}
-                    // onChange={handleChange}
                   />
                   <label className="form-check-label" style={{ textAlign: 'left', display: 'block' }} htmlFor="rememberme">
-                    I have read and understood the <a style={{ textDecoration: 'underline' }} onClick={() => handleNavigation('/PrivacyPageLoggedOut')}>privacy policy.</a>
+                    I have read and comply with the <a style={{ textDecoration: 'underline' }} onClick={() => window.open('/PrivacyPageLoggedOut', '_blank')}>privacy policy.</a>
                   </label>
                 </div>
 
@@ -147,11 +155,11 @@ function Register() {
                     className="btn btn-primary btn-login text-uppercase fw-bold"
                     onClick={handleLoginClick}
                   >
-                    Go to Login
+                    Go to sign In
                   </button>
                 </div>
               </form>
-              <strong>{error && <p className="error">{error}</p>}</strong>
+              <strong>{error && <p className="error text-danger mt-3">{error}</p>}</strong>
             </div>
           </div>
         </div>

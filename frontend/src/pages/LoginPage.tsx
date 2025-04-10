@@ -24,9 +24,9 @@ function LoginPage() {
     }
   };
 
-  const handleRegisterClick = () => {
-    navigate('/register');
-  };
+  // const handleRegisterClick = () => {
+  //   navigate('/register');
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,6 +89,7 @@ const handleMfaSubmit = async () => {
   return (
     <>
       <Header />
+      <div className='apply-margin'></div>
       <div className="container">
         <div className="row">
           <div className="card border-0 shadow rounded-3">
@@ -139,7 +140,7 @@ const handleMfaSubmit = async () => {
                         checked={rememberme}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label" htmlFor="rememberme">
+                      <label className="form-check-label" style={{ textAlign: 'left', display: 'block' }} htmlFor="rememberme">
                         Remember password
                       </label>
                     </div>
@@ -171,6 +172,7 @@ const handleMfaSubmit = async () => {
                   </button>
                 </div>
 
+{/*
                 {!requiresMfa && (
                   <div className="d-grid mb-2">
                     <button
@@ -182,7 +184,7 @@ const handleMfaSubmit = async () => {
                     </button>
                   </div>
                 )}
-
+*/}
                 {!requiresMfa && (
                   <>
                     <hr className="my-4" />
@@ -207,7 +209,7 @@ const handleMfaSubmit = async () => {
                   </>
                 )}
               </form>
-              {error && <p className="error text-danger mt-3">{error}</p>}
+             <strong>{error && <p className="error text-danger mt-3">{error}</p>}</strong>
             </div>
           </div>
         </div>
