@@ -17,7 +17,7 @@ function getLabelText(value: number) {
 
 export default function AverageRating({ showId }: { showId: string }) {
   const [value, setValue] = React.useState<number | null>(null);
-  const [ratingsCount, setRatingsCount] = React.useState<number>(0);
+  const [_ratingsCount, setRatingsCount] = React.useState<number>(0);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 

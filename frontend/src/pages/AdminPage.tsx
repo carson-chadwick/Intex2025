@@ -72,12 +72,13 @@ function AdminPage() {
     <>
       <AuthorizeView>
         <Header />
+        <div className="apply-margin"></div>
 
         <div className="mt-5">
           <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
               <button
-                className="btn rounded-0"
+                className="btn rounded-0 btn-white-black"
                 onClick={() => setShowForm(true)}
               >
                 Add Movie
@@ -102,6 +103,7 @@ function AdminPage() {
             }}
             initialData={editingMovie}
             onSubmit={async (movieData) => {
+              console.log('Submitting movie', movieData);
               try {
                 if (editingMovie) {
                   await editMovie(
@@ -300,13 +302,13 @@ function AdminPage() {
                     </td>
                     <td>
                       <button
-                        className="btn rounded-0 btn-sm w-100 mb-1"
+                        className="btn rounded-0 btn-sm w-100 mb-1 btn-black-white"
                         onClick={() => setEditingMovie(movie)}
                       >
                         Edit
                       </button>
                       <button
-                        className="btn rounded-0 btn-sm w-100"
+                        className="btn rounded-0 btn-sm w-100 btn-red"
                         onClick={() => setMovieToDelete(movie)}
                       >
                         Delete

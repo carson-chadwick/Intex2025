@@ -45,14 +45,6 @@ function App() {
           }
         />
         <Route
-          path="/AdminPage"
-          element={
-            <AuthorizeView>
-              <AdminPage />
-            </AuthorizeView>
-          }
-        />
-        <Route
           path="/"
           element={
             <AuthorizeView>
@@ -93,6 +85,15 @@ function App() {
             </AuthorizeView>
           }
         />
+        {/* Admin routes */}
+        <Route
+          path="/AdminPage"
+          element={
+            <AuthorizeView requiredRole="Administrator">
+              <AdminPage />
+            </AuthorizeView>
+          }
+        />
       </Routes>
       {/* 👇 Cookie consent banner shown on all pages */}
       <CookieConsent
@@ -117,7 +118,7 @@ function App() {
         buttonClasses="cookie-btn"
         expires={150}
       >
-          ⚠️ This website uses cookies to enhance the user experience.
+        ⚠️ This website uses cookies to enhance the user experience.
       </CookieConsent>
     </Router>
   );

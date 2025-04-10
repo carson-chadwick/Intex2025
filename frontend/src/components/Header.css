@@ -1,5 +1,5 @@
 .logo-img {
-  height: 160px;
+  height: 27px;
   width: auto;
   display: block;
   align-self: center;
@@ -8,7 +8,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1px;
 }
 
 .header-right {
@@ -38,7 +38,6 @@
   font-size: 28px;
   margin-left: 5px;
 }
-
 
 /* Profile Dropdown Menu */
 .profile-dropdown {
@@ -99,11 +98,6 @@
 
 /*End Profile dropdown menu*/
 
-
-
-
-
-
 /*--------------------------------------------------------------
 # Global Header
 --------------------------------------------------------------*/
@@ -123,7 +117,6 @@
 .header .logo {
   line-height: 1;
 }
-
 
 .header .logo h1 {
   font-size: 30px;
@@ -177,8 +170,6 @@
   --background-color: rgba(21, 34, 43, 0.85);
 }
 
-
-
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
@@ -200,12 +191,12 @@
     position: relative;
   }
 
-  .navmenu>ul>li {
+  .navmenu > ul > li {
     white-space: nowrap;
     padding: 15px 14px;
   }
 
-  .navmenu>ul>li:last-child {
+  .navmenu > ul > li:last-child {
     padding-right: 0;
   }
 
@@ -233,8 +224,8 @@
     transition: 0.3s;
   }
 
-  .navmenu>ul>li>a:before {
-    content: "";
+  .navmenu > ul > li > a:before {
+    content: '';
     position: absolute;
     height: 2px;
     bottom: -6px;
@@ -246,13 +237,13 @@
   }
 
   .navmenu a:hover:before,
-  .navmenu li:hover>a:before,
+  .navmenu li:hover > a:before,
   .navmenu .active:before {
     visibility: visible;
     width: 100%;
   }
 
-  .navmenu li:hover>a,
+  .navmenu li:hover > a,
   .navmenu .active,
   .navmenu .active:focus {
     color: color-mix(in srgb, var(--nav-color) 90%, white 15%);
@@ -291,11 +282,11 @@
 
   .navmenu .dropdown ul a:hover,
   .navmenu .dropdown ul .active:hover,
-  .navmenu .dropdown ul li:hover>a {
+  .navmenu .dropdown ul li:hover > a {
     color: var(--nav-dropdown-hover-color);
   }
 
-  .navmenu .dropdown:hover>ul {
+  .navmenu .dropdown:hover > ul {
     opacity: 1;
     top: 100%;
     visibility: visible;
@@ -307,7 +298,7 @@
     visibility: hidden;
   }
 
-  .navmenu .dropdown .dropdown:hover>ul {
+  .navmenu .dropdown .dropdown:hover > ul {
     opacity: 1;
     top: 0;
     left: -100%;
@@ -409,7 +400,7 @@
     background-color: rgba(33, 37, 41, 0.1);
   }
 
-  .navmenu .dropdown>.dropdown-active {
+  .navmenu .dropdown > .dropdown-active {
     display: block;
     background-color: rgba(33, 37, 41, 0.03);
   }
@@ -436,7 +427,59 @@
     transition: 0.3s;
   }
 
-  .mobile-nav-active .navmenu>ul {
+  .mobile-nav-active .navmenu > ul {
     display: block;
   }
+}
+
+
+
+/*--------------------------------------------------------------
+# Registration progress indicator
+--------------------------------------------------------------*/
+
+.step-indicator {
+  display: flex;
+  justify-content: center;  /* centers the whole group */
+  align-items: center;
+  gap: 40px; /* more spacing between steps */
+  margin-bottom: 30px;
+}
+
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bubble {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+}
+
+.step.filled .bubble {
+  background-color: #007bff;
+  color: white;
+}
+
+.step p {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.line {
+  width: 60px; /* fixed width for spacing */
+  height: 2px;
+  background-color: #ccc;
 }
