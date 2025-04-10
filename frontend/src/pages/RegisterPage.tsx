@@ -64,7 +64,7 @@ function Register() {
           password: password,
         }),
       })
-        .then((response) => response.json())
+        // .then((response) => response.json())
         .then((data) => {
           // handle success or error from the server
           console.log(data);
