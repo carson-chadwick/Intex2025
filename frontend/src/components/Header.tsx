@@ -42,12 +42,6 @@ const Header: React.FC = () => {
     }
   }, []);
 
-  const getInitial = () => {
-    if (user?.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
-    return null;
-  };
 
   return (
     <>
