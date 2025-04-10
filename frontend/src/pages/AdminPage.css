@@ -148,3 +148,94 @@ table td {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.75rem; /* 👈 This adds spacing between each field */
 }
+
+.apply-margin {
+  margin-top: 100px; /* adjust as needed */
+}
+
+.btn-white-black {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black;
+  transition: 0.2s ease;
+}
+
+.btn-white-blackk {
+  background-color: #0c0c0c !important;
+  color: white !important;
+  border: 1px solid black;
+  transition: 0.2s ease;
+}
+
+.btn-white-black:hover {
+  background-color: #f2f2f2 !important;
+  color: black !important;
+}
+
+.btn-black-white {
+  background-color: black !important;
+  color: white !important;
+  border: none !important;
+  transition: 0.2s ease;
+}
+
+.btn-black-white:hover {
+  background-color: #333 !important;
+  color: white !important;
+}
+
+.btn-red {
+  background-color: black !important; /* Bootstrap red */
+  color: white !important;
+  border: none !important;
+  transition: background-color 0.2s ease;
+}
+
+.btn-red:hover {
+  background-color: #8c0a17 !important;
+  color: white !important;
+}
+
+/* Pagination wrapper */
+.pagination-container {
+  color: white;
+}
+
+/* Page buttons */
+.pagination-container .btn {
+  color: white !important;
+  border: 1px solid white;
+  background-color: transparent;
+  box-shadow: none;
+  margin: 0 4px;
+  padding: 0.4rem 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-container .btn:hover {
+  background-color: white;
+  color: black !important;
+}
+
+/* Active page */
+.pagination-container .fw-bold.text-primary {
+  background-color: white !important;
+  color: black !important;
+  border-color: #ffc107 !important;
+}
+
+/* Disabled buttons */
+.pagination-container .btn:disabled {
+  color: #888 !important;
+  border-color: #666;
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Dropdown select */
+.pagination-container select.form-select {
+  background-color: #1c1c1e;
+  color: white;
+  border: 1px solid #ccc;
+}
