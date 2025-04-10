@@ -3,7 +3,7 @@ import RecommendCard from './RecommendCard';
 
 interface RecData {
   title: string;
-  showId: string; // ✅ ADD THIS LINE
+  showId: string;
   genre?: string;
   rank: number;
   user_Id?: number;
@@ -13,16 +13,21 @@ interface RecommenderProps {
   Name: string;
   userId?: number;
   showId?: string;
-  type: 'collab' | 'content' | 'homeTop' | 'homeGenre';
+  type:
+    | 'collab'
+    | 'content'
+    | 'homeTop'
+    | 'homeGenre'
+    | 'topHits'
+    | 'editorsPicks'
+    | 'recentlyAdded';
 }
 
 const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
   const [recs, setRecs] = useState<RecData[]>([]);
 
-  // 🔧 Helper function to sanitize titles
   const sanitizeTitle = (title: string): string => {
-    // Remove special characters but keep letters, digits, spaces, and preserve multiple spaces as is.
-    return title.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+    return title?.replace(/[^a-zA-Z0-9\s]/g, '').trim() ?? 'Untitled';
   };
 
   useEffect(() => {
@@ -32,8 +37,11 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
     if (type === 'content') endpoint = `/recommend/content/${showId}`;
     if (type === 'homeTop') endpoint = `/recommend/home/top/${userId}`;
     if (type === 'homeGenre') endpoint = `/recommend/home/genre/${userId}`;
+    if (type === 'topHits') endpoint = '/recommend/landing/top-hits';
+    if (type === 'editorsPicks') endpoint = '/recommend/landing/editors-picks';
+    if (type === 'recentlyAdded') endpoint = '/recommend/landing/recently-added';
 
-    const BASE_URL = import.meta.env.VITE_API_URL; // or use process.env.REACT_APP_API_URL
+    const BASE_URL = import.meta.env.VITE_API_URL;
     const fullUrl = `${BASE_URL}${endpoint}`;
 
     fetch(fullUrl)
@@ -44,87 +52,60 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
 
   const isMovieDetailRecommender = type === 'collab' || type === 'content';
 
+  const renderRecs = (recsToRender: RecData[]) => (
+    <div className="row g-3 bg-transparent">
+      {recsToRender.map((rec, idx) => {
+        const sanitizedTitle = sanitizeTitle(rec.title);
+        const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+
+        return (
+          <div className="col-auto" key={idx}>
+            <RecommendCard
+              showId={rec.showId}
+              imageSrc={imageSrc}
+              altText={rec.title}
+              captionText={rec.title}
+              containerHeight="300px"
+              containerWidth="200px"
+              imageHeight="300px"
+              imageWidth="200px"
+              rotateAmplitude={0}
+              scaleOnHover={1.05}
+              showMobileWarning={false}
+              showTooltip={false}
+              displayOverlayContent={false}
+              overlayContent={false}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className="w-[90%] mx-auto mb-5">
-      {isMovieDetailRecommender && (
-        <h2 className="text-2xl font-semibold text-start mb-3">{Name}</h2>
+      {(isMovieDetailRecommender || type !== 'homeGenre') && (
+        <h2 className="text-3xl font-semibold text-start mb-4">{Name}</h2>
       )}
 
       {type === 'homeGenre' ? (
-        // Group and display by genre
         Object.entries(
-          recs.reduce(
-            (acc, rec) => {
-              const genre = rec.genre || 'Other';
-              if (!acc[genre]) acc[genre] = [];
-              acc[genre].push(rec);
-              return acc;
-            },
-            {} as Record<string, RecData[]>
-          )
+          recs.reduce((acc, rec) => {
+            const genre = rec.genre || 'Other';
+            if (!acc[genre]) acc[genre] = [];
+            acc[genre].push(rec);
+            return acc;
+          }, {} as Record<string, RecData[]>)
         ).map(([genre, genreRecs]) => (
           <div key={genre} className="mb-8">
             <h2 className="text-3xl font-semibold text-start mb-4">
               Top picks in {genre}
             </h2>
-            <div className="row g-3 bg-transparent">
-              {genreRecs.map((rec, idx) => {
-                const sanitizedTitle = sanitizeTitle(rec.title);
-                const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
-
-                return (
-                  <div className="col-auto" key={idx}>
-                    <RecommendCard
-                      showId={rec.showId}
-                      imageSrc={imageSrc}
-                      altText={rec.title}
-                      captionText={rec.title}
-                      containerHeight="300px"
-                      containerWidth="200px"
-                      imageHeight="300px"
-                      imageWidth="200px"
-                      rotateAmplitude={0}
-                      scaleOnHover={1.05}
-                      showMobileWarning={false}
-                      showTooltip={false}
-                      displayOverlayContent={false}
-                      overlayContent={false}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            {renderRecs(genreRecs)}
           </div>
         ))
       ) : (
-        // Standard one-row layout for other types (like collab/content)
-        <div className="row g-3 bg-transparent">
-          {recs.map((rec, idx) => {
-            const sanitizedTitle = sanitizeTitle(rec.title);
-            const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
-
-            return (
-              <div className="col-auto" key={idx}>
-                <RecommendCard
-                  showId={rec.showId}
-                  imageSrc={imageSrc}
-                  altText={rec.title}
-                  captionText={rec.title}
-                  containerHeight="300px"
-                  containerWidth="200px"
-                  imageHeight="300px"
-                  imageWidth="200px"
-                  rotateAmplitude={0}
-                  scaleOnHover={1.05}
-                  showMobileWarning={false}
-                  showTooltip={false}
-                  displayOverlayContent={false}
-                  overlayContent={false}
-                />
-              </div>
-            );
-          })}
-        </div>
+        renderRecs(recs)
       )}
     </div>
   );

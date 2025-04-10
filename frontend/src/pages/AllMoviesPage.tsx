@@ -56,7 +56,9 @@ function AllMoviesPage() {
       const fullUrl = `${BASE_URL}/Movie/AllMovies?${queryParams.toString()}`;
 
       try {
-        const res = await fetch(fullUrl);
+        const res = await fetch(fullUrl,{
+          credentials: 'include',
+        } );
         const data = await res.json();
 
         if (data.movies && data.movies.length > 0) {

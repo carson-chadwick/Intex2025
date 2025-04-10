@@ -51,7 +51,7 @@ function AdminPage() {
     loadProjects();
   }, [pageSize, pageNum, searchTerm, sortBy, sortOrder]);
 
-  const handleDelete = async (showId: number) => {
+  async (showId: number) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this project?'
     );

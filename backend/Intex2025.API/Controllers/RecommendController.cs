@@ -101,5 +101,77 @@ namespace Intex2025.API.Controllers
 
             return Ok(picks);
         }
+        [HttpGet("landing/top-hits")]
+        public IActionResult GetTopHits()
+        {
+            var topHits = _moviesContext.MoviesRatings
+                .Where(r => r.Rating.HasValue && r.ShowId != null)
+                .GroupBy(r => r.ShowId)
+                .Select(g => new
+                {
+                    ShowId = g.Key,
+                    AvgRating = g.Average(r => r.Rating.Value),
+                    RatingCount = g.Count()
+                })
+                .Where(g => g.RatingCount >= 3)
+                .OrderByDescending(g => g.AvgRating)
+                .Take(12)
+                .ToList();
+
+            var resultsWithTitles = topHits
+                .Join(
+                    _moviesContext.MoviesTitles,
+                    rating => rating.ShowId,
+                    title => title.ShowId,
+                    (rating, title) => new
+                    {
+                        showId = rating.ShowId,
+                        title = title.Title ?? "Untitled"
+                    }
+                )
+                .ToList();
+
+            return Ok(resultsWithTitles);
+        }
+        
+        [HttpGet("landing/editors-picks")]
+        public IActionResult GetEditorsPicks()
+        {
+            // You can customize this list later or even pull it from a database table
+            var editorsPickIds = new List<string>
+            {
+                "s8052", "s461", 
+            };
+
+            var picks = _moviesContext.MoviesTitles
+                .Where(m => m.ShowId != null && editorsPickIds.Contains(m.ShowId))
+                .Select(m => new
+                {
+                    showId = m.ShowId,
+                    title = m.Title ?? "Untitled"
+                })
+                .ToList();
+
+            return Ok(picks);
+        }
+        
+        [HttpGet("landing/recently-added")]
+        public IActionResult GetRecentlyAdded()
+        {
+            var recent = _moviesContext.MoviesTitles
+                .Where(m => m.ReleaseYear.HasValue && m.Title != null)
+                .OrderByDescending(m => m.ReleaseYear)
+                .Take(12)
+                .Select(m => new
+                {
+                    showId = m.ShowId,
+                    title = m.Title ?? "Untitled"
+                })
+                .ToList();
+
+            return Ok(recent);
+        }
+        
+        
     }
 }

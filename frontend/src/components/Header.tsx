@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './Header.css';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
-import logo from '../images/cinenicheicon_720.png';
+import logo from '../images/NewCineNicheLogo.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
@@ -30,7 +30,7 @@ const Header: React.FC = () => {
 
           <div className="header-right">
             <button className="btn" onClick={() => handleNavigation('/HomePage')}>Home</button>
-            <button className="btn" onClick={() => handleNavigation('/MyListPage')}>My List</button>
+            <button className="btn" onClick={() => handleNavigation('/AllMoviesPage')}>All Movies</button>
             <button className="btn" onClick={() => handleNavigation('/AdminPage')}>Admin</button>
             <FaSearch className="icon" />
             {/* Profile Icon and Dropdown */}

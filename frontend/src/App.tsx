@@ -8,33 +8,110 @@ import MyListPage from './pages/MyListPage';
 import AdminPage from './pages/AdminPage';
 import LandingPage from './pages/LandingPage';
 import MovieDetailPage from './pages/MovieDetailPage';
-import PrivacyPage from './pages/PrivacyPageLoggedIn';
 import AccountPage from './pages/AccountPage';
 import PrivacyPageLoggedOut from './pages/PrivacyPageLoggedOut';
 import PrivacyPageLoggedIn from './pages/PrivacyPageLoggedIn';
 import AllMoviesPage from './pages/AllMoviesPage';
+import CookieConsent from 'react-cookie-consent';
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Unprotected routes */}
-        <Route path="/LandingPage" element={<LandingPage/>} />
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/register" element={<RegisterPage/>} />
-        <Route path="/PrivacyPageLoggedOut" element={<PrivacyPageLoggedOut/>} />
-        
+        <Route path="/LandingPage" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/PrivacyPageLoggedOut"
+          element={<PrivacyPageLoggedOut />}
+        />
+
         {/* Protected routes */}
-        <Route path="/HomePage" element={<AuthorizeView><HomePage/></AuthorizeView>} />
-        <Route path="/MyListPage" element={<AuthorizeView><MyListPage/></AuthorizeView>} />
-        <Route path="/AdminPage" element={<AuthorizeView><AdminPage/></AuthorizeView>} />
-        <Route path="/" element={<AuthorizeView><HomePage/></AuthorizeView>} />
-        <Route path="/AllMoviesPage" element={<AuthorizeView><AllMoviesPage/></AuthorizeView>} />
-        <Route path="/MovieDetailPage/:showId" element={<AuthorizeView><MovieDetailPage/></AuthorizeView>} />
+        <Route
+          path="/HomePage"
+          element={
+            <AuthorizeView>
+              <HomePage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/MyListPage"
+          element={
+            <AuthorizeView>
+              <MyListPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/AdminPage"
+          element={
+            <AuthorizeView>
+              <AdminPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <AuthorizeView>
+              <HomePage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/AllMoviesPage"
+          element={
+            <AuthorizeView>
+              <AllMoviesPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/MovieDetailPage/:showId"
+          element={
+            <AuthorizeView>
+              <MovieDetailPage />
+            </AuthorizeView>
+          }
+        />
         {/* Todo: Eventually pass in the userId to the account page */}
-        <Route path="/AccountPage" element={<AuthorizeView><AccountPage/></AuthorizeView>} />
-        <Route path="/PrivacyPageLoggedIn" element={<AuthorizeView><PrivacyPageLoggedIn/></AuthorizeView>} />
+        <Route
+          path="/AccountPage"
+          element={
+            <AuthorizeView>
+              <AccountPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/PrivacyPageLoggedIn"
+          element={
+            <AuthorizeView>
+              <PrivacyPageLoggedIn />
+            </AuthorizeView>
+          }
+        />
       </Routes>
+      {/* 👇 Cookie consent banner shown on all pages */}
+      <CookieConsent
+        location="bottom"
+        buttonText="I understand"
+        cookieName="IntexCookieConsent"
+        style={{ background: '#1c1c1e' }}
+        buttonStyle={{
+          color: 'white', // text color
+          background: '#e5b646', // ✅ button background color
+          fontSize: '13px',
+          borderRadius: '5px',
+          padding: '10px 20px',
+          border: 'none',
+        }}
+        expires={150}
+      >
+        This website uses cookies to enhance the user experience.
+      </CookieConsent>
     </Router>
   );
 }
