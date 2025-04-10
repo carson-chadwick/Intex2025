@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Recommender from '../components/RecommenderComponent';
+import { motion } from 'framer-motion';
+
 import Rating from '../components/Rating';
 import AverageRating from '../components/AverageRating';
 import AuthorizeView from '../components/AuthorizeView';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import CarouselRecommender from '../components/CarouselRecommender';
 
 function MovieDetailPage() {
   const { showId } = useParams<{ showId: string }>();
@@ -13,7 +15,11 @@ function MovieDetailPage() {
   console.log('Current showId from URL:', showId);
   const [movie, setMovie] = useState<any>(null); // use a better type if you have one
   const [loading, setLoading] = useState(true);
+  const [showRating, setShowRating] = useState(false);
   const url = import.meta.env.VITE_API_URL;
+
+  const ratingRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (showId) {
@@ -33,6 +39,7 @@ function MovieDetailPage() {
           setLoading(false);
         });
     }
+
     const fetchCurrentUser = async () => {
       try {
         const response = await fetch(
@@ -57,6 +64,27 @@ function MovieDetailPage() {
     fetchCurrentUser();
   }, [showId]);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        ratingRef.current &&
+        !ratingRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
+        setShowRating(false);
+      }
+    };
+
+    if (showRating) {
+      window.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, [showRating]);
+
   // 🔧 Helper function to sanitize titles
   const sanitizeTitle = (title: string): string => {
     return title.replace(/[':./-]/g, '');
@@ -65,29 +93,67 @@ function MovieDetailPage() {
   return (
     <>
       <AuthorizeView>
-        <Header/>
-        <div className="container mt-5">
-          {loading ? (
-            <p>Loading movie details...</p>
-          ) : movie ? (
-            <>
-              <div className="row mb-4">
-                <div className="row mb-4">
-                  <div className="col-6">
-                    <h2 className="text-3xl font-bold mb-3">{movie.title}</h2>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <img
-                    src={`https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizeTitle(movie.title)}.jpg`}
-                    alt={movie.title}
-                    className="img-fluid rounded mb-3"
-                    style={{ maxWidth: '300px', width: '100%' }} // 👈 scales with container
-                  />
-                  {userId !== null && <Rating showId={showId!} userId={userId} />}
-                </div>
+        <Header />
+        <br />
+        <br />
+        {loading || !movie ? (
+          <div className="container text-white text-center my-5">
+            <h3>Loading movie details...</h3>
+          </div>
+        ) : (
+          <div className="container my-5 text-white">
+            <div className="row g-4 align-items-start text-start">
+              {/* Poster */}
+              <div className="col-md-4">
+                <img
+                  src={`https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizeTitle(movie.title)}.jpg`}
+                  alt={movie.title}
+                  className="img-fluid rounded shadow"
+                  style={{ width: '100%', height: 'auto', maxWidth: '100%' }}
+                />
+                <div className="mt-3 d-flex gap-2 align-items-center position-relative">
+                  {/* ▶ Play Button */}
+                  <button
+                    className="btn bg-warning text-dark fw-bold w-100"
+                    onClick={() => alert('Play movie coming soon!')}
+                  >
+                    ▶ Play
+                  </button>
 
-                <div className="col-md-6 text-start">
+                  {/* ★ Rate Button */}
+                  <button
+                    ref={buttonRef}
+                    className="btn bg-warning text-dark fw-bold px-2"
+                    style={{ width: '12.5%' }}
+                    onClick={() => setShowRating(!showRating)}
+                  >
+                    ★
+                  </button>
+
+                  {/* Rating Popup */}
+                  {userId !== null && showRating && (
+                    <motion.div
+                      ref={ratingRef}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: 0.4,
+                        scale: { type: 'spring', bounce: 0.5 },
+                      }}
+                      className="position-absolute top-0 start-100 translate-middle-y ms-2 bg-dark text-white rounded shadow p-3"
+                      style={{ zIndex: 100, minWidth: '160px' }}
+                    >
+                      <Rating showId={showId!} userId={userId} />
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+
+              {/* Info Section */}
+              <div className="col-md-8" style={{ maxWidth: '600px' }}>
+                <h1 className="mb-3 montserrat-extrabold">{movie.title}</h1>
+
+                <div className="mb-3 montserrat-regular">
                   <p className="mb-1">
                     <strong>Director:</strong> {movie.director}
                   </p>
@@ -100,47 +166,68 @@ function MovieDetailPage() {
                   <p className="mb-1">
                     <strong>Duration:</strong> {movie.duration}
                   </p>
-                  <p className="mb-3">
+                  <p className="mb-1">
                     <strong>Country:</strong> {movie.country}
                   </p>
-
-                  <AverageRating showId={showId!} />
-                  <br />
-
-                  <h4 className="text-lg font-semibold mb-2">Description:</h4>
-                  <p className="mb-4">{movie.description}</p>
-
-                  <h4 className="text-lg font-semibold mb-2">Cast:</h4>
-                  <p className="mb-0">{movie.cast}</p>
-
-                  {movie.genres && movie.genres.length > 0 && (
-                    <>
-                      <h4 className="text-lg font-semibold mb-2 mt-3">Genres:</h4>
-                      <p className="mb-0">{movie.genres.join(', ')}</p>
-                    </>
-                  )}
+                  <div className="d-flex align-items-center mt-2">
+                    <AverageRating showId={showId!} />
+                  </div>
                 </div>
-              </div>
-              <p>
-                You're viewing the details for movie ID: <strong>{showId}</strong>
-              </p>
 
-              <Recommender
+                <div className="mb-4 montserrat-regular">
+                  <h5 className="mb-2">Description:</h5>
+                  <p>{movie.description}</p>
+                </div>
+
+                <div className="mb-3 montserrat-regular">
+                  <h5 className="mb-2">Cast:</h5>
+                  <p>
+                    {movie.cast
+                      .split(' ')
+                      .reduce((acc: string[], curr: string, index: number) => {
+                        const i = Math.floor(index / 2);
+                        if (!acc[i]) acc[i] = curr;
+                        else acc[i] += ' ' + curr;
+                        return acc;
+                      }, [])
+                      .join(', ')}
+                  </p>
+                </div>
+
+                {movie.genres && movie.genres.length > 0 && (
+                  <div className="mb-3">
+                    <h5 className="mb-2 montserrat-regular">Genres:</h5>
+                    <div>
+                      {movie.genres.map((genre: string, index: number) => (
+                        <span
+                          key={index}
+                          className="badge bg-warning text-dark me-2 mb-1"
+                        >
+                          {genre}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Carousels */}
+            <div className="my-5">
+              <CarouselRecommender
+                Name="Top Because You Watched This..."
+                showId={showId}
                 type="collab"
-                showId={showId}
-                Name="Because You Watched This..."
               />
-              <Recommender
-                type="content"
-                showId={showId}
-                Name="You Might Also Like"
-              />
-            </>
-          ) : (
-            <p>Movie not found.</p>
-          )}
-        </div>
-        <Footer/>
+            </div>
+            <CarouselRecommender
+              Name="Top You Might Also Like"
+              showId={showId}
+              type="content"
+            />
+          </div>
+        )}
+        <Footer />
       </AuthorizeView>
     </>
   );

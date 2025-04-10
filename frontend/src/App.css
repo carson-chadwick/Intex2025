@@ -8,7 +8,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%; /* Ensure the body and html take up the full height */
 }
 
@@ -58,10 +59,6 @@ html, body {
   color: #888;
 }
 
-.row {
-  background-color: white;
-}
-
 .logout {
   color: #fff;
   font-size: large;
@@ -77,22 +74,27 @@ html, body {
   font-weight: 700;
 }
 
+.montserrat-regular {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .cookie-btn:hover {
   text-decoration: underline;
 }
 
-
-
 /* root stuff to be applied to all */
 /* Fonts */
 :root {
-  --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --heading-font: "Raleway",  sans-serif;
-  --nav-font: "Inter",  sans-serif;
+  --default-font:
+    'Roboto', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --heading-font: 'Raleway', sans-serif;
+  --nav-font: 'Inter', sans-serif;
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
+:root {
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #444444; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #273d4e; /* Color for headings, subheadings and title throughout the website */
@@ -103,7 +105,7 @@ html, body {
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
-  --nav-color: #e5eaee;  /* The default color of the main navmenu links */
+  --nav-color: #e5eaee; /* The default color of the main navmenu links */
   --nav-hover-color: #ff4a17; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
@@ -131,11 +133,6 @@ html, body {
   scroll-behavior: smooth;
 }
 
-
-
-
-
-
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
@@ -160,7 +157,7 @@ html, body {
 }
 
 .hero:before {
-  content: "";
+  content: '';
   background: color-mix(in srgb, var(--background-color), transparent 30%);
   position: absolute;
   inset: 0;
@@ -173,7 +170,7 @@ html, body {
 }
 
 .hero h2 {
-  color: var(--contrast-color); 
+  color: var(--contrast-color);
   margin: 0;
   font-size: 48px;
   font-weight: 700;

@@ -2,6 +2,7 @@ import * as React from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 const labels: { [index: number]: string } = {
   1: 'Useless',
@@ -54,7 +55,15 @@ export default function AverageRating({ showId }: { showId: string }) {
           value={value}
           precision={0.5}
           getLabelText={getLabelText}
-          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+          emptyIcon={
+            <StarBorderIcon
+              style={{
+                color: '#ffc107', // same color
+                opacity: 0.3,
+              }}
+              fontSize="inherit"
+            />
+          }
           size="small"
           readOnly
         />

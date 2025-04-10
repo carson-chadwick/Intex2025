@@ -2,6 +2,7 @@ import * as React from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 const labels: { [index: number]: string } = {
   1: 'Useless',
@@ -87,20 +88,37 @@ export default function HoverRating({
         alignItems: 'flex-start',
       }}
     >
-      <h4 style={{ marginBottom: 4 }}>
-        {hasRated ? 'You rated this movie' : 'Rate this movie'}
-      </h4>
+      <h5 className="montserrat-extrabold" style={{ marginBottom: 4 }}>
+        {hasRated ? 'Your Rating' : 'Leave a Rating'}
+      </h5>
 
       {/* Show read-only stars if rated */}
       {hasRated && value !== null && (
         <Rating
           name={`user-rating-${showId}`}
-          value={value}
+          value={value ?? 0}
           precision={1}
           getLabelText={getLabelText}
-          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+          onChange={handleRatingChange}
+          onChangeActive={(_event, newHover) => setHover(newHover)}
+          icon={
+            <StarIcon
+              style={{
+                color: '#ffc107',
+              }}
+              fontSize="inherit"
+            />
+          }
+          emptyIcon={
+            <StarBorderIcon
+              style={{
+                color: '#FFD700',
+                opacity: 0.3,
+              }}
+              fontSize="inherit"
+            />
+          }
           size="large"
-          readOnly
         />
       )}
       {/* Show interactive stars if not rated yet */}
@@ -113,8 +131,22 @@ export default function HoverRating({
             getLabelText={getLabelText}
             onChange={handleRatingChange}
             onChangeActive={(_event, newHover) => setHover(newHover)}
+            icon={
+              <StarIcon
+                style={{
+                  color: '#FFD700',
+                }}
+                fontSize="inherit"
+              />
+            }
             emptyIcon={
-              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+              <StarBorderIcon
+                style={{
+                  color: '#FFD700',
+                  opacity: 0.3,
+                }}
+                fontSize="inherit"
+              />
             }
             size="large"
           />

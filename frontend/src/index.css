@@ -24,11 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* display: flex; */
+  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
-  background-color: #242424;
 }
 
 h1 {
@@ -55,15 +54,16 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-  a:hover {
-    color: #747bff;
-    cursor: pointer;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-
-  html, body {
-  background-color: #0c0c0c !important;
+a:hover {
+  color: #747bff;
+  cursor: pointer;
+}
+button {
+  background-color: #f9f9f9;
 }
 
+html,
+body {
+  background-color: #0c0c0c !important;
+  color: white !important;
+}
