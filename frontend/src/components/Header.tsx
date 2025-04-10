@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect  } from 'react';
 import './Header.css';
 import { FaUserCircle } from 'react-icons/fa';
 import logo from '../images/NewCineNicheLogo.png';
@@ -35,8 +35,11 @@ const Header: React.FC = () => {
     <>
       {isLoggedIn ? (
         <header
+         
           id="header"
+         
           className="header d-flex align-items-center fixed-top"
+        
         >
           <div className="container-fluid container-xl position-relative d-flex align-items-center">
             <a
@@ -83,8 +86,11 @@ const Header: React.FC = () => {
         </header>
       ) : (
         <header
+         
           id="header"
+         
           className="header d-flex align-items-center fixed-top"
+        
         >
           <div className="container-fluid container-xl position-relative d-flex align-items-center">
             <a
@@ -108,7 +114,9 @@ const Header: React.FC = () => {
             >
               <button onClick={() => handleNavigation('/login')}>Login</button>
               <button onClick={() => handleNavigation('/register')}>
+                
                 Get Started
+              
               </button>
             </div>
           </div>
@@ -119,3 +127,8 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
+
+
+
+        
