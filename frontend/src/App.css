@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Boldonse:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 /* Global styles */
 *,
 *::before,
@@ -72,12 +72,14 @@ html, body {
   margin: 1em;
 }
 
-.RKHeader {
-  font-family: 'Boldonse', system-ui;
-  font-weight: 200;
-  font-style: normal;
+.montserrat-extrabold {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
 }
 
+.cookie-btn:hover {
+  text-decoration: underline;
+}
 
 
 
