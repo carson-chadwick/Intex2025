@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Intex2025.API.Controllers;
 
@@ -13,58 +16,68 @@ public class AuthController : ControllerBase
     {
         _signInManager = signInManager;
     }
-[HttpPost("signin")]
-public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
-{
-    try
+
+    [HttpPost("signin")]
+    public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
     {
-        Console.WriteLine($"[LOGIN ATTEMPT] {request.Email}, RememberMe: {request.RememberMe}");
-
-        if (!ModelState.IsValid)
-            return BadRequest("Invalid login request");
-
-        var user = await _signInManager.UserManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return Unauthorized(new { message = "Invalid email or password." });
-
-        // ✅ First, check if password is valid
-        var passwordValid = await _signInManager.UserManager.CheckPasswordAsync(user, request.Password);
-        if (!passwordValid)
-            return Unauthorized(new { message = "Invalid email or password." });
-
-        // ✅ Check if the user has MFA enabled
-        var mfaEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(user);
-        if (mfaEnabled)
+        try
         {
-            return Ok(new
+            Console.WriteLine($"[LOGIN ATTEMPT] {request.Email}, RememberMe: {request.RememberMe}");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid login request");
+
+            var user = await _signInManager.UserManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return Unauthorized(new { message = "Invalid email or password." });
+
+            var passwordValid = await _signInManager.UserManager.CheckPasswordAsync(user, request.Password);
+            if (!passwordValid)
+                return Unauthorized(new { message = "Invalid email or password." });
+
+            var mfaEnabled = await _signInManager.UserManager.GetTwoFactorEnabledAsync(user);
+            if (mfaEnabled)
             {
-                requiresMfa = true,
-                email = user.Email
+                return Ok(new
+                {
+                    requiresMfa = true,
+                    email = user.Email
+                });
+            }
+
+            // ✅ Get the user's roles
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+
+            // ✅ Build the claims
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email ?? "")
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            // ✅ Build identity and principal
+            var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // ✅ Sign in manually to include roles in the cookie
+            await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal, new AuthenticationProperties
+            {
+                IsPersistent = request.RememberMe
             });
-        }
 
-
-        // ✅ No MFA — proceed to full sign-in
-        var result = await _signInManager.PasswordSignInAsync(
-            user,
-            request.Password,
-            isPersistent: request.RememberMe,
-            lockoutOnFailure: false);
-
-        if (result.Succeeded)
             return Ok(new { message = "Login successful" });
-
-        return Unauthorized(new { message = "Invalid email or password." });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[LOGIN ERROR] {ex.Message}");
+            return StatusCode(500, "Internal server error during login.");
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[LOGIN ERROR] {ex.Message}");
-        return StatusCode(500, "Internal server error during login.");
-    }
-}
-
-
-
 }
 
 public class UserLoginRequest
