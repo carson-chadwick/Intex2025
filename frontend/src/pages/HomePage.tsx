@@ -61,10 +61,11 @@ const HomePage: React.FC = () => {
           <img src={background} alt="Hero Background"  />
         
           <div className="container d-flex flex-column align-items-center">
-            <h2>PLAN. LAUNCH. GROW.</h2>
-            <p >
+            <h2 >Hidden Gems.</h2>
+            <h2 >Found Just For You.</h2>
+            {/* <p >
               We are a team of talented designers making websites with Bootstrap
-            </p>
+            </p> */}
             <div className="d-flex mt-4">
               <a href="#about" className="btn-get-started">Get Started</a>
               <a 
@@ -78,14 +79,9 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-
-
-
         
         <div className="home-container">
           <div className="content">
-            <h1>Welcome to Intex2025</h1>
-            <p>Your personalized homepage</p>
             <Recommender
               type="homeTop"
               userId={userId}
