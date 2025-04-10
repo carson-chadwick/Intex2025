@@ -215,13 +215,13 @@ function MovieDetailPage() {
             {/* Carousels */}
             <div className="my-5">
               <CarouselRecommender
-                Name="Top Because You Watched This..."
+                Name="Because You Watched This"
                 showId={showId}
                 type="collab"
               />
             </div>
             <CarouselRecommender
-              Name="Top You Might Also Like"
+              Name="You Might Also Like"
               showId={showId}
               type="content"
             />
