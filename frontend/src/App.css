@@ -10,6 +10,7 @@
 
 html,
 body {
+  background-color: #0c0c0cff;
   height: 100%; /* Ensure the body and html take up the full height */
 }
 
@@ -17,6 +18,7 @@ body {
   height: 100vh; /* Ensure the root div takes the full height of the viewport */
   width: 100%; /* Ensure it takes full width */
   text-align: center;
+  background-color: #0c0c0cff;
 }
 
 .logo {
@@ -95,7 +97,7 @@ body {
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root {
-  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
+  --background-color: #0c0c0cff; /* Background color for the entire website, including individual sections */
   --default-color: #444444; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #273d4e; /* Color for headings, subheadings and title throughout the website */
   --accent-color: #ff4a17; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
@@ -243,3 +245,4 @@ body {
   margin-top: 64px;
   width: 100%;
 }
+

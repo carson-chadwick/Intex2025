@@ -1,16 +1,16 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import PrivacyInfo from "../components/PrivacyInfo";
-function PrivacyPageLoggedOut() {
+// import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import PrivacyInfo from "../components/PrivacyInfo";
+// function PrivacyPageLoggedOut() {
 
-    return (
-        <>  
-            <Header/>
-            <PrivacyInfo/>
-            <Footer/>
-        </>
-    );
-}
+//     return (
+//         <>  
+//             <Header/>
+//             <PrivacyInfo/>
+//             <Footer/>
+//         </>
+//     );
+// }
 
 
-export default PrivacyPageLoggedOut;
+// export default PrivacyPageLoggedOut;
