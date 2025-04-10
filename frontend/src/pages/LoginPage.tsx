@@ -24,6 +24,7 @@ function LoginPage() {
     }
   };
 
+  
   // const handleRegisterClick = () => {
   //   navigate('/register');
   // };
@@ -171,20 +172,7 @@ const handleMfaSubmit = async () => {
                     {requiresMfa ? 'Verify Code' : 'Sign in'}
                   </button>
                 </div>
-
-{/*
-                {!requiresMfa && (
-                  <div className="d-grid mb-2">
-                    <button
-                      className="btn btn-primary btn-login text-uppercase fw-bold"
-                      onClick={handleRegisterClick}
-                      type="button"
-                    >
-                      Register
-                    </button>
-                  </div>
-                )}
-*/}
+                <a onClick={() => navigate('/register')} className="footer-text">Don't have an account?</a>
                 {!requiresMfa && (
                   <>
                     <hr className="my-4" />
