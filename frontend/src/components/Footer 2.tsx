@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import './Footer.css';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './AuthorizeView';

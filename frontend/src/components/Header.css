@@ -431,3 +431,55 @@
     display: block;
   }
 }
+
+
+
+/*--------------------------------------------------------------
+# Registration progress indicator
+--------------------------------------------------------------*/
+
+.step-indicator {
+  display: flex;
+  justify-content: center;  /* centers the whole group */
+  align-items: center;
+  gap: 40px; /* more spacing between steps */
+  margin-bottom: 30px;
+}
+
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bubble {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+}
+
+.step.filled .bubble {
+  background-color: #007bff;
+  color: white;
+}
+
+.step p {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.line {
+  width: 60px; /* fixed width for spacing */
+  height: 2px;
+  background-color: #ccc;
+}
