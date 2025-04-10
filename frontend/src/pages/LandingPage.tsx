@@ -132,11 +132,26 @@ function LandingPage() {
         </div>
       </div>
       <br /> <br />
-      <CarouselRecommender Name="Top Hits" type="topHits" />
+      <CarouselRecommender
+        Name="Top Hits"
+        type="topHits"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <br />
-      <CarouselRecommender Name="Editors Picks" type="editorsPicks" />
+      <CarouselRecommender
+        Name="Editors Picks"
+        type="editorsPicks"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <br />
-      <CarouselRecommender Name="Recently Added" type="recentlyAdded" />
+      <CarouselRecommender
+        Name="Recently Added"
+        type="recentlyAdded"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <Footer />
     </>
   );
