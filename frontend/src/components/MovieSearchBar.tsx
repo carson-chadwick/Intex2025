@@ -21,7 +21,7 @@ function MovieSearchBar({ onSearch }: MovieSearchBarProps) {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button type="submit" className="btn rounded-0">
+      <button type="submit" className="btn rounded-0 btn-white-blackk">
         Search
       </button>
     </form>
