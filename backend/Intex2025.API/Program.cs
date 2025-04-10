@@ -140,8 +140,20 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
         return Results.Unauthorized();
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    return Results.Json(new { email = email });
+
+    // 🧠 Grab all roles assigned to the user
+    var roles = user.Claims
+        .Where(c => c.Type == ClaimTypes.Role)
+        .Select(c => c.Value)
+        .ToList();
+
+    return Results.Json(new
+    {
+        email = email,
+        roles = roles
+    });
 }).RequireAuthorization();
+
 
 app.MapGet("/unauthorized", () => Results.Unauthorized());
 app.MapGet("/test", () => "API is alive3!");
