@@ -6,6 +6,7 @@ import MovieSearchBar from '../components/MovieSearchBar'; // ✅ import it
 interface MovieData {
   title: string;
   genre?: string;
+  showId: string;
 }
 
 function AllMoviesPage() {
@@ -33,32 +34,30 @@ function AllMoviesPage() {
       setLoading(true);
       const BASE_URL = import.meta.env.VITE_API_URL;
 
-  const queryParams = new URLSearchParams({
-    pageSize: '72',
-    pageNum: pageNum.toString(),
-  });
+      const queryParams = new URLSearchParams({
+        pageSize: '72',
+        pageNum: pageNum.toString(),
+      });
 
-  if (sortBy !== 'default' && order !== 'default') {
-    queryParams.append('sortBy', sortBy);
-    queryParams.append('order', order);
-  }
+      if (sortBy !== 'default' && order !== 'default') {
+        queryParams.append('sortBy', sortBy);
+        queryParams.append('order', order);
+      }
 
-  if (searchTerm) {
-    queryParams.append('search', searchTerm);
-  }
+      if (searchTerm) {
+        queryParams.append('search', searchTerm);
+      }
 
-  if (genreFilter) {
-    queryParams.append('genre', genreFilter);
-  }
-
-
+      if (genreFilter) {
+        queryParams.append('genre', genreFilter);
+      }
 
       const fullUrl = `${BASE_URL}/Movie/AllMovies?${queryParams.toString()}`;
 
       try {
-        const res = await fetch(fullUrl,{
+        const res = await fetch(fullUrl, {
           credentials: 'include',
-        } );
+        });
         const data = await res.json();
 
         if (data.movies && data.movies.length > 0) {
@@ -112,100 +111,105 @@ function AllMoviesPage() {
   return (
     <>
       <Header />
-      <div className='apply-margin'></div>
+      <div className="apply-margin"></div>
       <div className="w-[90%] mx-auto mb-5">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-          {/* <h2 className="text-3xl font-semibold text-start">All Movies</h2> */}
-
-          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
-            <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
-            <select
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
-              value={`${sortBy}-${order}`}
-              onChange={(e) => {
-                const [sort, ord] = e.target.value.split('-');
-                setSortBy(sort);
-                setOrder(ord);
-              }}
-            >
-              <option value="default-default">Sort</option>
-              <option value="title-asc">Title A–Z</option>
-              <option value="title-desc">Title Z–A</option>
-              <option value="releaseyear-asc">Release Year ↑</option>
-              <option value="releaseyear-desc">Release Year ↓</option>
-            </select>
-
-            <select
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
-              value={genreFilter}
-              onChange={(e) => {
-                setGenreFilter(e.target.value);
-                setMovies([]);
-                setPage(1);
-                setHasMore(true);
-              }}
-            >
-              <option value="">All Genres</option>
-              <option value="action">Action/Adventure</option>
-              <option value="animeSeriesInternationalTvShows">
-                Anime Series / International TV Shows
-              </option>
-              <option value="britishTvShowsDocuseriesInternationalTvShows">
-                British / Docuseries / International TV Shows
-              </option>
-              <option value="children">Children</option>
-              <option value="comedies">Comedies</option>
-              <option value="comediesDramasInternationalMovies">
-                Comedies / Dramas / International Movies
-              </option>
-              <option value="comediesInternationalMovies">
-                Comedies / International Movies
-              </option>
-              <option value="comediesRomanticMovies">
-                Comedies / Romantic Movies
-              </option>
-              <option value="crimeTvShowsDocuseries">
-                Crime TV Shows / Docuseries
-              </option>
-              <option value="documentaries">Documentaries</option>
-              <option value="documentariesInternationalMovies">
-                Documentaries / International Movies
-              </option>
-              <option value="docuseries">Docuseries</option>
-              <option value="dramas">Dramas</option>
-              <option value="dramasInternationalMovies">
-                Dramas / International Movies
-              </option>
-              <option value="dramasRomanticMovies">
-                Dramas / Romantic Movies
-              </option>
-              <option value="familyMovies">Family Movies</option>
-              <option value="fantasy">Fantasy</option>
-              <option value="horrorMovies">Horror Movies</option>
-              <option value="internationalMoviesThrillers">
-                International Movies / Thrillers
-              </option>
-              <option value="internationalTvShowsRomanticTvShowsTvDramas">
-                International / Romantic TV Shows / TV Dramas
-              </option>
-              <option value="kidsTv">Kids' TV</option>
-              <option value="languageTvShows">Language TV Shows</option>
-              <option value="musicals">Musicals</option>
-              <option value="natureTv">Nature TV</option>
-              <option value="realityTv">Reality TV</option>
-              <option value="spirituality">Spirituality</option>
-              <option value="tvAction">TV Action</option>
-              <option value="tvComedies">TV Comedies</option>
-              <option value="tvDramas">TV Dramas</option>
-              <option value="talkShowsTvComedies">
-                Talk Shows / TV Comedies
-              </option>
-              <option value="thrillers">Thrillers</option>
-            </select>
+        <div className="container mb-4">
+          <div className="row gx-3">
+            <div className="col-12 col-md-4">
+              <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
+            </div>
+            <div className="col-6 col-md-3">
+              <select
+                className="form-select fw-semibold"
+                style={{ fontFamily: 'Montserrat', height: '42px' }}
+                value={`${sortBy}-${order}`}
+                onChange={(e) => {
+                  const [sort, ord] = e.target.value.split('-');
+                  setSortBy(sort);
+                  setOrder(ord);
+                }}
+              >
+                <option value="default-default">Sort</option>
+                <option value="title-asc">Title A–Z</option>
+                <option value="title-desc">Title Z–A</option>
+                <option value="releaseyear-asc">Release Year ↑</option>
+                <option value="releaseyear-desc">Release Year ↓</option>
+              </select>
+            </div>
+            <div className="col-6 col-md-5">
+              <select
+                className="form-select fw-semibold"
+                style={{ fontFamily: 'Montserrat', height: '42px' }}
+                value={genreFilter}
+                onChange={(e) => {
+                  setGenreFilter(e.target.value);
+                  setMovies([]);
+                  setPage(1);
+                  setHasMore(true);
+                }}
+              >
+                <option value="">All Genres</option>
+                <option value="action">Action/Adventure</option>
+                <option value="animeSeriesInternationalTvShows">
+                  Anime Series / International TV Shows
+                </option>
+                <option value="britishTvShowsDocuseriesInternationalTvShows">
+                  British / Docuseries / International TV Shows
+                </option>
+                <option value="children">Children</option>
+                <option value="comedies">Comedies</option>
+                <option value="comediesDramasInternationalMovies">
+                  Comedies / Dramas / International Movies
+                </option>
+                <option value="comediesInternationalMovies">
+                  Comedies / International Movies
+                </option>
+                <option value="comediesRomanticMovies">
+                  Comedies / Romantic Movies
+                </option>
+                <option value="crimeTvShowsDocuseries">
+                  Crime TV Shows / Docuseries
+                </option>
+                <option value="documentaries">Documentaries</option>
+                <option value="documentariesInternationalMovies">
+                  Documentaries / International Movies
+                </option>
+                <option value="docuseries">Docuseries</option>
+                <option value="dramas">Dramas</option>
+                <option value="dramasInternationalMovies">
+                  Dramas / International Movies
+                </option>
+                <option value="dramasRomanticMovies">
+                  Dramas / Romantic Movies
+                </option>
+                <option value="familyMovies">Family Movies</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="horrorMovies">Horror Movies</option>
+                <option value="internationalMoviesThrillers">
+                  International Movies / Thrillers
+                </option>
+                <option value="internationalTvShowsRomanticTvShowsTvDramas">
+                  International / Romantic TV Shows / TV Dramas
+                </option>
+                <option value="kidsTv">Kids' TV</option>
+                <option value="languageTvShows">Language TV Shows</option>
+                <option value="musicals">Musicals</option>
+                <option value="natureTv">Nature TV</option>
+                <option value="realityTv">Reality TV</option>
+                <option value="spirituality">Spirituality</option>
+                <option value="tvAction">TV Action</option>
+                <option value="tvComedies">TV Comedies</option>
+                <option value="tvDramas">TV Dramas</option>
+                <option value="talkShowsTvComedies">
+                  Talk Shows / TV Comedies
+                </option>
+                <option value="thrillers">Thrillers</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className="row g-3 bg-transparent">
+        <div className="row g-3 bg-transparent align-items-center justify-content-center">
           {movies.map((movie, idx) => {
             const sanitizedTitle = sanitizeTitle(movie.title);
             const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
@@ -213,6 +217,7 @@ function AllMoviesPage() {
             return (
               <div className="col-auto p-3" key={`${movie.title}-${idx}`}>
                 <RecommendCard
+                  showId={movie.showId}
                   imageSrc={imageSrc}
                   altText={movie.title}
                   captionText={movie.title}
@@ -225,7 +230,8 @@ function AllMoviesPage() {
                   showMobileWarning={false}
                   showTooltip={false}
                   displayOverlayContent={false}
-                  overlayContent={false} showId={''}                />
+                  overlayContent={false}
+                />
               </div>
             );
           })}

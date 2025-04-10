@@ -246,3 +246,9 @@ body {
   width: 100%;
 }
 
+.search-input {
+  border-radius: 0.5rem 0 0 0.5rem !important;
+  height: 42px;
+  padding: 0.4rem 1rem;
+  font-family: 'Montserrat', sans-serif;
+}
