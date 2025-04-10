@@ -4,11 +4,24 @@ import './Homepage.css';
 import Recommender from '../components/RecommenderComponent';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import background from '../images/background.jpg';
+
+
+// import AOS from 'aos';
+// import 'aos/dist/aos.css';
 
 const HomePage: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   AOS.init({
+  //     duration: 1200, // Animation duration in milliseconds
+  //     once: true,     // Ensure animations happen only once on scroll
+  //   });
+  // }, []);
+  
+  
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -41,26 +54,54 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <AuthorizeView>
-      <Header />
-      <div className="home-container">
-        <div className="content">
-          <h1>Welcome to Intex2025</h1>
-          <p>Your personalized homepage</p>
-          <Recommender
-            type="homeTop"
-            userId={userId}
-            Name="Top Picks For You"
-          />
-          <Recommender
-            type="homeGenre"
-            userId={userId}
-            Name="Recommended by Genre"
-          />
+    <>
+      <AuthorizeView>
+        <Header />
+        <section id="hero" className="hero section dark-background">
+          <img src={background} alt="Hero Background"  />
+        
+          <div className="container d-flex flex-column align-items-center">
+            <h2>PLAN. LAUNCH. GROW.</h2>
+            <p >
+              We are a team of talented designers making websites with Bootstrap
+            </p>
+            <div className="d-flex mt-4">
+              <a href="#about" className="btn-get-started">Get Started</a>
+              <a 
+                href="https://youtu.be/ZMsTMuyH7w8?si=u6OcALxIEf3RXgQj"
+                
+                className="glightbox btn-watch-video d-flex align-items-center">
+                <i className="bi bi-play-circle"></i>
+                <span>Watch Video</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+
+
+
+        
+        <div className="home-container">
+          <div className="content">
+            <h1>Welcome to Intex2025</h1>
+            <p>Your personalized homepage</p>
+            <Recommender
+              type="homeTop"
+              userId={userId}
+              Name="Top Picks For You"
+            />
+            <Recommender
+              type="homeGenre"
+              userId={userId}
+              Name="Recommended by Genre"
+            />
+          </div>
         </div>
-      </div>
-      <Footer/>
-    </AuthorizeView>
+        <Footer/>
+      </AuthorizeView>
+    </>
+
   );
 };
 
