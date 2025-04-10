@@ -31,48 +31,55 @@ const Header: React.FC = () => {
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
+
+  //Profile stuff
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedImage = localStorage.getItem("profileImage");
+    if (storedImage) {
+      setProfileImage(storedImage);
+    }
+  }, []);
+
+  const getInitial = () => {
+    if (user?.email) {
+      return user.email.charAt(0).toUpperCase();
+    }
+    return null;
+  };
+
   return (
     <>
       {isLoggedIn ? (
-        <header
-         
-          id="header"
-         
-          className="header d-flex align-items-center fixed-top"
-        
-        >
+        <header id="header" className="header d-flex align-items-center fixed-top">
           <div className="container-fluid container-xl position-relative d-flex align-items-center">
             <a
               onClick={() => handleNavigation('/HomePage')}
-              className="logo d-flex align-items-center me-auto"
-            >
+              className="logo d-flex align-items-center me-auto">
               <img src={logo} className="logo-img" />
             </a>
 
             <nav id="navmenu" className="navmenu">
               <ul>
-                <li>
-                  <a onClick={() => handleNavigation('/HomePage')}>Home</a>
-                </li>
-                <li>
-                  <a onClick={() => handleNavigation('/AllMoviesPage')}>
-                    AllMovies
-                  </a>
-                </li>
+                <li><a onClick={() => handleNavigation('/HomePage')}>Home</a></li>
+                <li><a onClick={() => handleNavigation('/AllMoviesPage')}>All Movies</a></li>
                 {isAdmin && ( // ✅ Only show if user is an Administrator
-                  <li>
-                    <a onClick={() => handleNavigation('/AdminPage')}>Admin</a>
-                  </li>
+                  <li><a onClick={() => handleNavigation('/AdminPage')}>Admin</a></li>
                 )}
               </ul>
               <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-
-            <a
-              className="icon profile-icon"
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
-            >
-              <FaUserCircle />
+            <a className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              {profileImage ? (
+                <img src={profileImage} className="profile-img-icon" alt="Profile" />
+              ) : user?.email ? (
+                <div className="profile-img-icon profile-initial-icon">
+                  {user.email.charAt(0).toUpperCase()}
+                </div>
+              ) : (
+                <FaUserCircle />
+              )}
             </a>
             <div
               className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}
@@ -92,7 +99,8 @@ const Header: React.FC = () => {
           className="header d-flex align-items-center fixed-top"
         
         >
-          <div className="container-fluid container-xl position-relative d-flex align-items-center">
+          <div className="container-xl position-relative d-flex align-items-center">
+          {/* <div className="container-fluid container-xl position-relative d-flex align-items-center"> */}
             <a
               onClick={() => handleNavigation('/LandingPage')}
               className="logo d-flex align-items-center me-auto"
@@ -107,7 +115,7 @@ const Header: React.FC = () => {
               className="icon profile-icon"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
-              <FaUserCircle />
+              <FaUserCircle className='profile-img-icon'/>
             </a>
             <div
               className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}
@@ -127,8 +135,5 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
-
-
 
         
