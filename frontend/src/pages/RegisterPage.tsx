@@ -92,10 +92,15 @@ function RegisterPage() {
             <p>Account Info</p>
           </div>
           <div className="line" />
-          <div className={`step ${step === 2 ? 'filled' : ''}`}>
-            <div className="bubble">{step === 2 ? '2' : ''}</div>
+          <div className={`step ${step === 2 || success ? 'filled' : ''}`}>
+            <div className="bubble">{success ? '✔' : '2'}</div>
             <p>Personal Details</p>
           </div>
+
+          {/* <div className={`step ${step === 2 ? 'filled' : ''}`}>
+            <div className="bubble">{step > 2 ? '✔' : '2'}</div>
+            <p>Personal Details</p>
+          </div> */}
         </div>
 
         <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
@@ -135,12 +140,13 @@ function RegisterPage() {
                 </div>
               </>
             )}
+
           </>
-        ) : (
+        ) : (   
           <div className="text-center">
             <h4 className="text-success">✅ Successfully Registered!</h4>
             <button className="btn btn-primary mt-3" onClick={() => navigate('/login')}>Go to Login</button>
-          </div>
+          </div>            
         )}
 
         {error && <p className="text-danger mt-3">{error}</p>}
