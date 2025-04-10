@@ -112,9 +112,10 @@ function AllMoviesPage() {
   return (
     <>
       <Header />
+      <div className='apply-margin'></div>
       <div className="w-[90%] mx-auto mb-5">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-          <h2 className="text-3xl font-semibold text-start">All Movies</h2>
+          {/* <h2 className="text-3xl font-semibold text-start">All Movies</h2> */}
 
           <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
             <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
