@@ -89,6 +89,14 @@
 .profile-dropdown button:hover {
   background-color: #c0c0c0; /* Slight hover effect */
 }
+
+/*Mobile Version*/
+@media screen and (max-width: 768px) {
+  .profile-dropdown {
+    left: 12px;
+  }
+}
+
 /*End Profile dropdown menu*/
 
 
