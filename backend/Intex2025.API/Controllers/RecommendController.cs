@@ -140,7 +140,7 @@ namespace Intex2025.API.Controllers
             // You can customize this list later or even pull it from a database table
             var editorsPickIds = new List<string>
             {
-                "s8052", "s461", 
+                "s8052", "s461", "s574", "s595", "s8083", "s341", "s1846", "s9", "s754", "s7128", "s2520", "s6614", "s7571", "s1000", "s1001", "s1002", "s1003", "s1004", "s1005", "s1006", "s1007", "s1008", "s1009", "s1010"
             };
 
             var picks = _moviesContext.MoviesTitles

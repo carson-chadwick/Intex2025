@@ -99,18 +99,25 @@ function App() {
         location="bottom"
         buttonText="I understand"
         cookieName="IntexCookieConsent"
-        style={{ background: '#1c1c1e' }}
+        style={{ background: '#0c0c0e' }}
+        contentStyle={{
+          margin: '0 auto',
+          textAlign: 'left',
+          width: '100%',
+          maxWidth: '1200px',
+        }}
         buttonStyle={{
-          color: 'white', // text color
-          background: '#e5b646', // ✅ button background color
+          color: 'white',
+          background: '#0c0c0e',
           fontSize: '13px',
           borderRadius: '5px',
           padding: '10px 20px',
           border: 'none',
         }}
+        buttonClasses="cookie-btn"
         expires={150}
       >
-        This website uses cookies to enhance the user experience.
+          ⚠️ This website uses cookies to enhance the user experience.
       </CookieConsent>
     </Router>
   );
