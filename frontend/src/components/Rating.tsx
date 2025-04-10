@@ -151,7 +151,7 @@ export default function HoverRating({
             size="large"
           />
           {(hover !== -1 || value !== null) && (
-            <Box sx={{ ml: 2, minWidth: 80 }}>
+            <Box className="montserrat-extrabold" sx={{ ml: 2, minWidth: 80 }}>
               {labels[hover !== -1 ? hover : (value ?? 0)]}
             </Box>
           )}
