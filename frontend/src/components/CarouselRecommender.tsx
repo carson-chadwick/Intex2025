@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import ItemsCarousel from 'react-items-carousel';
 import RecommendCard from './RecommendCard';
+import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+
 
 interface RecData {
   title: string;
@@ -23,6 +25,8 @@ interface CarouselRecommenderProps {
     | 'editorsPicks'
     | 'recentlyAdded';
   autoScroll?: boolean;
+  leftChevron?: React.ReactNode;
+  rightChevron?: React.ReactNode;
 }
 
 const CarouselRecommender = ({
@@ -31,32 +35,34 @@ const CarouselRecommender = ({
   showId,
   type,
   autoScroll = true,
+  leftChevron,
+  rightChevron,
 }: CarouselRecommenderProps) => {
   const [recs, setRecs] = useState<RecData[]>([]);
   const [activeIndexes, setActiveIndexes] = useState<Record<string, number>>(
     {}
   );
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [cardsToShow, setCardsToShow] = useState(6); // 👈 Start with default
+  const [cardsToShow, setCardsToShow] = useState(6);
+  const [hoveredGenres, setHoveredGenres] = useState<Record<string, boolean>>(
+    {}
+  );
 
-  // ✅ Adjust number of cards based on screen width
   const updateCardCount = () => {
     const containerWidth = window.innerWidth * 0.8;
-    const cardWidthWithSpacing = 200; // 200px card + 20px spacing
+    const cardWidthWithSpacing = 200;
     const maxCards = Math.floor(containerWidth / cardWidthWithSpacing);
-
     setCardsToShow(Math.max(1, maxCards));
   };
 
   useEffect(() => {
-    updateCardCount(); // Initial set
+    updateCardCount();
     window.addEventListener('resize', updateCardCount);
     return () => window.removeEventListener('resize', updateCardCount);
   }, []);
 
   useEffect(() => {
     let endpoint = '';
-
     if (type === 'collab') endpoint = `/recommend/collab/${showId}`;
     if (type === 'content') endpoint = `/recommend/content/${showId}`;
     if (type === 'homeTop') endpoint = `/recommend/home/top/${userId}`;
@@ -79,7 +85,6 @@ const CarouselRecommender = ({
 
   useEffect(() => {
     if (!autoScroll || recs.length <= cardsToShow) return;
-
     intervalRef.current = setInterval(() => {
       setActiveIndexes((prev) => ({
         ...prev,
@@ -89,7 +94,6 @@ const CarouselRecommender = ({
             : 0,
       }));
     }, 3500);
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
@@ -98,58 +102,90 @@ const CarouselRecommender = ({
   const sanitizeTitle = (title: string): string =>
     title?.replace(/[^a-zA-Z0-9\s]/g, '').trim() ?? 'Untitled';
 
-  const renderCarousel = (items: RecData[], genreKey: string = 'default') => (
-    <ItemsCarousel
-      enablePlaceholder
-      numberOfPlaceholderItems={3}
-      minimumPlaceholderTime={500}
-      placeholderItem={<div style={{ height: 300, background: '#202020' }} />}
-      numberOfCards={cardsToShow}
-      gutter={20}
-      showSlither={true}
-      firstAndLastGutter={true}
-      freeScrolling={false}
-      requestToChangeActive={(index: number) =>
-        setActiveIndexes((prev) => ({ ...prev, [genreKey]: index }))
-      }
-      activeItemIndex={activeIndexes[genreKey] || 0}
-      chevronWidth={50}
-      outsideChevron={false}
-      infiniteLoop={true}
-      rightChevron={
-        <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
-          {'>'}
-        </button>
-      }
-      leftChevron={
-        <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
-          {'<'}
-        </button>
-      }
-    >
-      {items.map((rec, idx) => {
-        const sanitizedTitle = sanitizeTitle(rec.title);
-        const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+  const renderCarousel = (items: RecData[], genreKey: string = 'default') => {
+    const isHovered = hoveredGenres[genreKey] || false;
 
-        return (
-          <div key={idx} style={{ width: '200px' }}>
-            <RecommendCard
-              showId={rec.showId}
-              imageSrc={imageSrc}
-              altText={rec.title}
-              captionText={rec.title}
-              rotateAmplitude={0}
-              scaleOnHover={1.05}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={false}
-              overlayContent={false}
-            />
-          </div>
-        );
-      })}
-    </ItemsCarousel>
-  );
+    return (
+      <div
+        className="relative"
+        onMouseEnter={() =>
+          setHoveredGenres((prev) => ({ ...prev, [genreKey]: true }))
+        }
+        onMouseLeave={() =>
+          setHoveredGenres((prev) => ({ ...prev, [genreKey]: false }))
+        }
+      >
+        <ItemsCarousel
+          enablePlaceholder
+          numberOfPlaceholderItems={3}
+          minimumPlaceholderTime={500}
+          placeholderItem={
+            <div style={{ height: 300, background: '#202020' }} />
+          }
+          numberOfCards={cardsToShow}
+          gutter={20}
+          showSlither={true}
+          firstAndLastGutter={true}
+          freeScrolling={false}
+          requestToChangeActive={(index: number) =>
+            setActiveIndexes((prev) => ({ ...prev, [genreKey]: index }))
+          }
+          activeItemIndex={activeIndexes[genreKey] || 0}
+          chevronWidth={50}
+          outsideChevron={false}
+          infiniteLoop={true}
+          leftChevron={
+            leftChevron !== undefined ? (
+              leftChevron
+            ) : (
+              <button
+                className={`transition-opacity duration-300 ${
+                  isHovered ? 'opacity-100' : 'opacity-0'
+                } bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800`}
+              >
+                <FaChevronLeft />
+              </button>
+            )
+          }
+          rightChevron={
+            rightChevron !== undefined ? (
+              rightChevron
+            ) : (
+              <button
+                className={`transition-opacity duration-300 ${
+                  isHovered ? 'opacity-100' : 'opacity-0'
+                } bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800`}
+              >
+                <FaChevronRight />
+              </button>
+            )
+          }
+        >
+          {items.map((rec, idx) => {
+            const sanitizedTitle = sanitizeTitle(rec.title);
+            const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+
+            return (
+              <div key={idx} style={{ width: '200px' }}>
+                <RecommendCard
+                  showId={rec.showId}
+                  imageSrc={imageSrc}
+                  altText={rec.title}
+                  captionText={rec.title}
+                  rotateAmplitude={0}
+                  scaleOnHover={1.05}
+                  showMobileWarning={false}
+                  showTooltip={false}
+                  displayOverlayContent={false}
+                  overlayContent={false}
+                />
+              </div>
+            );
+          })}
+        </ItemsCarousel>
+      </div>
+    );
+  };
 
   return (
     <div className="w-[80%] mx-auto my-12">
@@ -166,16 +202,8 @@ const CarouselRecommender = ({
           recs.reduce(
             (acc, rec) => {
               let genre = rec.genre || 'Other';
-              // Only relabel Action → Adventure / Action
-              if (genre === 'Action') {
-                genre = 'Adventure / Action';
-              }
-
-              // Exclude Adventure completely
-              if (genre === 'Adventure') {
-                return acc; // Skip this one
-              }
-
+              if (genre === 'Action') genre = 'Adventure / Action';
+              if (genre === 'Adventure') return acc;
               if (!acc[genre]) acc[genre] = [];
               acc[genre].push(rec);
               return acc;
