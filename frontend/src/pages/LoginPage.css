@@ -6,13 +6,13 @@
 }
 
 .login-card {
-  border-radius: 0 !important; /* removes rounded corners */
+  border-radius: 1rem !important; /* removes rounded corners */
 }
 
 .btn-login {
   background-color: #000 !important; /* black button */
   color: #fff !important;
-  border-radius: 0 !important;
+  border-radius: 0.5rem !important;
 }
 
 .btn-google,
@@ -39,7 +39,7 @@
 
 .login-card {
   background-color: #fff; /* <--- this brings the white back */
-  border-radius: 0 !important;
+  border-radius: 1rem !important;
   padding: 2rem; /* optional: adds space inside the box */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* optional: nicer card shadow */
 }
@@ -50,4 +50,22 @@
 
 .login-card .form-check-label {
   color: #000 !important;
+}
+
+.register-card {
+  color: #000;
+}
+
+.register-card input,
+.register-card select,
+.register-card label,
+.register-card h3,
+.register-card .form-check-label,
+.register-card p,
+.register-card a {
+  color: #000 !important;
+}
+
+.register-card input::placeholder {
+  color: #555;
 }

@@ -4,7 +4,7 @@ import './Homepage.css';
 import CarouselRecommender from '../components/CarouselRecommender';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import landingPageImage from '../images/landingpagebackground.png';
+import landingPageImage from '../images/background.jpg';
 
 // import AOS from 'aos';
 // import 'aos/dist/aos.css';
