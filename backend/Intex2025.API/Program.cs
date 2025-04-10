@@ -18,16 +18,31 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// SQL Server - this is fine as-is
 builder.Services.AddDbContext<MoviesContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MovieConnection")));
 
-
+// SQLite (Recommendations)
 builder.Services.AddDbContext<RecommendationsContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("RecsConnection")));
+{
+    var provider = new ServiceCollection()
+        .AddEntityFrameworkSqlite()
+        .BuildServiceProvider();
 
+    options.UseSqlite(builder.Configuration.GetConnectionString("RecsConnection"))
+        .UseInternalServiceProvider(provider);
+});
 
+// SQLite (Identity/Auth)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+{
+    var provider = new ServiceCollection()
+        .AddEntityFrameworkSqlite()
+        .BuildServiceProvider();
+
+    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection"))
+        .UseInternalServiceProvider(provider);
+});
 
 builder.Services.AddAuthorization();
 
