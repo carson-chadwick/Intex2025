@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 function Register() {
   //navigation stuff
-  const handleNavigation = (path: string) => {
+  (path: string) => {
     navigate(path);
   };
 
