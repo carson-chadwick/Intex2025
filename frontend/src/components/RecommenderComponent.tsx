@@ -39,7 +39,8 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
     if (type === 'homeGenre') endpoint = `/recommend/home/genre/${userId}`;
     if (type === 'topHits') endpoint = '/recommend/landing/top-hits';
     if (type === 'editorsPicks') endpoint = '/recommend/landing/editors-picks';
-    if (type === 'recentlyAdded') endpoint = '/recommend/landing/recently-added';
+    if (type === 'recentlyAdded')
+      endpoint = '/recommend/landing/recently-added';
 
     const BASE_URL = import.meta.env.VITE_API_URL;
     const fullUrl = `${BASE_URL}${endpoint}`;
@@ -88,25 +89,26 @@ const Recommender = ({ Name, userId, showId, type }: RecommenderProps) => {
         <h2 className="text-3xl font-semibold text-start mb-4">{Name}</h2>
       )}
 
-      {type === 'homeGenre' ? (
-        Object.entries(
-          recs.reduce((acc, rec) => {
-            const genre = rec.genre || 'Other';
-            if (!acc[genre]) acc[genre] = [];
-            acc[genre].push(rec);
-            return acc;
-          }, {} as Record<string, RecData[]>)
-        ).map(([genre, genreRecs]) => (
-          <div key={genre} className="mb-8">
-            <h2 className="text-3xl font-semibold text-start mb-4">
-              Top picks in {genre}
-            </h2>
-            {renderRecs(genreRecs)}
-          </div>
-        ))
-      ) : (
-        renderRecs(recs)
-      )}
+      {type === 'homeGenre'
+        ? Object.entries(
+            recs.reduce(
+              (acc, rec) => {
+                const genre = rec.genre || 'Other';
+                if (!acc[genre]) acc[genre] = [];
+                acc[genre].push(rec);
+                return acc;
+              },
+              {} as Record<string, RecData[]>
+            )
+          ).map(([genre, genreRecs]) => (
+            <div key={genre} className="mb-8">
+              <h2 className="text-3xl font-semibold text-start mb-4">
+                Top picks in {genre}
+              </h2>
+              {renderRecs(genreRecs)}
+            </div>
+          ))
+        : renderRecs(recs)}
     </div>
   );
 };

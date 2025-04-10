@@ -22,6 +22,7 @@ interface CarouselRecommenderProps {
     | 'topHits'
     | 'editorsPicks'
     | 'recentlyAdded';
+  autoScroll?: boolean;
 }
 
 const CarouselRecommender = ({
@@ -29,23 +30,22 @@ const CarouselRecommender = ({
   userId,
   showId,
   type,
+  autoScroll = true,
 }: CarouselRecommenderProps) => {
   const [recs, setRecs] = useState<RecData[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndexes, setActiveIndexes] = useState<Record<string, number>>(
+    {}
+  );
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [cardsToShow, setCardsToShow] = useState(6); // 👈 Start with default
 
   // ✅ Adjust number of cards based on screen width
   const updateCardCount = () => {
-    const width = window.innerWidth;
-    if (width >= 1600) setCardsToShow(8);
-    else if (width >= 1475) setCardsToShow(7);
-    else if (width >= 1290) setCardsToShow(6);
-    else if (width >= 1100) setCardsToShow(5);
-    else if (width >= 900) setCardsToShow(4);
-    else if (width >= 700) setCardsToShow(3);
-    else if (width >= 0) setCardsToShow(2);
-    else setCardsToShow(1);
+    const containerWidth = window.innerWidth * 0.8;
+    const cardWidthWithSpacing = 200; // 200px card + 20px spacing
+    const maxCards = Math.floor(containerWidth / cardWidthWithSpacing);
+
+    setCardsToShow(Math.max(1, maxCards));
   };
 
   useEffect(() => {
@@ -78,83 +78,127 @@ const CarouselRecommender = ({
   }, [type, userId, showId]);
 
   useEffect(() => {
-    if (recs.length <= cardsToShow) return;
+    if (!autoScroll || recs.length <= cardsToShow) return;
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) =>
-        prevIndex + 1 < recs.length - cardsToShow + 1 ? prevIndex + 1 : 0
-      );
+      setActiveIndexes((prev) => ({
+        ...prev,
+        default:
+          (prev.default || 0) + 1 < recs.length - cardsToShow + 1
+            ? (prev.default || 0) + 1
+            : 0,
+      }));
     }, 3500);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [recs, cardsToShow]);
+  }, [recs, cardsToShow, autoScroll]);
 
   const sanitizeTitle = (title: string): string =>
     title?.replace(/[^a-zA-Z0-9\s]/g, '').trim() ?? 'Untitled';
 
+  const renderCarousel = (items: RecData[], genreKey: string = 'default') => (
+    <ItemsCarousel
+      enablePlaceholder
+      numberOfPlaceholderItems={3}
+      minimumPlaceholderTime={500}
+      placeholderItem={<div style={{ height: 300, background: '#202020' }} />}
+      numberOfCards={cardsToShow}
+      gutter={20}
+      showSlither={true}
+      firstAndLastGutter={true}
+      freeScrolling={false}
+      requestToChangeActive={(index: number) =>
+        setActiveIndexes((prev) => ({ ...prev, [genreKey]: index }))
+      }
+      activeItemIndex={activeIndexes[genreKey] || 0}
+      chevronWidth={50}
+      outsideChevron={false}
+      infiniteLoop={true}
+      rightChevron={
+        <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
+          {'>'}
+        </button>
+      }
+      leftChevron={
+        <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
+          {'<'}
+        </button>
+      }
+    >
+      {items.map((rec, idx) => {
+        const sanitizedTitle = sanitizeTitle(rec.title);
+        const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+
+        return (
+          <div key={idx} style={{ width: '200px' }}>
+            <RecommendCard
+              showId={rec.showId}
+              imageSrc={imageSrc}
+              altText={rec.title}
+              captionText={rec.title}
+              rotateAmplitude={0}
+              scaleOnHover={1.05}
+              showMobileWarning={false}
+              showTooltip={false}
+              displayOverlayContent={false}
+              overlayContent={false}
+            />
+          </div>
+        );
+      })}
+    </ItemsCarousel>
+  );
+
   return (
     <div className="w-[80%] mx-auto my-12">
-      <div className="px-4 sm:px-8 md:px-12">
-        <h2 className="montserrat-extrabold text-3xl text-start mb-6 text-white">
-          {Name}
-        </h2>
-      </div>
+      {type !== 'homeGenre' && (
+        <div className="px-4 sm:px-8 md:px-12 mb-10">
+          <h2 className="montserrat-extrabold text-3xl text-start mb-6 text-white">
+            {Name}
+          </h2>
+        </div>
+      )}
 
-      <div className="carousel-container">
-        <ItemsCarousel
-          enablePlaceholder
-          numberOfPlaceholderItems={3}
-          minimumPlaceholderTime={500}
-          placeholderItem={
-            <div style={{ height: 300, background: '#202020' }} />
-          }
-          numberOfCards={cardsToShow}
-          gutter={20}
-          showSlither={true}
-          firstAndLastGutter={true}
-          freeScrolling={false}
-          requestToChangeActive={setActiveIndex}
-          activeItemIndex={activeIndex}
-          activePosition={'center'}
-          chevronWidth={50}
-          outsideChevron={false}
-          infiniteLoop={true}
-          rightChevron={
-            <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
-              {'>'}
-            </button>
-          }
-          leftChevron={
-            <button className="bg-black text-white text-xl px-3 py-1 rounded hover:bg-gray-800">
-              {'<'}
-            </button>
-          }
-        >
-          {recs.map((rec, idx) => {
-            const sanitizedTitle = sanitizeTitle(rec.title);
-            const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
+      {type === 'homeGenre' ? (
+        Object.entries(
+          recs.reduce(
+            (acc, rec) => {
+              let genre = rec.genre || 'Other';
+              // Only relabel Action → Adventure / Action
+              if (genre === 'Action') {
+                genre = 'Adventure / Action';
+              }
 
-            return (
-              <div key={idx} style={{ width: '200px', padding: '0 10px' }}>
-                <RecommendCard
-                  showId={rec.showId}
-                  imageSrc={imageSrc}
-                  altText={rec.title}
-                  captionText={rec.title}
-                  rotateAmplitude={0}
-                  scaleOnHover={1.05}
-                  showMobileWarning={false}
-                  showTooltip={false}
-                  displayOverlayContent={false}
-                  overlayContent={false}
-                />
-              </div>
-            );
-          })}
-        </ItemsCarousel>
-      </div>
+              // Exclude Adventure completely
+              if (genre === 'Adventure') {
+                return acc; // Skip this one
+              }
+
+              if (!acc[genre]) acc[genre] = [];
+              acc[genre].push(rec);
+              return acc;
+            },
+            {} as Record<string, RecData[]>
+          )
+        ).map(([genre, genreRecs]) => (
+          <div key={genre} className="py-20">
+            <div className="px-4 sm:px-8 md:px-12 mb-6">
+              <h2 className="montserrat-extrabold text-3xl text-start text-white mt-3">
+                Top picks in {genre}
+              </h2>
+            </div>
+            <div className="carousel-container px-4 sm:px-8 md:px-12">
+              {renderCarousel(genreRecs, genre)}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="carousel-container">
+          {renderCarousel(recs, 'default')}
+        </div>
+      )}
     </div>
   );
 };

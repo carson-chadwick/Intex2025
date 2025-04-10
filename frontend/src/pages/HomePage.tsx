@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import AuthorizeView from '../components/AuthorizeView';
 import './Homepage.css';
-import Recommender from '../components/RecommenderComponent';
+import CarouselRecommender from '../components/CarouselRecommender';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import background from '../images/background.jpg';
-
+import landingPageImage from '../images/landingpagebackground.png';
 
 // import AOS from 'aos';
 // import 'aos/dist/aos.css';
@@ -20,8 +19,7 @@ const HomePage: React.FC = () => {
   //     once: true,     // Ensure animations happen only once on scroll
   //   });
   // }, []);
-  
-  
+
   useEffect(() => {
 const fetchCurrentUser = async () => {
   try {
@@ -70,21 +68,27 @@ const fetchCurrentUser = async () => {
     <>
       <AuthorizeView>
         <Header />
-        <section id="hero" className="hero section dark-background">
-          <img src={background} alt="Hero Background"  />
-        
+        <section
+          id="hero"
+          className="hero section dark-background"
+          style={{ height: '500px', minHeight: 'unset' }}
+        >
+          <img src={landingPageImage} alt="Hero Background" />
+
           <div className="container d-flex flex-column align-items-center">
-            <h2 >Hidden Gems.</h2>
-            <h2 >Found Just For You.</h2>
+            <h2>Hidden Gems.</h2>
+            <h2>Found Just For You.</h2>
             {/* <p >
               We are a team of talented designers making websites with Bootstrap
             </p> */}
             <div className="d-flex mt-4">
-              <a href="#about" className="btn-get-started">Get Started</a>
-              <a 
+              <a href="#about" className="btn-get-started">
+                Get Started
+              </a>
+              <a
                 href="https://youtu.be/ZMsTMuyH7w8?si=u6OcALxIEf3RXgQj"
-                
-                className="glightbox btn-watch-video d-flex align-items-center">
+                className="glightbox btn-watch-video d-flex align-items-center"
+              >
                 <i className="bi bi-play-circle"></i>
                 <span>Watch Video</span>
               </a>
@@ -92,25 +96,26 @@ const fetchCurrentUser = async () => {
           </div>
         </section>
 
-        
-        <div className="home-container">
-          <div className="content">
-            <Recommender
-              type="homeTop"
-              userId={userId}
-              Name="Top Picks For You"
-            />
-            <Recommender
-              type="homeGenre"
-              userId={userId}
-              Name="Recommended by Genre"
-            />
-          </div>
+        <div className="py-16">
+          <CarouselRecommender
+            Name="Top Picks"
+            userId={userId}
+            type="homeTop"
+            autoScroll={false}
+          />
         </div>
-        <Footer/>
+        <div>
+          <CarouselRecommender
+            Name="By Genre"
+            userId={userId}
+            type="homeGenre"
+            autoScroll={false}
+          />
+        </div>
+
+        <Footer />
       </AuthorizeView>
     </>
-
   );
 };
 

@@ -220,11 +220,13 @@ function MovieDetailPage() {
                 type="collab"
               />
             </div>
-            <CarouselRecommender
-              Name="You Might Also Like"
-              showId={showId}
-              type="content"
-            />
+            <div className="my-5">
+              <CarouselRecommender
+                Name="You Might Also Like"
+                showId={showId}
+                type="content"
+              />
+            </div>
           </div>
         )}
         <Footer />
