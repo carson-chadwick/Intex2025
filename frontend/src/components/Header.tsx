@@ -73,7 +73,7 @@ const Header: React.FC = () => {
             </nav>
             <a className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}><FaUserCircle/></a>
             <div className={`profile-dropdown ${isDropdownOpen ? "active" : ""}`}>
-              <button onClick={() => handleNavigation('/login')}>Account</button>
+              <button onClick={() => handleNavigation('/login')}>Login</button>
               <button onClick={() => handleNavigation('/register')}>Get Started</button>
             </div>
           </div>
