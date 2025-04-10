@@ -63,17 +63,14 @@ const Header: React.FC = () => {
             <nav id="navmenu" className="navmenu">
               <ul>
                 <li><a onClick={() => handleNavigation('/HomePage')}>Home</a></li>
-                <li><a onClick={() => handleNavigation('/AllMoviesPage')}>AllMovies</a></li>
+                <li><a onClick={() => handleNavigation('/AllMoviesPage')}>All Movies</a></li>
                 {isAdmin && ( // ✅ Only show if user is an Administrator
                   <li><a onClick={() => handleNavigation('/AdminPage')}>Admin</a></li>
                 )}
               </ul>
               <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-            <a
-              className="icon profile-icon"
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
-            >
+            <a className="icon profile-icon" onClick={() => setDropdownOpen(!isDropdownOpen)}>
               {profileImage ? (
                 <img src={profileImage} className="profile-img-icon" alt="Profile" />
               ) : user?.email ? (
@@ -84,13 +81,6 @@ const Header: React.FC = () => {
                 <FaUserCircle />
               )}
             </a>
-
-            {/* <a
-              className="icon profile-icon"
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
-            >
-              <FaUserCircle />
-            </a> */}
             <div
               className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}
             >
@@ -109,7 +99,8 @@ const Header: React.FC = () => {
           className="header d-flex align-items-center fixed-top"
         
         >
-          <div className="container-fluid container-xl position-relative d-flex align-items-center">
+          <div className="container-xl position-relative d-flex align-items-center">
+          {/* <div className="container-fluid container-xl position-relative d-flex align-items-center"> */}
             <a
               onClick={() => handleNavigation('/LandingPage')}
               className="logo d-flex align-items-center me-auto"
@@ -124,7 +115,7 @@ const Header: React.FC = () => {
               className="icon profile-icon"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
-              <FaUserCircle />
+              <FaUserCircle className='profile-img-icon'/>
             </a>
             <div
               className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}

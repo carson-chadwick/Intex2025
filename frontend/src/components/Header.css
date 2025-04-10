@@ -35,6 +35,7 @@
 }
 
 .profile-icon {
+  all: unset;
   font-size: 28px;
   margin-left: 5px;
 }
@@ -486,14 +487,16 @@
 
 
 .profile-img-icon {
-  width: 32px;
-  height: 32px;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .profile-initial-icon {
-  background-color: #555;
+  background-color: #1c1c1e;
   color: white;
   display: flex;
   align-items: center;
@@ -501,4 +504,6 @@
   font-weight: bold;
   font-size: 1rem;
   text-transform: uppercase;
+  border: 2px solid white;
+  text-decoration: none;
 }
