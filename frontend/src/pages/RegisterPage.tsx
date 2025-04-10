@@ -96,11 +96,6 @@ function RegisterPage() {
             <div className="bubble">{success ? '✔' : '2'}</div>
             <p>Personal Details</p>
           </div>
-
-          {/* <div className={`step ${step === 2 ? 'filled' : ''}`}>
-            <div className="bubble">{step > 2 ? '✔' : '2'}</div>
-            <p>Personal Details</p>
-          </div> */}
         </div>
 
         <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
