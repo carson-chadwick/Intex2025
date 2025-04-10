@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-import landingPageImage from '../images/landingpagebackground.png';
+import background from '../images/background.jpg';
 import Footer from '../components/Footer';
 import CarouselRecommender from '../components/CarouselRecommender';
 
@@ -15,16 +15,7 @@ function LandingPage() {
     <>
       <Header />
       {/* Hero Section */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '500px',
-          marginTop: '-60px',
-          overflow: 'hidden',
-          zIndex: 0,
-        }}
-      >
+      <div className="hero">
         {/* Background Image */}
         <div
           style={{
@@ -33,7 +24,7 @@ function LandingPage() {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundImage: `url(${landingPageImage})`,
+            backgroundImage: `url(${background})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             zIndex: 0,

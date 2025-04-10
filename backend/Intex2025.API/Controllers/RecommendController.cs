@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Intex2025.API.Data;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Intex2025.API.Controllers
 {
@@ -86,21 +88,65 @@ namespace Intex2025.API.Controllers
         [HttpGet("home/genre/{userId}")]
         public IActionResult GetGenrePicks(int userId)
         {
-        var picks = _recsContext.UserHomeGenreRecs
-            .Where(p => p.user_id == userId)
-            .OrderBy(p => p.genre)
-            .ThenBy(p => p.rank)
-            .Select(p => new {
-                title = p.title,
-                genre = p.genre,
-                rank = p.rank,
-                userId = p.user_id,
-                showId = p.show_id
-            })
-            .ToList();
+            var allRecs = _recsContext.UserHomeGenreRecs
+                .Where(p => p.user_id == userId)
+                .Select(p => new {
+                    title = p.title,
+                    genre = p.genre,
+                    rank = p.rank,
+                    userId = p.user_id,
+                    showId = p.show_id
+                })
+                .ToList();
 
-            return Ok(picks);
+            var grouped = allRecs
+                .GroupBy(p => p.genre ?? "Other")
+                .SelectMany(g =>
+                {
+                    var genreList = g.OrderBy(p => p.rank).Take(10).ToList();
+
+                    if (genreList.Count < 10)
+                    {
+                        var missing = 10 - genreList.Count;
+                        var existingShowIds = genreList.Select(p => p.showId).ToHashSet();
+
+                        var genreKey = g.Key;
+
+                        // Try to match MoviesTitle genre column
+                        var genreProp = typeof(MoviesTitle).GetProperty(
+                            genreKey.Replace(" ", ""), 
+                            BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance
+                        );
+
+                        if (genreProp != null)
+                        {
+                            var randomExtras = _moviesContext.MoviesTitles
+                                .Where(s =>
+                                    !existingShowIds.Contains(s.ShowId) &&
+                                    EF.Property<int?>(s, genreProp.Name) == 1
+                                )
+                                .OrderBy(s => Guid.NewGuid())
+                                .Take(missing)
+                                .Select(s => new {
+                                    title = s.Title,
+                                    genre = genreKey,
+                                    rank = 999,
+                                    userId = userId,
+                                    showId = s.ShowId
+                                })
+                                .ToList();
+
+                            genreList.AddRange(randomExtras);
+                        }
+                    }
+
+                    return genreList;
+                })
+                .ToList();
+
+            return Ok(grouped);
         }
+        
         [HttpGet("landing/top-hits")]
         public IActionResult GetTopHits()
         {
