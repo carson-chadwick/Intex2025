@@ -300,13 +300,13 @@ function AdminPage() {
                     </td>
                     <td>
                       <button
-                        className="btn rounded-0 btn-sm w-100 mb-1"
+                        className="btn btn-edit w-100 mb-2"
                         onClick={() => setEditingMovie(movie)}
                       >
                         Edit
                       </button>
                       <button
-                        className="btn rounded-0 btn-sm w-100"
+                        className="btn btn-delete w-100"
                         onClick={() => setMovieToDelete(movie)}
                       >
                         Delete

@@ -148,3 +148,14 @@ table td {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.75rem; /* 👈 This adds spacing between each field */
 }
+
+/* Shared base */
+.btn {
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
