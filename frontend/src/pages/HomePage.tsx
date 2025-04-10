@@ -81,7 +81,7 @@ const fetchCurrentUser = async () => {
             {/* <p >
               We are a team of talented designers making websites with Bootstrap
             </p> */}
-            <div className="d-flex mt-4">
+            {/* <div className="d-flex mt-4">
               <a href="#about" className="btn-get-started">
                 Get Started
               </a>
@@ -92,7 +92,7 @@ const fetchCurrentUser = async () => {
                 <i className="bi bi-play-circle"></i>
                 <span>Watch Video</span>
               </a>
-            </div>
+            </div> */}
           </div>
         </section>
 
