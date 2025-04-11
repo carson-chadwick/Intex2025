@@ -78,7 +78,7 @@ function AdminPage() {
           <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
               <button
-                className="btn rounded-0 btn-white-black"
+                className="btn btn-white-black"
                 onClick={() => setShowForm(true)}
               >
                 Add Movie
@@ -302,13 +302,13 @@ function AdminPage() {
                     </td>
                     <td>
                       <button
-                        className="btn rounded-0 btn-sm w-100 mb-1 btn-black-white"
+                        className="btn btn-sm w-100 mb-1 btn-black-white"
                         onClick={() => setEditingMovie(movie)}
                       >
                         Edit
                       </button>
                       <button
-                        className="btn rounded-0 btn-sm w-100 btn-red"
+                        className="btn btn-sm w-100 mb-1 btn-black-white"
                         onClick={() => setMovieToDelete(movie)}
                       >
                         Delete

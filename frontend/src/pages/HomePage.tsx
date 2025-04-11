@@ -21,41 +21,40 @@ const HomePage: React.FC = () => {
   // }, []);
 
   useEffect(() => {
-const fetchCurrentUser = async () => {
-  try {
-    const pingResponse = await fetch(
-      `${import.meta.env.VITE_API_URL}/pingauth`,
-      {
-        method: 'GET',
-        credentials: 'include',
+    const fetchCurrentUser = async () => {
+      try {
+        const pingResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/pingauth`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
+
+        if (!pingResponse.ok) throw new Error('Failed to fetch auth info');
+        const pingData = await pingResponse.json();
+
+        if (!pingData.email) throw new Error('Email not returned');
+
+        const userResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/user/by-email/${encodeURIComponent(
+            pingData.email
+          )}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
+
+        if (!userResponse.ok) throw new Error('Failed to fetch user by email');
+        const userData = await userResponse.json();
+        setUserId(userData.user_id);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      } finally {
+        setLoading(false);
       }
-    );
-
-    if (!pingResponse.ok) throw new Error('Failed to fetch auth info');
-    const pingData = await pingResponse.json();
-
-    if (!pingData.email) throw new Error('Email not returned');
-
-    const userResponse = await fetch(
-      `${import.meta.env.VITE_API_URL}/user/by-email/${encodeURIComponent(
-        pingData.email
-      )}`,
-      {
-        method: 'GET',
-        credentials: 'include',
-      }
-    );
-
-    if (!userResponse.ok) throw new Error('Failed to fetch user by email');
-    const userData = await userResponse.json();
-    setUserId(userData.user_id);
-  } catch (error) {
-    console.error('Error fetching user:', error);
-  } finally {
-    setLoading(false);
-  }
-};
-
+    };
 
     fetchCurrentUser();
   }, []);
@@ -98,7 +97,7 @@ const fetchCurrentUser = async () => {
 
         <div className="py-16">
           <CarouselRecommender
-            Name="Top Picks"
+            Name="Top Picks For You"
             userId={userId}
             type="homeTop"
             autoScroll={false}

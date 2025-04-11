@@ -187,6 +187,8 @@ const CarouselRecommender = ({
     );
   };
 
+  if (recs.length === 0) return null;
+
   return (
     <div className="w-[80%] mx-auto my-12">
       {type !== 'homeGenre' && (
