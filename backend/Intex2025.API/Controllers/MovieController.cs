@@ -83,11 +83,7 @@ namespace Intex2025.API.Controllers
         var movies = query
             .Skip((pageNum - 1) * pageSize)
             .Take(pageSize)
-            .Select(m => new {
-                m.Title,
-                m.ShowId, // ✅ add this
-            })
-            .ToList();
+            .ToList(); // returns full movie objects
         
         HttpContext.Response.Cookies.Append("totalNumMovies", totalNumMovies.ToString(),
             new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.None, Secure = true, Expires = DateTime.Now.AddMinutes(5) });
