@@ -4,6 +4,10 @@
   },
   "routes": [
     {
+      "route": "/assets/*",
+      "rewrite": "/assets/:path"
+    },
+    {
       "route": "/api/*",
       "allowedRoles": ["anonymous"]
     },
@@ -11,5 +15,9 @@
       "route": "/*",
       "rewrite": "/index.html"
     }
-  ]
+  ],
+  "mimeTypes": {
+    ".js": "application/javascript",
+    ".css": "text/css"
+  }
 }
