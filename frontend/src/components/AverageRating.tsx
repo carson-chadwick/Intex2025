@@ -2,20 +2,37 @@ import * as React from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import Cookies from 'js-cookie';
 
-const labels: { [index: number]: string } = {
-  1: 'Useless',
-  2: 'Poor',
-  3: 'Ok',
-  4: 'Good',
-  5: 'Excellent',
+const labelMap: Record<string, Record<number, string>> = {
+  en: {
+    1: 'Useless',
+    2: 'Poor',
+    3: 'Ok',
+    4: 'Good',
+    5: 'Excellent',
+  },
+  es: {
+    1: 'Inútil',
+    2: 'Pobre',
+    3: 'Regular',
+    4: 'Bueno',
+    5: 'Excelente',
+  },
 };
 
-function getLabelText(value: number) {
-  return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+const titleLabel: Record<string, string> = {
+  en: 'Average Rating:',
+  es: 'Calificación Promedio:',
+};
+
+function getLabelText(value: number, lang: 'en' | 'es') {
+  return `${value} Star${value !== 1 ? 's' : ''}, ${labelMap[lang][value]}`;
 }
 
 export default function AverageRating({ showId }: { showId: string }) {
+  const lang: 'en' | 'es' = Cookies.get('language') === 'es' ? 'es' : 'en';
+
   const [value, setValue] = React.useState<number | null>(null);
   const [_ratingsCount, setRatingsCount] = React.useState<number>(0);
 
@@ -47,17 +64,17 @@ export default function AverageRating({ showId }: { showId: string }) {
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <h6 style={{ marginBottom: 0, marginRight: 8 }}>
-          <strong>Average Rating:</strong>
+          <strong>{titleLabel[lang]}</strong>
         </h6>
         <Rating
           name={`average-rating-${showId}`}
           value={value}
           precision={0.5}
-          getLabelText={getLabelText}
+          getLabelText={(val) => getLabelText(val, lang)}
           emptyIcon={
             <StarBorderIcon
               style={{
-                color: '#ffc107', // same color
+                color: '#ffc107',
                 opacity: 0.3,
               }}
               fontSize="inherit"
@@ -67,13 +84,6 @@ export default function AverageRating({ showId }: { showId: string }) {
           readOnly
         />
       </Box>
-      {/* Optional: Show numeric value and count below */}
-      {/* {value !== null && (
-      <Box sx={{ mt: 1 }}>
-        <strong>{value}</strong> out of 5 ({ratingsCount} rating
-        {ratingsCount !== 1 && 's'})
-      </Box>
-    )} */}
     </Box>
   );
 }

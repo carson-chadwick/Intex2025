@@ -1,0 +1,71 @@
+/* LoginPage.css */
+
+.login-container {
+  max-width: 450px; /* makes the card narrower */
+  margin: 0 auto;
+}
+
+.login-card {
+  border-radius: 1rem !important; /* removes rounded corners */
+}
+
+.btn-login {
+  background-color: #000 !important; /* black button */
+  color: #fff !important;
+  border-radius: 0.5rem !important;
+}
+
+.btn-google,
+.btn-facebook {
+  background-color: #000 !important; /* also black */
+  color: #fff !important;
+  border-radius: 0 !important;
+  border: none;
+}
+
+.btn-google:hover,
+.btn-facebook:hover,
+.btn-login:hover {
+  background-color: #333 !important; /* dark gray hover */
+}
+
+.form-control {
+  border-radius: 0 !important;
+}
+
+.apply-margin-login {
+  margin-top: 140px;
+}
+
+.login-card {
+  background-color: #fff; /* <--- this brings the white back */
+  border-radius: 1rem !important;
+  padding: 2rem; /* optional: adds space inside the box */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* optional: nicer card shadow */
+}
+
+.login-card .card-title {
+  color: #000 !important;
+}
+
+.login-card .form-check-label {
+  color: #000 !important;
+}
+
+.register-card {
+  color: #000;
+}
+
+.register-card input,
+.register-card select,
+.register-card label,
+.register-card h3,
+.register-card .form-check-label,
+.register-card p,
+.register-card a {
+  color: #000 !important;
+}
+
+.register-card input::placeholder {
+  color: #555;
+}

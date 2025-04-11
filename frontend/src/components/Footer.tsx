@@ -2,31 +2,41 @@ import React, { useContext } from 'react';
 import './Footer.css';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './AuthorizeView';
+import Cookies from 'js-cookie';
+
+const translations: Record<string, { privacy: string }> = {
+  en: { privacy: 'Privacy Policy' },
+  es: { privacy: 'Política de Privacidad' },
+};
 
 const Footer: React.FC = () => {
-    //authentication stuff
-    const user = useContext(UserContext);
-    const isLoggedIn = !!user;
+  const lang = Cookies.get('language') === 'es' ? 'es' : 'en';
+  const t = translations[lang];
 
-    //navigation stuff
-    const navigate = useNavigate();
-    const handleNavigation = (path: string) => {
-        navigate(path);
-    };
+  // Authentication
+  const user = useContext(UserContext);
+  const isLoggedIn = !!user;
 
-    return (
-        <>
-            {isLoggedIn ? (
-                <footer className="footer">
-                    <a onClick={() => handleNavigation('/PrivacyPageLoggedIn')} className="footer-text">Privacy Policy</a>
-                </footer>
-            ) : (
-                <footer className="footer">
-                    <a onClick={() => handleNavigation('/PrivacyPageLoggedOut')} className="footer-text">Privacy Policy</a>
-                </footer>
-            )}
-        </>
-    );
+  // Navigation
+  const navigate = useNavigate();
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  return (
+    <footer className="footer">
+      <a
+        onClick={() =>
+          handleNavigation(
+            isLoggedIn ? '/PrivacyPageLoggedIn' : '/PrivacyPageLoggedOut'
+          )
+        }
+        className="footer-text"
+      >
+        {t.privacy}
+      </a>
+    </footer>
+  );
 };
 
 export default Footer;

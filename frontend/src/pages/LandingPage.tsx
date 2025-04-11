@@ -1,11 +1,44 @@
-import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-import background from '../images/background.jpg';
+import { useState } from 'react';
+import Cookies from 'js-cookie';
+import Header from '../components/Header';
+import background from '../images/landingpagebackground.png';
 import Footer from '../components/Footer';
 import CarouselRecommender from '../components/CarouselRecommender';
 
+const translations: Record<
+  string,
+  { heading: string; getStarted: string; login: string; topHits: string; editorsPicks: string; recentlyAdded: string }
+> = {
+  en: {
+    heading: 'Hidden Gems.\nFound Just For You.',
+    getStarted: 'Get Started',
+    login: 'Login',
+    topHits: 'Top Hits',
+    editorsPicks: "Editor's Picks",
+    recentlyAdded: 'Recently Added',
+  },
+  es: {
+    heading: 'Joyas ocultas.\nEncontradas solo para ti.',
+    getStarted: 'Comenzar',
+    login: 'Iniciar sesión',
+    topHits: 'Éxitos Principales',
+    editorsPicks: 'Selecciones del Editor',
+    recentlyAdded: 'Recién Añadidos',
+  },
+};
+
+
+function getPreferredLanguage(): 'en' | 'es' {
+  const lang = Cookies.get('language');
+  return lang === 'es' ? 'es' : 'en';
+}
+
+
 function LandingPage() {
   const navigate = useNavigate();
+  const [lang] = useState<'en' | 'es'>(getPreferredLanguage());
+  const t = translations[lang];
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -14,6 +47,15 @@ function LandingPage() {
   return (
     <>
       <Header />
+      {/* Language Toggle */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '40px',
+          zIndex: 999,
+        }}
+      ></div>
       {/* Hero Section */}
       <div className="hero">
         {/* Background Image */}
@@ -63,11 +105,11 @@ function LandingPage() {
           }}
         >
           <div>
-            Hidden Gems. <br />
-            Found Just For You.
+            {t.heading.split('\n').map((line, idx) => (
+              <div key={idx}>{line}</div>
+            ))}
           </div>
 
-          {/* Buttons Row */}
           <div
             style={{
               display: 'flex',
@@ -75,7 +117,6 @@ function LandingPage() {
               marginTop: '20px',
             }}
           >
-            {/* Get Started */}
             <button
               onClick={() => handleNavigation('/register')}
               style={{
@@ -99,10 +140,9 @@ function LandingPage() {
                 e.currentTarget.style.color = 'white';
               }}
             >
-              Get Started
+              {t.getStarted}
             </button>
 
-            {/* Login */}
             <button
               onClick={() => handleNavigation('/login')}
               style={{
@@ -126,17 +166,32 @@ function LandingPage() {
                 e.currentTarget.style.color = 'white';
               }}
             >
-              Login
+              {t.login}
             </button>
           </div>
         </div>
       </div>
       <br /> <br />
-      <CarouselRecommender Name="Top Hits" type="topHits" />
+      <CarouselRecommender
+        Name="Top Hits"
+        type="topHits"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <br />
-      <CarouselRecommender Name="Editors Picks" type="editorsPicks" />
+      <CarouselRecommender
+        Name="Editors Picks"
+        type="editorsPicks"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <br />
-      <CarouselRecommender Name="Recently Added" type="recentlyAdded" />
+      <CarouselRecommender
+        Name="Recently Added"
+        type="recentlyAdded"
+        leftChevron={null}
+        rightChevron={null}
+      />
       <Footer />
     </>
   );

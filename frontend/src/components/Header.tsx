@@ -1,12 +1,49 @@
-import React, { useContext, useState, useEffect  } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './Header.css';
 import { FaUserCircle } from 'react-icons/fa';
 import logo from '../images/NewCineNicheLogo.png';
 import { UserContext } from './AuthorizeView';
 import { useNavigate } from 'react-router-dom';
-import Logout from '../components/Logout';
+import Logout from './Logout';
+import Cookies from 'js-cookie';
+
+// ✅ Translations for header elements
+const translations = {
+  en: {
+    home: 'Home',
+    allMovies: 'All Movies',
+    admin: 'Admin',
+    account: 'Account',
+    logout: 'Logout',
+    login: 'Login',
+    register: 'Get Started',
+  },
+  es: {
+    home: 'Inicio',
+    allMovies: 'Todas las Películas',
+    admin: 'Administración',
+    account: 'Cuenta',
+    logout: 'Cerrar sesión',
+    login: 'Iniciar sesión',
+    register: 'Comenzar',
+  },
+};
 
 const Header: React.FC = () => {
+  const [lang, setLang] = useState<'en' | 'es'>(() => {
+    const cookieLang = Cookies.get('language');
+    return cookieLang === 'es' ? 'es' : 'en';
+  });
+
+  const t = translations[lang]; // Use translations dynamically
+
+  const handleLanguageToggle = () => {
+    const newLang = lang === 'en' ? 'es' : 'en';
+    setLang(newLang);
+    Cookies.set('language', newLang, { expires: 365 });
+    window.location.reload(); // Optional: refresh to apply language site-wide
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -19,7 +56,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 🔒 Auth + role check
   const user = useContext(UserContext);
   const isLoggedIn = !!user;
   const isAdmin = user?.roles?.includes('Administrator');
@@ -30,105 +66,107 @@ const Header: React.FC = () => {
   };
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedImage = localStorage.getItem('profileImage');
+    if (storedImage) {
+      setProfileImage(storedImage);
+    }
+  }, []);
 
   return (
-    <>
-      {isLoggedIn ? (
-        <header
-         
-          id="header"
-         
-          className="header d-flex align-items-center fixed-top"
-        
+    <header id="header" className="header d-flex align-items-center fixed-top">
+      <div className="container-xl position-relative d-flex align-items-center">
+        <a
+          onClick={() =>
+            handleNavigation(isLoggedIn ? '/HomePage' : '/LandingPage')
+          }
+          className="logo d-flex align-items-center me-auto"
         >
-          <div className="container-fluid container-xl position-relative d-flex align-items-center">
-            <a
-              onClick={() => handleNavigation('/HomePage')}
-              className="logo d-flex align-items-center me-auto"
-            >
-              <img src={logo} className="logo-img" />
-            </a>
+          <img src={logo} className="logo-img" />
+        </a>
 
-            <nav id="navmenu" className="navmenu">
-              <ul>
+        <nav id="navmenu" className="navmenu">
+          <ul>
+            {isLoggedIn && (
+              <>
                 <li>
-                  <a onClick={() => handleNavigation('/HomePage')}>Home</a>
+                  <a onClick={() => handleNavigation('/HomePage')}>{t.home}</a>
                 </li>
                 <li>
                   <a onClick={() => handleNavigation('/AllMoviesPage')}>
-                    AllMovies
+                    {t.allMovies}
                   </a>
                 </li>
-                {isAdmin && ( // ✅ Only show if user is an Administrator
+                {isAdmin && (
                   <li>
-                    <a onClick={() => handleNavigation('/AdminPage')}>Admin</a>
+                    <a onClick={() => handleNavigation('/AdminPage')}>
+                      {t.admin}
+                    </a>
                   </li>
                 )}
-              </ul>
-              <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
-            </nav>
+              </>
+            )}
+          </ul>
+          <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
 
-            <a
-              className="icon profile-icon"
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
-            >
-              <FaUserCircle />
-            </a>
-            <div
-              className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}
-            >
-              <button onClick={() => handleNavigation('/AccountPage')}>
-                Account
-              </button>
-              <Logout>Logout</Logout>
-            </div>
-          </div>
-        </header>
-      ) : (
-        <header
-         
-          id="header"
-         
-          className="header d-flex align-items-center fixed-top"
-        
+        <a
+          className="icon profile-icon"
+          onClick={() => setDropdownOpen(!isDropdownOpen)}
         >
-          <div className="container-fluid container-xl position-relative d-flex align-items-center">
-            <a
-              onClick={() => handleNavigation('/LandingPage')}
-              className="logo d-flex align-items-center me-auto"
-            >
-              <img src={logo} className="logo-img" />
-            </a>
-
-            <nav id="navmenu" className="navmenu">
-              <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
-            </nav>
-            <a
-              className="icon profile-icon"
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
-            >
-              <FaUserCircle />
-            </a>
-            <div
-              className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}
-            >
-              <button onClick={() => handleNavigation('/login')}>Login</button>
-              <button onClick={() => handleNavigation('/register')}>
-                
-                Get Started
-              
-              </button>
+          {profileImage ? (
+            <img
+              src={profileImage}
+              className="profile-img-icon"
+              alt="Profile"
+            />
+          ) : user?.email ? (
+            <div className="profile-img-icon profile-initial-icon">
+              {user.email.charAt(0).toUpperCase()}
             </div>
+          ) : (
+            <FaUserCircle className="profile-img-icon" />
+          )}
+        </a>
+
+        <div className={`profile-dropdown ${isDropdownOpen ? 'active' : ''}`}>
+          {isLoggedIn ? (
+            <>
+              <button onClick={() => handleNavigation('/AccountPage')}>
+                {t.account}
+              </button>
+              <Logout>{t.logout}</Logout>
+            </>
+          ) : (
+            <>
+              <button onClick={() => handleNavigation('/login')}>
+                {t.login}
+              </button>
+              <button onClick={() => handleNavigation('/register')}>
+                {t.register}
+              </button>
+            </>
+          )}
+          <hr />
+          <div className="language-switch">
+            <label className="language-toggle">
+              <input
+                type="checkbox"
+                checked={lang === 'es'}
+                onChange={handleLanguageToggle}
+              />
+              <span className="language-slider"></span>
+            </label>
+            <span style={{ color: 'black' }}>
+              {lang === 'en' ? 'Spanish' : 'Español'}
+            </span>
           </div>
-        </header>
-      )}
-    </>
+        </div>
+      </div>
+    </header>
   );
 };
 
 export default Header;
-
-
-
-
-        

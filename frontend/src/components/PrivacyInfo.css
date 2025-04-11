@@ -8,6 +8,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.8;
   color: #2d3436;
+  text-align: left; /* ✅ Force left alignment for all content */
 }
 
 .privacy-title {
@@ -26,17 +27,20 @@
 
 section {
   margin-bottom: 35px;
+  text-align: left; /* ✅ Explicitly left-align section content */
 }
 
 section h3 {
   font-size: 1.4rem;
   color: #0984e3;
   margin-bottom: 12px;
+  text-align: left; /* ✅ Ensure headings are also left-aligned */
 }
 
 section p,
 section ul {
   font-size: 1rem;
+  text-align: left; /* ✅ Ensure paragraphs and lists are left-aligned */
 }
 
 section ul {
@@ -57,4 +61,5 @@ section ul li {
   color: #b00020;
   font-weight: 600;
   font-size: 0.95rem;
+  text-align: left; /* ✅ Ensure disclaimer is also aligned */
 }
