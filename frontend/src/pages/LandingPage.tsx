@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Header from '../components/Header';
-import background from '../images/background.jpg';
+import background from '../images/landingpagebackground.png';
 import Footer from '../components/Footer';
 import CarouselRecommender from '../components/CarouselRecommender';
 

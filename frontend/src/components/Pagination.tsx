@@ -40,7 +40,14 @@ const Pagination = ({
       >
         <button
           className="btn btn-link text-decoration-none px-2"
-          style={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+          style={{
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            color: 'white',
+            border: '1px solid white',
+            margin: '0 4px',
+            borderRadius: '4px',
+          }}
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
         >
@@ -50,10 +57,15 @@ const Pagination = ({
         {getPageNumbers().map((page) => (
           <button
             key={page}
-            className={`btn btn-link text-decoration-none px-2 ${
-              currentPage === page ? 'fw-bold text-primary' : 'text-dark'
-            }`}
-            style={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+            className={`btn btn-link text-decoration-none px-2`}
+            style={{
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              color: currentPage === page ? '#ffc107' : 'white',
+              border: '1px solid white',
+              margin: '0 4px',
+              borderRadius: '4px',
+            }}
             onClick={() => onPageChange(page)}
           >
             {page}
@@ -62,7 +74,14 @@ const Pagination = ({
 
         <button
           className="btn btn-link text-decoration-none px-2"
-          style={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+          style={{
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            color: 'white',
+            border: '1px solid white',
+            margin: '0 4px',
+            borderRadius: '4px',
+          }}
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
         >
@@ -71,9 +90,15 @@ const Pagination = ({
       </div>
 
       <div className="d-flex align-items-center">
-        <label className="me-2">Results per page:</label>
+        <label className="me-2" style={{ color: 'white' }}>Results per page:</label>
         <select
-          className="form-select w-auto rounded-0"
+          className="form-select w-auto"
+          style={{
+            backgroundColor: '#1c1c1e',
+            color: 'white',
+            border: '1px solid white',
+            borderRadius: '4px',
+          }}
           value={pageSize}
           onChange={(e) => {
             onPageSizeChange(Number(e.target.value));

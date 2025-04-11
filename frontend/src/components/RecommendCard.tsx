@@ -132,7 +132,11 @@ export default function TiltedCard({
             alt={altText}
             loading="lazy"
             className="tilted-card-img fade-in"
-            style={{ width: imageWidth, height: imageHeight }}
+            style={{
+              width: imageWidth,
+              height: imageHeight,
+              borderRadius: '6px',
+            }}
             onError={(e) => {
               const placeholder =
                 'https://mlworkspace6342542406.blob.core.windows.net/inteximages/NoImage.png';

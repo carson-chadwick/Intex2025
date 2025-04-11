@@ -7,6 +7,7 @@ import MovieSearchBar from '../components/MovieSearchBar';
 interface MovieData {
   title: string;
   genre?: string;
+  showId: string;
 }
 
 const translations = {
@@ -30,34 +31,7 @@ const translations = {
   },
 };
 
-const localizedGenres: Record<string, { en: string; es: string }> = {
-  action: { en: 'Action/Adventure', es: 'Acción/Aventura' },
-  comedies: { en: 'Comedies', es: 'Comedias' },
-  dramas: { en: 'Dramas', es: 'Dramas' },
-  documentaries: { en: 'Documentaries', es: 'Documentales' },
-  horrorMovies: { en: 'Horror', es: 'Terror' },
-  musicals: { en: 'Musicals', es: 'Musicales' },
-  thrillers: { en: 'Thrillers', es: 'Suspenso' },
-  tvDramas: { en: 'TV Dramas', es: 'Dramas de TV' },
-  animeSeriesInternationalTvShows: {
-    en: 'Anime / International TV',
-    es: 'Anime / TV Internacional',
-  },
-  children: { en: 'Children', es: 'Infantil' },
-  familyMovies: { en: 'Family Movies', es: 'Películas Familiares' },
-  realityTv: { en: 'Reality TV', es: 'TV Realidad' },
-  tvComedies: { en: 'TV Comedies', es: 'Comedias de TV' },
-  spirituality: { en: 'Spirituality', es: 'Espiritualidad' },
-  fantasy: { en: 'Fantasy', es: 'Fantasía' },
-  crimeTvShowsDocuseries: {
-    en: 'Crime TV Shows / Docuseries',
-    es: 'Crimen / Docuseries',
-  },
-  talkShowsTvComedies: {
-    en: 'Talk Shows / TV Comedies',
-    es: 'Talk Shows / Comedias TV',
-  },
-};
+import { genreTranslations } from '../utils/genreTranslations';
 
 function AllMoviesPage() {
   const [lang] = useState<'en' | 'es'>(() => {
@@ -87,6 +61,7 @@ function AllMoviesPage() {
     async (pageNum: number, reset = false) => {
       setLoading(true);
       const BASE_URL = import.meta.env.VITE_API_URL;
+
       const queryParams = new URLSearchParams({
         pageSize: '72',
         pageNum: pageNum.toString(),
@@ -97,13 +72,20 @@ function AllMoviesPage() {
         queryParams.append('order', order);
       }
 
-      if (searchTerm) queryParams.append('search', searchTerm);
-      if (genreFilter) queryParams.append('genre', genreFilter);
+      if (searchTerm) {
+        queryParams.append('search', searchTerm);
+      }
+
+      if (genreFilter) {
+        queryParams.append('genre', genreFilter);
+      }
 
       const fullUrl = `${BASE_URL}/Movie/AllMovies?${queryParams.toString()}`;
 
       try {
-        const res = await fetch(fullUrl, { credentials: 'include' });
+        const res = await fetch(fullUrl, {
+          credentials: 'include',
+        });
         const data = await res.json();
 
         if (data.movies && data.movies.length > 0) {
@@ -153,47 +135,53 @@ function AllMoviesPage() {
       <Header />
       <div className="apply-margin"></div>
       <div className="w-[90%] mx-auto mb-5">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
-            <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
-
-            <select
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
-              value={`${sortBy}-${order}`}
-              onChange={(e) => {
-                const [sort, ord] = e.target.value.split('-');
-                setSortBy(sort);
-                setOrder(ord);
-              }}
-            >
-              <option value="default-default">{t.sort}</option>
-              <option value="title-asc">{t.titleAZ}</option>
-              <option value="title-desc">{t.titleZA}</option>
-              <option value="releaseyear-asc">{t.releaseAsc}</option>
-              <option value="releaseyear-desc">{t.releaseDesc}</option>
-            </select>
-
-            <select
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
-              value={genreFilter}
-              onChange={(e) => {
-                setGenreFilter(e.target.value);
-                setMovies([]);
-                setPage(1);
-                setHasMore(true);
-              }}
-            >
-              <option value="">{t.allGenres}</option>
-              {Object.entries(localizedGenres).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value[lang]}
-                </option>
-              ))}
-            </select>
+        <div className="container mb-4">
+          <div className="row gx-3">
+            <div className="col-12 col-md-4">
+              <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
+            </div>
+            <div className="col-6 col-md-3">
+              <select
+                className="form-select fw-semibold"
+                style={{ fontFamily: 'Montserrat', height: '42px' }}
+                value={`${sortBy}-${order}`}
+                onChange={(e) => {
+                  const [sort, ord] = e.target.value.split('-');
+                  setSortBy(sort);
+                  setOrder(ord);
+                }}
+              >
+                <option value="default-default">{t.sort}</option>
+                <option value="title-asc">{t.titleAZ}</option>
+                <option value="title-desc">{t.titleZA}</option>
+                <option value="releaseyear-asc">{t.releaseAsc}</option>
+                <option value="releaseyear-desc">{t.releaseDesc}</option>
+              </select>
+            </div>
+            <div className="col-6 col-md-5">
+              <select
+                className="form-select fw-semibold"
+                style={{ fontFamily: 'Montserrat', height: '42px' }}
+                value={genreFilter}
+                onChange={(e) => {
+                  setGenreFilter(e.target.value);
+                  setMovies([]);
+                  setPage(1);
+                  setHasMore(true);
+                }}
+              >
+                <option value="">{t.allGenres}</option>
+                {Object.entries(genreTranslations).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value[lang]}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className="row g-3 bg-transparent">
+        <div className="row g-3 bg-transparent align-items-center justify-content-center">
           {movies.map((movie, idx) => {
             const sanitizedTitle = sanitizeTitle(movie.title);
             const imageSrc = `https://mlworkspace6342542406.blob.core.windows.net/inteximages/${sanitizedTitle}.jpg`;
@@ -201,7 +189,7 @@ function AllMoviesPage() {
             return (
               <div className="col-auto p-3" key={`${movie.title}-${idx}`}>
                 <RecommendCard
-                  showId={''}
+                  showId={movie.showId}
                   imageSrc={imageSrc}
                   altText={movie.title}
                   captionText={movie.title}

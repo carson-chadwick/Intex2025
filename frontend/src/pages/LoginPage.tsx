@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Cookies from 'js-cookie';
+import './LoginPage.css';
 
-// 🌐 Translation strings
 const translations: Record<
   string,
   {
@@ -19,6 +19,7 @@ const translations: Record<
     signInWithGoogle: string;
     signInWithFacebook: string;
     errorFillFields: string;
+    mfaCodeLabel: string;
   }
 > = {
   en: {
@@ -33,6 +34,7 @@ const translations: Record<
     signInWithGoogle: 'Sign in with Google',
     signInWithFacebook: 'Sign in with Facebook',
     errorFillFields: 'Please fill in all fields.',
+    mfaCodeLabel: 'MFA Code',
   },
   es: {
     signIn: 'Iniciar sesión',
@@ -46,6 +48,7 @@ const translations: Record<
     signInWithGoogle: 'Iniciar sesión con Google',
     signInWithFacebook: 'Iniciar sesión con Facebook',
     errorFillFields: 'Por favor, complete todos los campos.',
+    mfaCodeLabel: 'Código MFA',
   },
 };
 
@@ -133,131 +136,112 @@ function LoginPage() {
   return (
     <>
       <Header />
-      <div className="apply-margin"></div>
-      <div className="container">
-        <div className="row">
-          <div className="card border-0 shadow rounded-3">
-            <div className="card-body p-4 p-sm-5">
-              <h5 className="card-title text-center mb-5 fw-light fs-5">
-                {requiresMfa ? t.mfa : t.signIn}
-              </h5>
-              <form
-                onSubmit={
-                  requiresMfa
-                    ? (e) => {
-                        e.preventDefault();
-                        handleMfaSubmit();
-                      }
-                    : handleSubmit
-                }
-              >
-                {!requiresMfa ? (
-                  <>
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="email">{t.email}</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="password">{t.password}</label>
-                    </div>
-                    <div className="form-check mb-3">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="rememberme"
-                        name="rememberme"
-                        checked={rememberme}
-                        onChange={handleChange}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="rememberme"
-                        style={{ textAlign: 'left', display: 'block' }}
-                      >
-                        {t.remember}
-                      </label>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="mb-3">{t.mfaPrompt}</p>
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        type="text"
-                        id="mfaCode"
-                        name="mfaCode"
-                        value={mfaCode}
-                        onChange={(e) => setMfaCode(e.target.value)}
-                        placeholder="123456"
-                      />
-                      <label htmlFor="mfaCode">MFA Code</label>
-                    </div>
-                  </>
-                )}
 
-                <div className="d-grid mb-2">
-                  <button
-                    className="btn btn-primary btn-login text-uppercase fw-bold"
-                    type="submit"
-                  >
-                    {requiresMfa ? t.verifyCode : t.signIn}
-                  </button>
-                </div>
+      <div className="apply-margin-login"></div>
+      <div className="login-container">
+        <div className="login-card shadow">
+          <div className="card-body p-4 p-sm-5">
+            <h5 className="card-title text-center mb-5 fw-light fs-5">
+              {requiresMfa ? t.mfa : t.signIn}
+            </h5>
+            <form
+              onSubmit={
+                requiresMfa
+                  ? (e) => {
+                      e.preventDefault();
+                      handleMfaSubmit();
+                    }
+                  : handleSubmit
+              }
+            >
+              {!requiresMfa ? (
+                <>
+                  <div className="form-floating mb-3">
+                    <input
+                      className="form-control"
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="email">{t.email}</label>
+                  </div>
+                  <div className="form-floating mb-3">
+                    <input
+                      className="form-control"
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={password}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="password">{t.password}</label>
+                  </div>
+                  <div className="form-check mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="rememberme"
+                      name="rememberme"
+                      checked={rememberme}
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="form-check-label"
+                      style={{ textAlign: 'left', display: 'block' }}
+                      htmlFor="rememberme"
+                    >
+                      {t.remember}
+                    </label>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="mb-3">{t.mfaPrompt}</p>
+                  <div className="form-floating mb-3">
+                    <input
+                      className="form-control"
+                      type="text"
+                      id="mfaCode"
+                      name="mfaCode"
+                      value={mfaCode}
+                      onChange={(e) => setMfaCode(e.target.value)}
+                      placeholder="123456"
+                    />
+                    <label htmlFor="mfaCode">{t.mfaCodeLabel}</label>
+                  </div>
+                </>
+              )}
 
-                <a
-                  onClick={() => navigate('/register')}
-                  className="footer-text"
+              <div className="d-grid mb-2">
+                <button
+                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  type="submit"
                 >
-                  {t.noAccount}
-                </a>
-
-                {!requiresMfa && (
-                  <>
-                    <hr className="my-4" />
-                    <div className="d-grid mb-2">
-                      <button
-                        className="btn btn-google btn-login text-uppercase fw-bold"
-                        type="button"
-                      >
-                        <i className="fa-brands fa-google me-2"></i>{' '}
-                        {t.signInWithGoogle}
-                      </button>
-                    </div>
-                    <div className="d-grid mb-2">
-                      <button
-                        className="btn btn-facebook btn-login text-uppercase fw-bold"
-                        type="button"
-                      >
-                        <i className="fa-brands fa-facebook-f me-2"></i>{' '}
-                        {t.signInWithFacebook}
-                      </button>
-                    </div>
-                  </>
-                )}
-              </form>
-              <strong>
-                {error && <p className="error text-danger mt-3">{error}</p>}
-              </strong>
-            </div>
+                  {requiresMfa ? t.verifyCode : t.signIn}
+                </button>
+              </div>
+              <a
+                onClick={() => navigate('/register')}
+                className="footer-text"
+                role="button"
+                style={{
+                  cursor: 'pointer',
+                  display: 'block',
+                  marginTop: '10px',
+                }}
+              >
+                {t.noAccount}
+              </a>
+            </form>
+            <strong>
+              {error && <p className="error text-danger mt-3">{error}</p>}
+            </strong>
           </div>
         </div>
       </div>
+      <div className="apply-margin-login"></div>
       <Footer />
     </>
   );

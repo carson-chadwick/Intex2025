@@ -4,7 +4,7 @@ import './Homepage.css';
 import CarouselRecommender from '../components/CarouselRecommender';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import landingPageImage from '../images/landingpagebackground.png';
+import landingPageImage from '../images/background.jpg';
 import Cookies from 'js-cookie';
 
 const translations = {
@@ -13,7 +13,7 @@ const translations = {
     heading2: 'Found Just For You.',
     getStarted: 'Get Started',
     watchVideo: 'Watch Video',
-    topPicks: 'Top Picks',
+    topPicks: 'Top Picks For You',
     byGenre: 'By Genre',
   },
   es: {
@@ -21,7 +21,7 @@ const translations = {
     heading2: 'Encontradas solo para ti.',
     getStarted: 'Comenzar',
     watchVideo: 'Ver video',
-    topPicks: 'Mejores recomendaciones',
+    topPicks: 'Mejores recomendaciones por Ti',
     byGenre: 'Por género',
   },
 };
@@ -89,7 +89,7 @@ const HomePage: React.FC = () => {
           <div className="container d-flex flex-column align-items-center">
             <h2>{t.heading1}</h2>
             <h2>{t.heading2}</h2>
-            <div className="d-flex mt-4">
+            {/* <div className="d-flex mt-4">
               <a href="#about" className="btn-get-started">
                 {t.getStarted}
               </a>
@@ -100,7 +100,7 @@ const HomePage: React.FC = () => {
                 <i className="bi bi-play-circle"></i>
                 <span>{t.watchVideo}</span>
               </a>
-            </div>
+            </div> */}
           </div>
         </section>
 
