@@ -39,6 +39,11 @@ table td {
   font-size: 0.95rem;
 }
 
+table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 /* Kill inherited background for btn-link */
 .btn.btn-link {
   background-color: transparent !important;

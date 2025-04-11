@@ -39,30 +39,46 @@ function MovieDetailPage() {
           setLoading(false);
         });
     }
+  }, [showId]);
 
+  useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/user/current-user`,
+        const pingResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/pingauth`,
           {
             method: 'GET',
-            credentials: 'include', // required to send cookies/session
+            credentials: 'include',
           }
         );
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch current user');
-        }
+        if (!pingResponse.ok) throw new Error('Failed to fetch auth info');
+        const pingData = await pingResponse.json();
 
-        const data = await response.json();
-        setUserId(data.user_id);
+        if (!pingData.email) throw new Error('Email not returned');
+
+        const userResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/user/by-email/${encodeURIComponent(
+            pingData.email
+          )}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
+
+        if (!userResponse.ok) throw new Error('Failed to fetch user by email');
+        const userData = await userResponse.json();
+        setUserId(userData.user_id);
       } catch (error) {
         console.error('Error fetching user:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCurrentUser();
-  }, [showId]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
