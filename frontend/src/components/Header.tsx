@@ -37,12 +37,18 @@ const Header: React.FC = () => {
 
   const t = translations[lang]; // Use translations dynamically
 
-  const handleLanguageToggle = () => {
-    const newLang = lang === 'en' ? 'es' : 'en';
-    setLang(newLang);
-    Cookies.set('language', newLang, { expires: 365 });
-    window.location.reload(); // Optional: refresh to apply language site-wide
-  };
+const handleLanguageToggle = () => {
+  const newLang = lang === 'en' ? 'es' : 'en';
+  setLang(newLang);
+  Cookies.set('language', newLang, {
+    expires: 365,
+    path: '/',
+    sameSite: 'None',
+    secure: true,
+  });
+  window.location.reload(); // Optional: refresh to apply language site-wide
+};
+
 
   useEffect(() => {
     const handleScroll = () => {
