@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
-import background from '../images/background.jpg';
+import background from '../images/landingpagebackground.png';
 import Footer from '../components/Footer';
 import CarouselRecommender from '../components/CarouselRecommender';
 
