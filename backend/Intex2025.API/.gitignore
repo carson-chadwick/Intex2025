@@ -33,6 +33,4 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
-# Ignore ASP.NET Core configuration files
-appsettings.json
-appsettings.*.json
+
