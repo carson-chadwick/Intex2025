@@ -1,14 +1,71 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import Cookies from 'js-cookie';
 import Header from '../components/Header';
 import RecommendCard from '../components/RecommendCard';
-import MovieSearchBar from '../components/MovieSearchBar'; // ✅ import it
+import MovieSearchBar from '../components/MovieSearchBar';
 
 interface MovieData {
   title: string;
   genre?: string;
 }
 
+const translations = {
+  en: {
+    sort: 'Sort',
+    titleAZ: 'Title A–Z',
+    titleZA: 'Title Z–A',
+    releaseAsc: 'Release Year ↑',
+    releaseDesc: 'Release Year ↓',
+    allGenres: 'All Genres',
+    loadingMore: 'No more movies to load.',
+  },
+  es: {
+    sort: 'Ordenar',
+    titleAZ: 'Título A–Z',
+    titleZA: 'Título Z–A',
+    releaseAsc: 'Año de estreno ↑',
+    releaseDesc: 'Año de estreno ↓',
+    allGenres: 'Todos los géneros',
+    loadingMore: 'No hay más películas para cargar.',
+  },
+};
+
+const localizedGenres: Record<string, { en: string; es: string }> = {
+  action: { en: 'Action/Adventure', es: 'Acción/Aventura' },
+  comedies: { en: 'Comedies', es: 'Comedias' },
+  dramas: { en: 'Dramas', es: 'Dramas' },
+  documentaries: { en: 'Documentaries', es: 'Documentales' },
+  horrorMovies: { en: 'Horror', es: 'Terror' },
+  musicals: { en: 'Musicals', es: 'Musicales' },
+  thrillers: { en: 'Thrillers', es: 'Suspenso' },
+  tvDramas: { en: 'TV Dramas', es: 'Dramas de TV' },
+  animeSeriesInternationalTvShows: {
+    en: 'Anime / International TV',
+    es: 'Anime / TV Internacional',
+  },
+  children: { en: 'Children', es: 'Infantil' },
+  familyMovies: { en: 'Family Movies', es: 'Películas Familiares' },
+  realityTv: { en: 'Reality TV', es: 'TV Realidad' },
+  tvComedies: { en: 'TV Comedies', es: 'Comedias de TV' },
+  spirituality: { en: 'Spirituality', es: 'Espiritualidad' },
+  fantasy: { en: 'Fantasy', es: 'Fantasía' },
+  crimeTvShowsDocuseries: {
+    en: 'Crime TV Shows / Docuseries',
+    es: 'Crimen / Docuseries',
+  },
+  talkShowsTvComedies: {
+    en: 'Talk Shows / TV Comedies',
+    es: 'Talk Shows / Comedias TV',
+  },
+};
+
 function AllMoviesPage() {
+  const [lang] = useState<'en' | 'es'>(() => {
+    const cookieLang = Cookies.get('language');
+    return cookieLang === 'es' ? 'es' : 'en';
+  });
+  const t = translations[lang];
+
   const [movies, setMovies] = useState<MovieData[]>([]);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState('default');
@@ -17,48 +74,36 @@ function AllMoviesPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [genreFilter, setGenreFilter] = useState('');
-
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const sanitizeTitle = (title: string): string => {
-    return title
+  const sanitizeTitle = (title: string): string =>
+    title
       .normalize('NFD')
       .replace(/[^a-zA-Z0-9\s]/g, '')
       .trim()
       .replace(/\s+/g, '%20');
-  };
 
   const fetchMovies = useCallback(
     async (pageNum: number, reset = false) => {
       setLoading(true);
       const BASE_URL = import.meta.env.VITE_API_URL;
+      const queryParams = new URLSearchParams({
+        pageSize: '72',
+        pageNum: pageNum.toString(),
+      });
 
-  const queryParams = new URLSearchParams({
-    pageSize: '72',
-    pageNum: pageNum.toString(),
-  });
+      if (sortBy !== 'default' && order !== 'default') {
+        queryParams.append('sortBy', sortBy);
+        queryParams.append('order', order);
+      }
 
-  if (sortBy !== 'default' && order !== 'default') {
-    queryParams.append('sortBy', sortBy);
-    queryParams.append('order', order);
-  }
-
-  if (searchTerm) {
-    queryParams.append('search', searchTerm);
-  }
-
-  if (genreFilter) {
-    queryParams.append('genre', genreFilter);
-  }
-
-
+      if (searchTerm) queryParams.append('search', searchTerm);
+      if (genreFilter) queryParams.append('genre', genreFilter);
 
       const fullUrl = `${BASE_URL}/Movie/AllMovies?${queryParams.toString()}`;
 
       try {
-        const res = await fetch(fullUrl,{
-          credentials: 'include',
-        } );
+        const res = await fetch(fullUrl, { credentials: 'include' });
         const data = await res.json();
 
         if (data.movies && data.movies.length > 0) {
@@ -78,15 +123,13 @@ function AllMoviesPage() {
     [sortBy, order, searchTerm, genreFilter]
   );
 
-  // 🔁 Run when sort/search changes
   useEffect(() => {
     setMovies([]);
     setPage(1);
     setHasMore(true);
-    fetchMovies(1, true); // reset = true
+    fetchMovies(1, true);
   }, [sortBy, order, searchTerm, genreFilter, fetchMovies]);
 
-  // 🔁 Infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -94,11 +137,7 @@ function AllMoviesPage() {
           fetchMovies(page);
         }
       },
-      {
-        root: null,
-        rootMargin: '200px',
-        threshold: 1.0,
-      }
+      { root: null, rootMargin: '200px', threshold: 1.0 }
     );
 
     const currentLoader = loaderRef.current;
@@ -112,13 +151,12 @@ function AllMoviesPage() {
   return (
     <>
       <Header />
-      <div className='apply-margin'></div>
+      <div className="apply-margin"></div>
       <div className="w-[90%] mx-auto mb-5">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-          {/* <h2 className="text-3xl font-semibold text-start">All Movies</h2> */}
-
           <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
             <MovieSearchBar onSearch={(term) => setSearchTerm(term)} />
+
             <select
               className="border border-gray-300 rounded-md px-3 py-1 text-sm"
               value={`${sortBy}-${order}`}
@@ -128,11 +166,11 @@ function AllMoviesPage() {
                 setOrder(ord);
               }}
             >
-              <option value="default-default">Sort</option>
-              <option value="title-asc">Title A–Z</option>
-              <option value="title-desc">Title Z–A</option>
-              <option value="releaseyear-asc">Release Year ↑</option>
-              <option value="releaseyear-desc">Release Year ↓</option>
+              <option value="default-default">{t.sort}</option>
+              <option value="title-asc">{t.titleAZ}</option>
+              <option value="title-desc">{t.titleZA}</option>
+              <option value="releaseyear-asc">{t.releaseAsc}</option>
+              <option value="releaseyear-desc">{t.releaseDesc}</option>
             </select>
 
             <select
@@ -145,62 +183,12 @@ function AllMoviesPage() {
                 setHasMore(true);
               }}
             >
-              <option value="">All Genres</option>
-              <option value="action">Action/Adventure</option>
-              <option value="animeSeriesInternationalTvShows">
-                Anime Series / International TV Shows
-              </option>
-              <option value="britishTvShowsDocuseriesInternationalTvShows">
-                British / Docuseries / International TV Shows
-              </option>
-              <option value="children">Children</option>
-              <option value="comedies">Comedies</option>
-              <option value="comediesDramasInternationalMovies">
-                Comedies / Dramas / International Movies
-              </option>
-              <option value="comediesInternationalMovies">
-                Comedies / International Movies
-              </option>
-              <option value="comediesRomanticMovies">
-                Comedies / Romantic Movies
-              </option>
-              <option value="crimeTvShowsDocuseries">
-                Crime TV Shows / Docuseries
-              </option>
-              <option value="documentaries">Documentaries</option>
-              <option value="documentariesInternationalMovies">
-                Documentaries / International Movies
-              </option>
-              <option value="docuseries">Docuseries</option>
-              <option value="dramas">Dramas</option>
-              <option value="dramasInternationalMovies">
-                Dramas / International Movies
-              </option>
-              <option value="dramasRomanticMovies">
-                Dramas / Romantic Movies
-              </option>
-              <option value="familyMovies">Family Movies</option>
-              <option value="fantasy">Fantasy</option>
-              <option value="horrorMovies">Horror Movies</option>
-              <option value="internationalMoviesThrillers">
-                International Movies / Thrillers
-              </option>
-              <option value="internationalTvShowsRomanticTvShowsTvDramas">
-                International / Romantic TV Shows / TV Dramas
-              </option>
-              <option value="kidsTv">Kids' TV</option>
-              <option value="languageTvShows">Language TV Shows</option>
-              <option value="musicals">Musicals</option>
-              <option value="natureTv">Nature TV</option>
-              <option value="realityTv">Reality TV</option>
-              <option value="spirituality">Spirituality</option>
-              <option value="tvAction">TV Action</option>
-              <option value="tvComedies">TV Comedies</option>
-              <option value="tvDramas">TV Dramas</option>
-              <option value="talkShowsTvComedies">
-                Talk Shows / TV Comedies
-              </option>
-              <option value="thrillers">Thrillers</option>
+              <option value="">{t.allGenres}</option>
+              {Object.entries(localizedGenres).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value[lang]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -213,6 +201,7 @@ function AllMoviesPage() {
             return (
               <div className="col-auto p-3" key={`${movie.title}-${idx}`}>
                 <RecommendCard
+                  showId={''}
                   imageSrc={imageSrc}
                   altText={movie.title}
                   captionText={movie.title}
@@ -225,7 +214,8 @@ function AllMoviesPage() {
                   showMobileWarning={false}
                   showTooltip={false}
                   displayOverlayContent={false}
-                  overlayContent={false} showId={''}                />
+                  overlayContent={false}
+                />
               </div>
             );
           })}
@@ -241,7 +231,7 @@ function AllMoviesPage() {
 
         {!hasMore && !loading && (
           <p className="text-center text-gray-500 text-sm my-4">
-            No more movies to load.
+            {t.loadingMore}
           </p>
         )}
       </div>
