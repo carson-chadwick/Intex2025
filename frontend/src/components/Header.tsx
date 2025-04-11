@@ -156,19 +156,6 @@ const handleLanguageToggle = () => {
             </>
           )}
           <hr />
-          <div className="language-switch">
-            <label className="language-toggle">
-              <input
-                type="checkbox"
-                checked={lang === 'es'}
-                onChange={handleLanguageToggle}
-              />
-              <span className="language-slider"></span>
-            </label>
-            <span style={{ color: 'black' }}>
-              {lang === 'en' ? 'Spanish' : 'Español'}
-            </span>
-          </div>
         </div>
       </div>
     </header>

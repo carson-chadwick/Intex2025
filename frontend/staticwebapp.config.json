@@ -1,23 +1,5 @@
 {
   "globalHeaders": {
     "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' data:; font-src 'self' fonts.gstatic.com data:; connect-src 'self' https://sec4group2intex-h9cngnggf6czb8f6.eastus-01.azurewebsites.net; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';"
-  },
-  "routes": [
-    {
-      "route": "/assets/*",
-      "rewrite": "/assets/:path"
-    },
-    {
-      "route": "/api/*",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*",
-      "rewrite": "/index.html"
-    }
-  ],
-  "mimeTypes": {
-    ".js": "application/javascript",
-    ".css": "text/css"
   }
 }
