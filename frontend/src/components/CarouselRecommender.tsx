@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import ItemsCarousel from 'react-items-carousel';
 import RecommendCard from './RecommendCard';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
-
+import Cookies from 'js-cookie';
+import { genreTranslations } from '../utils/genreTranslations';
 
 interface RecData {
   title: string;
@@ -29,6 +30,25 @@ interface CarouselRecommenderProps {
   rightChevron?: React.ReactNode;
 }
 
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    topPicks: 'Top Picks',
+    byGenre: 'By Genre',
+    topPicksIn: 'Top picks in',
+    topHits: 'Top Hits',
+    editorsPicks: "Editor's Picks",
+    recentlyAdded: 'Recently Added',
+  },
+  es: {
+    topPicks: 'Mejores selecciones',
+    byGenre: 'Por género',
+    topPicksIn: 'Mejores selecciones de',
+    topHits: 'Éxitos Principales',
+    editorsPicks: 'Selecciones del Editor',
+    recentlyAdded: 'Recién Añadidos',
+  },
+};
+
 const CarouselRecommender = ({
   Name,
   userId,
@@ -38,6 +58,9 @@ const CarouselRecommender = ({
   leftChevron,
   rightChevron,
 }: CarouselRecommenderProps) => {
+  const lang = Cookies.get('language') === 'es' ? 'es' : 'en';
+  const t = translations[lang];
+
   const [recs, setRecs] = useState<RecData[]>([]);
   const [activeIndexes, setActiveIndexes] = useState<Record<string, number>>(
     {}
@@ -73,9 +96,7 @@ const CarouselRecommender = ({
       endpoint = '/recommend/landing/recently-added';
 
     const BASE_URL = import.meta.env.VITE_API_URL;
-    const fullUrl = `${BASE_URL}${endpoint}`;
-
-    fetch(fullUrl)
+    fetch(`${BASE_URL}${endpoint}`)
       .then((res) => res.json())
       .then((data) => setRecs(data))
       .catch((err) =>
@@ -95,7 +116,9 @@ const CarouselRecommender = ({
       }));
     }, 3500);
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, [recs, cardsToShow, autoScroll]);
 
@@ -187,6 +210,14 @@ const CarouselRecommender = ({
     );
   };
 
+  const localizedName = (() => {
+    if (type === 'topHits') return t.topHits;
+    if (type === 'editorsPicks') return t.editorsPicks;
+    if (type === 'recentlyAdded') return t.recentlyAdded;
+    if (lang === 'es' && Name === 'Top Picks') return t.topPicks;
+    return Name;
+  })();
+
   if (recs.length === 0) return null;
 
   return (
@@ -194,7 +225,7 @@ const CarouselRecommender = ({
       {type !== 'homeGenre' && (
         <div className="px-4 sm:px-8 md:px-12 mb-10">
           <h2 className="montserrat-extrabold text-3xl text-start mb-6 text-white">
-            {Name}
+            {localizedName}
           </h2>
         </div>
       )}
@@ -216,7 +247,7 @@ const CarouselRecommender = ({
           <div key={genre} className="py-20">
             <div className="px-4 sm:px-8 md:px-12 mb-6">
               <h2 className="montserrat-extrabold text-3xl text-start text-white mt-3">
-                Top picks in {genre}
+                {t.topPicksIn} {genreTranslations[genre]?.[lang] || genre}
               </h2>
             </div>
             <div className="carousel-container px-4 sm:px-8 md:px-12">

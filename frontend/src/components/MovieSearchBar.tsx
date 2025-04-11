@@ -1,12 +1,27 @@
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import '../App.css';
 
 interface MovieSearchBarProps {
   onSearch: (searchTerm: string) => void;
 }
 
+// ✅ Translation strings
+const translations = {
+  en: {
+    placeholder: 'Search by title...',
+    button: 'Search',
+  },
+  es: {
+    placeholder: 'Buscar por título...',
+    button: 'Buscar',
+  },
+};
+
 function MovieSearchBar({ onSearch }: MovieSearchBarProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const lang = Cookies.get('language') === 'es' ? 'es' : 'en';
+  const t = translations[lang];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +45,7 @@ function MovieSearchBar({ onSearch }: MovieSearchBarProps) {
         <input
           type="text"
           className="form-control fw-semibold search-input"
-          placeholder="Search by title..."
+          placeholder={t.placeholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
@@ -57,7 +72,7 @@ function MovieSearchBar({ onSearch }: MovieSearchBarProps) {
             boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.05)',
           }}
         >
-          Search
+          {t.button}
         </button>
       </div>
     </form>

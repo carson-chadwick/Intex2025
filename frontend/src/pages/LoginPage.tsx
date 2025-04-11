@@ -2,9 +2,60 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Cookies from 'js-cookie';
 import './LoginPage.css';
 
+const translations: Record<
+  string,
+  {
+    signIn: string;
+    mfa: string;
+    verifyCode: string;
+    mfaPrompt: string;
+    email: string;
+    password: string;
+    remember: string;
+    noAccount: string;
+    signInWithGoogle: string;
+    signInWithFacebook: string;
+    errorFillFields: string;
+    mfaCodeLabel: string;
+  }
+> = {
+  en: {
+    signIn: 'Sign In',
+    mfa: 'Multi-Factor Authentication',
+    verifyCode: 'Verify Code',
+    mfaPrompt: 'Enter your 6-digit MFA code:',
+    email: 'Email address',
+    password: 'Password',
+    remember: 'Remember password',
+    noAccount: "Don't have an account?",
+    signInWithGoogle: 'Sign in with Google',
+    signInWithFacebook: 'Sign in with Facebook',
+    errorFillFields: 'Please fill in all fields.',
+    mfaCodeLabel: 'MFA Code',
+  },
+  es: {
+    signIn: 'Iniciar sesión',
+    mfa: 'Autenticación multifactor',
+    verifyCode: 'Verificar código',
+    mfaPrompt: 'Introduce tu código MFA de 6 dígitos:',
+    email: 'Correo electrónico',
+    password: 'Contraseña',
+    remember: 'Recordar contraseña',
+    noAccount: '¿No tienes una cuenta?',
+    signInWithGoogle: 'Iniciar sesión con Google',
+    signInWithFacebook: 'Iniciar sesión con Facebook',
+    errorFillFields: 'Por favor, complete todos los campos.',
+    mfaCodeLabel: 'Código MFA',
+  },
+};
+
 function LoginPage() {
+  const lang = Cookies.get('language') === 'es' ? 'es' : 'en';
+  const t = translations[lang];
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberme, setRememberme] = useState(false);
@@ -30,7 +81,7 @@ function LoginPage() {
     setError('');
 
     if (!email || !password) {
-      setError('Please fill in all fields.');
+      setError(t.errorFillFields);
       return;
     }
 
@@ -91,7 +142,7 @@ function LoginPage() {
         <div className="login-card shadow">
           <div className="card-body p-4 p-sm-5">
             <h5 className="card-title text-center mb-5 fw-light fs-5">
-              {requiresMfa ? 'Multi-Factor Authentication' : 'Sign In'}
+              {requiresMfa ? t.mfa : t.signIn}
             </h5>
             <form
               onSubmit={
@@ -114,7 +165,7 @@ function LoginPage() {
                       value={email}
                       onChange={handleChange}
                     />
-                    <label htmlFor="email">Email address</label>
+                    <label htmlFor="email">{t.email}</label>
                   </div>
                   <div className="form-floating mb-3">
                     <input
@@ -125,7 +176,7 @@ function LoginPage() {
                       value={password}
                       onChange={handleChange}
                     />
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t.password}</label>
                   </div>
                   <div className="form-check mb-3">
                     <input
@@ -141,13 +192,13 @@ function LoginPage() {
                       style={{ textAlign: 'left', display: 'block' }}
                       htmlFor="rememberme"
                     >
-                      Remember password
+                      {t.remember}
                     </label>
                   </div>
                 </>
               ) : (
                 <>
-                  <p className="mb-3">Enter your 6-digit MFA code:</p>
+                  <p className="mb-3">{t.mfaPrompt}</p>
                   <div className="form-floating mb-3">
                     <input
                       className="form-control"
@@ -158,7 +209,7 @@ function LoginPage() {
                       onChange={(e) => setMfaCode(e.target.value)}
                       placeholder="123456"
                     />
-                    <label htmlFor="mfaCode">MFA Code</label>
+                    <label htmlFor="mfaCode">{t.mfaCodeLabel}</label>
                   </div>
                 </>
               )}
@@ -168,19 +219,25 @@ function LoginPage() {
                   className="btn btn-primary btn-login text-uppercase fw-bold"
                   type="submit"
                 >
-                  {requiresMfa ? 'Verify Code' : 'Sign in'}
+                  {requiresMfa ? t.verifyCode : t.signIn}
                 </button>
               </div>
               <a
                 onClick={() => navigate('/register')}
                 className="footer-text"
                 role="button"
-                style={{ cursor: 'pointer', display: 'block', marginTop: '10px' }}
+                style={{
+                  cursor: 'pointer',
+                  display: 'block',
+                  marginTop: '10px',
+                }}
               >
-                Don't have an account?
+                {t.noAccount}
               </a>
             </form>
-            <strong>{error && <p className="error text-danger mt-3">{error}</p>}</strong>
+            <strong>
+              {error && <p className="error text-danger mt-3">{error}</p>}
+            </strong>
           </div>
         </div>
       </div>
@@ -191,4 +248,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-

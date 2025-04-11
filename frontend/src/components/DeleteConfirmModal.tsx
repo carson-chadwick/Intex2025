@@ -6,20 +6,25 @@ interface Props {
 }
 
 const DeleteConfirmModal = ({ isOpen, title, onCancel, onConfirm }: Props) => {
-  // ✅ No useState here unless necessary
   if (!isOpen) return null;
 
   return (
     <div className="popup-overlay">
-      <div className="popup-modal">
-        <h3 className="text-lg font-semibold mb-4">
+      <div className="popup-modal bg-white text-black p-6 rounded shadow-lg max-w-md mx-auto">
+        <h3 className="text-lg font-semibold mb-4 text-black">
           Are you sure you want to delete <em>{title}</em> from the database?
         </h3>
         <div className="flex justify-center gap-4">
-          <button className="btn btn-secondary" onClick={onCancel}>
+          <button
+            className="bg-white text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+            onClick={onCancel}
+          >
             Cancel
           </button>
-          <button className="btn btn-danger" onClick={onConfirm}>
+          <button
+            className="bg-white text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+            onClick={onConfirm}
+          >
             Delete
           </button>
         </div>

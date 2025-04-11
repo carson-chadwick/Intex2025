@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import Cookies from 'js-cookie';
 import Header from '../components/Header';
 import RecommendCard from '../components/RecommendCard';
-import MovieSearchBar from '../components/MovieSearchBar'; // ✅ import it
+import MovieSearchBar from '../components/MovieSearchBar';
 
 interface MovieData {
   title: string;
@@ -9,7 +10,36 @@ interface MovieData {
   showId: string;
 }
 
+const translations = {
+  en: {
+    sort: 'Sort',
+    titleAZ: 'Title A–Z',
+    titleZA: 'Title Z–A',
+    releaseAsc: 'Release Year ↑',
+    releaseDesc: 'Release Year ↓',
+    allGenres: 'All Genres',
+    loadingMore: 'No more movies to load.',
+  },
+  es: {
+    sort: 'Ordenar',
+    titleAZ: 'Título A–Z',
+    titleZA: 'Título Z–A',
+    releaseAsc: 'Año de estreno ↑',
+    releaseDesc: 'Año de estreno ↓',
+    allGenres: 'Todos los géneros',
+    loadingMore: 'No hay más películas para cargar.',
+  },
+};
+
+import { genreTranslations } from '../utils/genreTranslations';
+
 function AllMoviesPage() {
+  const [lang] = useState<'en' | 'es'>(() => {
+    const cookieLang = Cookies.get('language');
+    return cookieLang === 'es' ? 'es' : 'en';
+  });
+  const t = translations[lang];
+
   const [movies, setMovies] = useState<MovieData[]>([]);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState('default');
@@ -18,16 +48,14 @@ function AllMoviesPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [genreFilter, setGenreFilter] = useState('');
-
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const sanitizeTitle = (title: string): string => {
-    return title
+  const sanitizeTitle = (title: string): string =>
+    title
       .normalize('NFD')
       .replace(/[^a-zA-Z0-9\s]/g, '')
       .trim()
       .replace(/\s+/g, '%20');
-  };
 
   const fetchMovies = useCallback(
     async (pageNum: number, reset = false) => {
@@ -77,15 +105,13 @@ function AllMoviesPage() {
     [sortBy, order, searchTerm, genreFilter]
   );
 
-  // 🔁 Run when sort/search changes
   useEffect(() => {
     setMovies([]);
     setPage(1);
     setHasMore(true);
-    fetchMovies(1, true); // reset = true
+    fetchMovies(1, true);
   }, [sortBy, order, searchTerm, genreFilter, fetchMovies]);
 
-  // 🔁 Infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -93,11 +119,7 @@ function AllMoviesPage() {
           fetchMovies(page);
         }
       },
-      {
-        root: null,
-        rootMargin: '200px',
-        threshold: 1.0,
-      }
+      { root: null, rootMargin: '200px', threshold: 1.0 }
     );
 
     const currentLoader = loaderRef.current;
@@ -129,11 +151,11 @@ function AllMoviesPage() {
                   setOrder(ord);
                 }}
               >
-                <option value="default-default">Sort</option>
-                <option value="title-asc">Title A–Z</option>
-                <option value="title-desc">Title Z–A</option>
-                <option value="releaseyear-asc">Release Year ↑</option>
-                <option value="releaseyear-desc">Release Year ↓</option>
+                <option value="default-default">{t.sort}</option>
+                <option value="title-asc">{t.titleAZ}</option>
+                <option value="title-desc">{t.titleZA}</option>
+                <option value="releaseyear-asc">{t.releaseAsc}</option>
+                <option value="releaseyear-desc">{t.releaseDesc}</option>
               </select>
             </div>
             <div className="col-6 col-md-5">
@@ -148,62 +170,12 @@ function AllMoviesPage() {
                   setHasMore(true);
                 }}
               >
-                <option value="">All Genres</option>
-                <option value="action">Action/Adventure</option>
-                <option value="animeSeriesInternationalTvShows">
-                  Anime Series / International TV Shows
-                </option>
-                <option value="britishTvShowsDocuseriesInternationalTvShows">
-                  British / Docuseries / International TV Shows
-                </option>
-                <option value="children">Children</option>
-                <option value="comedies">Comedies</option>
-                <option value="comediesDramasInternationalMovies">
-                  Comedies / Dramas / International Movies
-                </option>
-                <option value="comediesInternationalMovies">
-                  Comedies / International Movies
-                </option>
-                <option value="comediesRomanticMovies">
-                  Comedies / Romantic Movies
-                </option>
-                <option value="crimeTvShowsDocuseries">
-                  Crime TV Shows / Docuseries
-                </option>
-                <option value="documentaries">Documentaries</option>
-                <option value="documentariesInternationalMovies">
-                  Documentaries / International Movies
-                </option>
-                <option value="docuseries">Docuseries</option>
-                <option value="dramas">Dramas</option>
-                <option value="dramasInternationalMovies">
-                  Dramas / International Movies
-                </option>
-                <option value="dramasRomanticMovies">
-                  Dramas / Romantic Movies
-                </option>
-                <option value="familyMovies">Family Movies</option>
-                <option value="fantasy">Fantasy</option>
-                <option value="horrorMovies">Horror Movies</option>
-                <option value="internationalMoviesThrillers">
-                  International Movies / Thrillers
-                </option>
-                <option value="internationalTvShowsRomanticTvShowsTvDramas">
-                  International / Romantic TV Shows / TV Dramas
-                </option>
-                <option value="kidsTv">Kids' TV</option>
-                <option value="languageTvShows">Language TV Shows</option>
-                <option value="musicals">Musicals</option>
-                <option value="natureTv">Nature TV</option>
-                <option value="realityTv">Reality TV</option>
-                <option value="spirituality">Spirituality</option>
-                <option value="tvAction">TV Action</option>
-                <option value="tvComedies">TV Comedies</option>
-                <option value="tvDramas">TV Dramas</option>
-                <option value="talkShowsTvComedies">
-                  Talk Shows / TV Comedies
-                </option>
-                <option value="thrillers">Thrillers</option>
+                <option value="">{t.allGenres}</option>
+                {Object.entries(genreTranslations).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value[lang]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -247,7 +219,7 @@ function AllMoviesPage() {
 
         {!hasMore && !loading && (
           <p className="text-center text-gray-500 text-sm my-4">
-            No more movies to load.
+            {t.loadingMore}
           </p>
         )}
       </div>

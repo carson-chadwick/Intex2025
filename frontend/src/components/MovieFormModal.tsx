@@ -40,7 +40,7 @@ const MovieFormModal = ({ isOpen, onClose, onSubmit, initialData }: Props) => {
   return (
     <div className="popup-overlay">
       <div className="popup-modal">
-        <h2 className="text-xl font-semibold mb-4 text-center">
+        <h2 className="text-xl font-semibold mb-4 text-center text-black">
           {initialData ? 'Edit Movie' : 'Add New Movie'}
         </h2>
 
@@ -111,10 +111,16 @@ const MovieFormModal = ({ isOpen, onClose, onSubmit, initialData }: Props) => {
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
-          <button onClick={onClose} className="btn btn-secondary">
+          <button
+            onClick={onClose}
+            className="bg-white text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+          >
             Cancel
           </button>
-          <button onClick={handleSubmit} className="btn btn-dark">
+          <button
+            onClick={handleSubmit}
+            className="bg-white text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+          >
             Save
           </button>
         </div>

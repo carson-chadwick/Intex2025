@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@thumbmarkjs/thumbmarkjs": "^0.20.0"
+    "@thumbmarkjs/thumbmarkjs": "^0.20.0",
+    "js-cookie": "^3.0.5"
   }
 }

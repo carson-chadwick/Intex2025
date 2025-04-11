@@ -5,20 +5,33 @@ import CarouselRecommender from '../components/CarouselRecommender';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import landingPageImage from '../images/background.jpg';
+import Cookies from 'js-cookie';
 
-// import AOS from 'aos';
-// import 'aos/dist/aos.css';
+const translations = {
+  en: {
+    heading1: 'Hidden Gems.',
+    heading2: 'Found Just For You.',
+    getStarted: 'Get Started',
+    watchVideo: 'Watch Video',
+    topPicks: 'Top Picks For You',
+    byGenre: 'By Genre',
+  },
+  es: {
+    heading1: 'Joyas ocultas.',
+    heading2: 'Encontradas solo para ti.',
+    getStarted: 'Comenzar',
+    watchVideo: 'Ver video',
+    topPicks: 'Mejores recomendaciones por Ti',
+    byGenre: 'Por género',
+  },
+};
 
 const HomePage: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   AOS.init({
-  //     duration: 1200, // Animation duration in milliseconds
-  //     once: true,     // Ensure animations happen only once on scroll
-  //   });
-  // }, []);
+  const lang = Cookies.get('language') === 'es' ? 'es' : 'en';
+  const t = translations[lang];
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -73,23 +86,19 @@ const HomePage: React.FC = () => {
           style={{ height: '500px', minHeight: 'unset' }}
         >
           <img src={landingPageImage} alt="Hero Background" />
-
           <div className="container d-flex flex-column align-items-center">
-            <h2>Hidden Gems.</h2>
-            <h2>Found Just For You.</h2>
-            {/* <p >
-              We are a team of talented designers making websites with Bootstrap
-            </p> */}
+            <h2>{t.heading1}</h2>
+            <h2>{t.heading2}</h2>
             {/* <div className="d-flex mt-4">
               <a href="#about" className="btn-get-started">
-                Get Started
+                {t.getStarted}
               </a>
               <a
                 href="https://youtu.be/ZMsTMuyH7w8?si=u6OcALxIEf3RXgQj"
                 className="glightbox btn-watch-video d-flex align-items-center"
               >
                 <i className="bi bi-play-circle"></i>
-                <span>Watch Video</span>
+                <span>{t.watchVideo}</span>
               </a>
             </div> */}
           </div>
@@ -97,7 +106,7 @@ const HomePage: React.FC = () => {
 
         <div className="py-16">
           <CarouselRecommender
-            Name="Top Picks For You"
+            Name={t.topPicks}
             userId={userId}
             type="homeTop"
             autoScroll={false}
@@ -105,7 +114,7 @@ const HomePage: React.FC = () => {
         </div>
         <div>
           <CarouselRecommender
-            Name="By Genre"
+            Name={t.byGenre}
             userId={userId}
             type="homeGenre"
             autoScroll={false}
