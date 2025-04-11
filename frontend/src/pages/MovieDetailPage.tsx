@@ -219,14 +219,19 @@ function MovieDetailPage() {
                   <h5 className="mb-2">{t.cast}:</h5>
                   <p>
                     {movie.cast
-                      .split(' ')
-                      .reduce((acc: string[], curr: string, index: number) => {
-                        const i = Math.floor(index / 2);
-                        if (!acc[i]) acc[i] = curr;
-                        else acc[i] += ' ' + curr;
-                        return acc;
-                      }, [])
-                      .join(', ')}
+                      ? movie.cast
+                          .split(' ')
+                          .reduce(
+                            (acc: string[], curr: string, index: number) => {
+                              const i = Math.floor(index / 2);
+                              if (!acc[i]) acc[i] = curr;
+                              else acc[i] += ' ' + curr;
+                              return acc;
+                            },
+                            []
+                          )
+                          .join(', ')
+                      : 'Unknown'}
                   </p>
                 </div>
                 {movie.genres && movie.genres.length > 0 && (

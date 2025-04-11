@@ -159,7 +159,9 @@ const Header: React.FC = () => {
               />
               <span className="language-slider"></span>
             </label>
-            <span>{lang === 'en' ? 'Spanish' : 'Español'}</span>
+            <span style={{ color: 'black' }}>
+              {lang === 'en' ? 'Spanish' : 'Español'}
+            </span>
           </div>
         </div>
       </div>
