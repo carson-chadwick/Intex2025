@@ -30,24 +30,12 @@ const translations = {
 };
 
 const Header: React.FC = () => {
-  const [lang, setLang] = useState<'en' | 'es'>(() => {
+  const [lang] = useState<'en' | 'es'>(() => {
     const cookieLang = Cookies.get('language');
     return cookieLang === 'es' ? 'es' : 'en';
   });
 
   const t = translations[lang]; // Use translations dynamically
-
-const handleLanguageToggle = () => {
-  const newLang = lang === 'en' ? 'es' : 'en';
-  setLang(newLang);
-  Cookies.set('language', newLang, {
-    expires: 365,
-    path: '/',
-    sameSite: 'None',
-    secure: true,
-  });
-  window.location.reload(); // Optional: refresh to apply language site-wide
-};
 
 
   useEffect(() => {
